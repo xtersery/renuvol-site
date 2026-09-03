@@ -8,17 +8,22 @@
       name="description"
       content="RENUVOL — препарат для работы с качеством кожи. Южная Корея, профессиональная эстетическая медицина. Протоколы и условия сотрудничества для косметологов."
     />
-    <meta name="theme-color" content="#F4F2EE" />
+    <meta name="theme-color" content="#e6f1f7" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Fonts are self-hosted: no third-party runtime dependency, no render
          block on an external CDN. See docs/design-system.md. -->
     <link rel="preload" as="font" type="font/woff2" href="/fonts/onest-cyrillic.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/prata-cyrillic.woff2" crossorigin />
-    <link rel="preload" as="image" href="/video/renuvol-hero-poster.jpg" />
+    <!-- The vial is the opening image now that the film sits behind a CTA;
+         the film poster loads only when the modal is opened. -->
+    <link rel="preload" as="image" href="/images/product/renuvol-vial.webp" />
 
     <link rel="stylesheet" href="./styles/tokens.css" />
     <link rel="stylesheet" href="./styles/base.css" />
     <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/art.css" />
     <link rel="stylesheet" href="./styles/components.css" />
     <link rel="stylesheet" href="./styles/sections.css" />
     <link rel="stylesheet" href="./styles/responsive.css" />
@@ -26,9 +31,18 @@
   <body class="rv-body">
     <a class="rv-skip" href="#rv-main">Перейти к содержанию</a>
 
-    <!-- Page ground: a single fixed layer whose colour drifts between scenes,
-         so sections read as one continuous journey rather than a stack. -->
+    <!-- Page ground: a single fixed layer whose colour drifts between colour
+         chapters, so sections read as one continuous journey. -->
     <div class="rv-ground" aria-hidden="true"></div>
+
+    <!-- Atmosphere: three large colour masses that travel the whole document,
+         driven by global page progress. See docs/art-direction.md. -->
+    <div class="rv-atmos" aria-hidden="true">
+      <span class="rv-atmos__mass rv-atmos__mass--a"></span>
+      <span class="rv-atmos__mass rv-atmos__mass--b"></span>
+      <span class="rv-atmos__mass rv-atmos__mass--c"></span>
+    </div>
+
     <div class="rv-grain" aria-hidden="true"></div>
 
     <!-- @include sections/01-header.html -->
@@ -48,6 +62,9 @@
     </main>
 
     <!-- @include sections/13-footer.html -->
+
+    <!-- Optional media experience; not part of first paint. -->
+    <!-- @include sections/14-video-modal.html -->
 
     <script type="module" src="./js/main.js"></script>
   </body>

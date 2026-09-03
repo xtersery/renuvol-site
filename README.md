@@ -4,11 +4,15 @@ Marketing website for RENUVOL.
 
 ## Status
 
-Homepage implemented: all 13 sections, Russian-language, with a
-scroll-scrubbed hero film. Content that has not been verified renders as a
-visible `[CONTENT REQUIRED]` marker rather than invented copy — see
-`content/placeholders.md` for the full list and
-`docs/claims-verification.md` for what is blocked and why.
+Homepage implemented: all 13 sections, Russian-language, art-directed as one
+continuous artwork (`docs/art-direction.md`). The product film is an optional
+modal behind a CTA — the page carries itself without it.
+
+Content that has not been verified is never invented and never shown to a
+visitor: the component is composed to read as finished without it, and the
+`[CONTENT REQUIRED]` marker survives as an HTML comment beside the slot. See
+`content/placeholders.md` for the full list and `docs/claims-verification.md`
+for what is blocked and why.
 
 ## Stack
 

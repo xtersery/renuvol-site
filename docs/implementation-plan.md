@@ -88,7 +88,7 @@ strictly the numeric order, e.g.:
 1. `01-header.html` / `13-footer.html` — need only brand assets, the
    lightest dependency; good first build once Phase 0/1 land.
 2. `02-hero.html` — highest-visibility section, gets the most design-DNA
-   attention and (per `scroll-craft`) the page's `scrub` device budget.
+   attention and (per `scroll-craft`) the page's device budget.
 3. `03-manifesto.html`, `04-formula.html` — copy-led sections. `04-formula`
    is corrected to **5** components (PDO, PN, Vitamin C, Glutathione,
    Hyaluronate) per `docs/design-system.md` § Section 04 — content still
@@ -178,7 +178,7 @@ out against the assets that exist:
 - **Phase 3** — motion implemented and verified; see `docs/motion-spec.md`.
 - **Phase 4** — responsive and accessibility pass done; see
   `docs/mobile-spec.md`.
-- **Phase 5** — verified with a headless browser: scrubbing in both
+- **Phase 5** — verified with a headless browser: scroll choreography in both
   directions, pinning, interaction states, no horizontal overflow, no
   console errors, reduced-motion layout, Russian-language validation
   messages.

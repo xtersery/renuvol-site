@@ -67,10 +67,14 @@ No CRM, webhook or Tilda endpoint is hardcoded anywhere.
 
 ## Assets and encoding
 
-The hero clip is encoded specifically for scrubbing — a dense GOP so seeking
-does not have to decode a long run of frames. A normal web encode plays
-perfectly and scrubs like mud. If the video is replaced, re-encode it the
-same way (ffmpeg, dev-time only, not a project dependency):
+The film plays back normally now (it lives in a modal, not on the scroll
+timeline), so a dense GOP is no longer required — but the shipped encodes
+still have one, from when the hero scrubbed. They are harmless: a dense GOP
+costs bitrate, not playback. If the video is replaced, a plain web encode is
+fine; the commands below are the ones that produced the current files and are
+kept so the existing assets can be reproduced (ffmpeg, dev-time only, not a
+project dependency; drop `-g 5 -keyint_min 5 -sc_threshold 0` and raise the
+CRF for a smaller normal-playback encode):
 
 ```bash
 # desktop, WebM/VP9 (preferred where supported)
@@ -89,10 +93,12 @@ ffmpeg -ss 0.2 -i source.mp4 -frames:v 1 -q:v 4 -vf scale=1280:-2 \
   public/video/renuvol-hero-poster.jpg
 ```
 
-Then check `data-rv-start` / `data-rv-end` on the `<video>` in
-`src/sections/02-hero.html`. They trim the clip to the part the hero uses and
-are the only timing values tied to a specific file — the copy cues are keyed
-to scroll progress, not to video seconds, so they survive a swap unchanged.
+The `<video>` now lives in `src/sections/14-video-modal.html`. Nothing on the
+page is keyed to video seconds, so a replacement file needs no other change
+except one attribute: `data-rv-end` stops playback before the source clip's
+**METABIOMED end-card** (a third-party manufacturer mark — see
+`docs/claims-verification.md`). Retime it for a new file, or drop it once the
+master is trimmed.
 
 ## Things to watch
 

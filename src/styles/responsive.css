@@ -1,5 +1,6 @@
 /* ==========================================================================
-   Responsive — mobile is designed, not scaled down. Full rationale in
+   Responsive — mobile keeps the artistic identity (colour chapters, large
+   forms, the atmosphere layer) and simplifies the mechanics. Rationale in
    docs/mobile-spec.md.
    ========================================================================== */
 
@@ -8,14 +9,20 @@
 @media (max-width: 1180px) {
   .rv-formula__body,
   .rv-protocols__body,
-  .rv-selection__body,
   .rv-korea__grid,
-  .rv-docs {
+  .rv-cases__grid {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .rv-orbit {
-    max-width: 560px;
+    max-width: min(600px, 78vw);
+  }
+
+  .rv-detail {
+    border-left: 0;
+    border-top: 1px solid var(--rv-line);
+    padding-left: 0;
+    padding-top: var(--rv-6);
   }
 
   .rv-end__grid {
@@ -26,13 +33,14 @@
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
   }
+
+  .rv-hero__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+  }
 }
 
 @media (max-width: 1024px) {
-  .rv-nav {
-    display: none;
-  }
-
+  .rv-nav,
   .rv-header__cta {
     display: none;
   }
@@ -40,79 +48,21 @@
   .rv-burger {
     display: flex;
   }
+
+  .rv-profiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .rv-directions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* --- Mobile ---------------------------------------------------------------- */
 
-@media (max-width: 760px) {
-  /* Hero: the wordmark steps down a rung so a Cyrillic statement never wraps
-     to six lines, and the split travel shortens on a narrow viewport. It also
-     moves to the upper third, because at this width it would otherwise sit
-     behind the opening statement. */
-  .rv-hero__title {
-    font-size: clamp(3rem, 20vw, 5.4rem);
-    justify-content: flex-start;
-    padding-top: calc(var(--rv-header-h) + var(--rv-8));
-  }
-
-  .rv-hero__word--lead {
-    transform: translate3d(calc(min(var(--rv-p, 0), 0.75) * -12vw), 0, 0);
-  }
-
-  .rv-hero__word--trail {
-    transform: translate3d(calc(min(var(--rv-p, 0), 0.75) * 12vw), 0, 0);
-  }
-
-  .rv-hero__statement {
-    font-size: clamp(1.5rem, 6.4vw, 2rem);
-    max-width: 16ch;
-  }
-
-  .rv-hero__actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .rv-hero__actions .rv-btn {
-    width: 100%;
-  }
-
-  .rv-hero__scroll {
-    display: none;
-  }
-
-  .rv-hero__line {
-    font-size: clamp(1.5rem, 7vw, 2.3rem);
-  }
-
-  /* Manifesto: the two phrases stack rather than overlaying. The size is set
-     by the longest word ("ВОССТАНАВЛИВАТЬ."), which must not overflow. */
-  .rv-manifesto__phrase {
-    position: static;
-    font-size: clamp(1.75rem, 8.4vw, 3rem);
-    letter-spacing: -0.045em;
-  }
-
-  .rv-manifesto__phrase--b {
-    margin-top: var(--rv-2);
-  }
-
-  .rv-manifesto__rule,
-  .rv-manifesto__support {
-    position: static;
-    transform: translate3d(0, calc((1 - var(--rv-o, 0)) * 14px), 0);
-  }
-
-  .rv-manifesto__rule {
-    margin: var(--rv-6) auto;
-  }
-
-  .rv-manifesto__support {
-    font-size: var(--rv-t-base);
-  }
-
-  /* Formula: the orbit is not usable at phone width — the same five
-     components become a native accordion list, product first. */
+@media (max-width: 860px) {
+  /* The orbit needs width a phone does not have: the same five components
+     become a native accordion, product first. */
   .rv-orbit__web,
   .rv-orbit__nodes {
     display: none;
@@ -120,52 +70,46 @@
 
   .rv-orbit {
     aspect-ratio: auto;
+    max-width: none;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--rv-5);
-  }
-
-  .rv-orbit__concept {
-    position: static;
-    transform: none;
-    white-space: normal;
-    text-align: center;
     justify-content: center;
+    padding-block: var(--rv-6);
+    /* The ingredient wash bleeds 60% of the vial's width to either side,
+       which a phone does not have. Clip the horizontal axis only so the
+       halo keeps its vertical bleed. */
+    overflow-x: clip;
   }
 
-  /* Stays positioned so the halo keeps this element as its containing block;
-     as a static box the halo would resolve its percentages against the whole
-     section and spill past the viewport. */
+  .rv-orbit__halo {
+    inset: -10% 10%;
+  }
+
   .rv-orbit__core {
     position: relative;
     left: auto;
     top: auto;
     transform: none;
-    width: min(62vw, 260px);
+    width: min(58vw, 240px);
   }
 
-  .rv-orbit__halo {
-    inset: -14% -18%;
-  }
-
-  .rv-detail {
-    border-top: 0;
-    padding-top: 0;
-  }
-
-  /* Mobile accordion built from the same panels — see interactions.js. */
   .rv-accordion {
     border-top: 1px solid var(--rv-line);
   }
 
   .rv-accordion__item {
+    --rv-item-accent: var(--rv-cobalt);
     border-bottom: 1px solid var(--rv-line-soft);
   }
 
+  .rv-accordion__item[data-rv-accent='pdo'] { --rv-item-accent: var(--rv-a-pdo); }
+  .rv-accordion__item[data-rv-accent='pn'] { --rv-item-accent: var(--rv-a-pn); }
+  .rv-accordion__item[data-rv-accent='vitc'] { --rv-item-accent: var(--rv-a-vitc); }
+  .rv-accordion__item[data-rv-accent='gsh'] { --rv-item-accent: var(--rv-a-gsh); }
+  .rv-accordion__item[data-rv-accent='ha'] { --rv-item-accent: var(--rv-a-ha); }
+
   .rv-accordion__trigger {
     width: 100%;
-    min-height: 60px;
+    min-height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -174,15 +118,28 @@
     text-align: left;
   }
 
-  .rv-accordion__trigger .rv-node__name {
-    font-family: var(--rv-font-display);
-    font-size: 1.15rem;
-  }
-
   .rv-accordion__lead {
     display: flex;
     align-items: center;
-    gap: var(--rv-4);
+    gap: var(--rv-3);
+  }
+
+  /* Each component keeps its colour identity in the list. */
+  .rv-accordion__dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    background:
+      radial-gradient(circle at 34% 30%, rgb(255 255 255 / 0.9) 0%, transparent 42%),
+      radial-gradient(circle at 60% 70%, var(--rv-item-accent) 0%, transparent 76%),
+      color-mix(in srgb, var(--rv-item-accent) 32%, #fff);
+    box-shadow: inset -2px -3px 6px color-mix(in srgb, var(--rv-item-accent) 45%, transparent);
+  }
+
+  .rv-accordion__trigger .rv-node__name {
+    font-family: var(--rv-font-display);
+    font-size: 1.15rem;
   }
 
   .rv-accordion__sign {
@@ -228,15 +185,175 @@
     padding-bottom: var(--rv-5);
   }
 
-  /* The trigger already carries the number and name — don't repeat them
-     inside the opened panel. */
+  /* The trigger already carries the number and name. */
   .rv-accordion__inner .rv-detail__index,
   .rv-accordion__inner .rv-detail__name {
     display: none;
   }
 
-  /* Skin changes: the pinned horizontal rail becomes a swipeable, snapping
-     sequence — vertical scroll keeps its normal meaning on touch. */
+  /* Protocol selector becomes an accordion stack. */
+  .rv-protocols__body {
+    gap: 0;
+  }
+
+  .rv-goal {
+    min-height: 62px;
+  }
+
+  .rv-goal[aria-selected='true'] {
+    padding-left: 0;
+  }
+
+  .rv-protocol {
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .rv-protocol__panel {
+    padding: var(--rv-5) 0 var(--rv-6);
+  }
+
+  .rv-protocol__panel .rv-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Hero: the wordmark moves above the product and the composition stacks.
+     Forms scale to sit inside the viewport rather than bleeding on all
+     edges. */
+  .rv-hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    /* The desktop composition pins product and copy to one shared row; the
+       phone stacks them, so the explicit row has to be released or `order`
+       has nothing to reorder. */
+    grid-template-rows: auto;
+    align-content: center;
+    row-gap: var(--rv-3);
+    padding-top: var(--rv-header-h);
+  }
+
+  .rv-hero__title {
+    position: relative;
+    top: auto;
+    transform: none;
+    font-size: clamp(3rem, 18vw, 5.2rem);
+    grid-column: 1;
+    order: 1;
+  }
+
+  .rv-hero__word--lead,
+  .rv-hero__word--trail {
+    transform: none;
+    margin-left: 0;
+  }
+
+  /* Enough offset to keep the two lines staggered, not so much that VOL
+     runs under the vial. */
+  .rv-hero__word--trail {
+    margin-left: 1.05em;
+  }
+
+  .rv-hero__product {
+    grid-column: 1;
+    grid-row: auto;
+    order: 2;
+    width: min(38vw, 152px);
+    justify-self: end;
+    margin-top: calc(var(--rv-7) * -1);
+    transform: none;
+  }
+
+  .rv-hero__copy {
+    grid-column: 1;
+    grid-row: auto;
+    order: 3;
+    position: relative;
+    min-height: 0;
+    padding-bottom: 0;
+    align-self: start;
+  }
+
+  .rv-hero__cue {
+    position: static;
+  }
+
+  .rv-hero__cue--trail {
+    display: none;
+  }
+
+  .rv-hero__statement {
+    font-size: clamp(1.4rem, 6vw, 1.9rem);
+    max-width: 18ch;
+  }
+
+  .rv-hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rv-hero__actions .rv-btn {
+    width: 100%;
+  }
+
+  .rv-hero__scroll {
+    display: none;
+  }
+
+  .rv-hero__orb--major {
+    width: 78vw;
+    right: -26vw;
+    top: -6vh;
+  }
+
+  .rv-hero__orb--minor {
+    width: 26vw;
+    left: -6vw;
+    bottom: 6vh;
+  }
+
+  .rv-hero__arc {
+    width: 120vw;
+    right: -34vw;
+  }
+
+  /* Manifesto: phrases stack; sized by the longest word. */
+  .rv-manifesto__phrase {
+    position: static;
+  }
+
+  .rv-manifesto__type {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rv-3);
+  }
+
+  .rv-manifesto__phrase--a {
+    font-size: clamp(1.7rem, 8.4vw, 2.6rem);
+  }
+
+  .rv-manifesto__phrase--b {
+    font-size: clamp(1.9rem, 9.4vw, 3rem);
+  }
+
+  .rv-manifesto__support {
+    position: static;
+    transform: translate3d(0, calc((1 - var(--rv-o, 0)) * 14px), 0);
+    margin-top: var(--rv-7);
+    font-size: var(--rv-t-base);
+  }
+
+  .rv-manifesto__mass {
+    width: 130vw;
+    height: 130vw;
+  }
+
+  /* What changes: the pinned rail releases into a swipeable strip, with the
+     evolving form above it rather than behind it. */
   .rv-changes {
     height: auto !important;
   }
@@ -248,12 +365,22 @@
     gap: var(--rv-6);
   }
 
+  .rv-morph {
+    position: relative;
+    left: auto;
+    top: auto;
+    translate: none;
+    margin-inline: auto;
+    width: min(56vw, 240px);
+  }
+
   .rv-rail {
     transform: none !important;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    gap: var(--rv-7);
     padding-bottom: var(--rv-4);
   }
 
@@ -261,17 +388,32 @@
     display: none;
   }
 
-  .rv-chapter,
-  .rv-chapter--wide {
-    width: min(78vw, 320px);
-    scroll-snap-align: start;
+  .rv-chapter {
+    width: min(64vw, 260px);
+    scroll-snap-align: center;
+    opacity: 1 !important;
   }
 
-  .rv-changes__hint {
-    display: none;
+  /* Biotech: shorter pin, sculpture up-right, copy stacked. */
+  .rv-biotech__sculpture {
+    width: 74vw;
+    right: -18vw;
+    top: 24%;
+    translate: 0 0;
   }
 
-  /* Biotech: shorter pin, copy stacked above the orb rather than beside it. */
+  .rv-biotech__satellite {
+    width: 22vw;
+    right: 58vw;
+    top: 16%;
+  }
+
+  .rv-biotech__orbit {
+    right: -18vw;
+    top: 24%;
+    translate: 0 0;
+  }
+
   .rv-biotech__line--b {
     padding-left: var(--rv-4);
   }
@@ -280,128 +422,65 @@
     padding-left: var(--rv-6);
   }
 
-  .rv-biotech__orb,
-  .rv-biotech__glow,
-  .rv-biotech__lattice {
-    left: 78%;
-    top: 26%;
-  }
-
-  .rv-biotech__orb {
-    width: 54vw;
-  }
-
-  .rv-biotech__foot {
-    gap: var(--rv-5);
-  }
-
   .rv-biotech__foot .rv-btn {
     width: 100%;
   }
 
-  /* Protocol selector: list + panel become an accordion stack. */
-  .rv-protocols__body {
-    gap: 0;
-  }
-
-  .rv-goals {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .rv-goal {
-    min-height: 60px;
-  }
-
-  .rv-goal[aria-selected='true'] {
-    padding-left: 0;
-  }
-
-  /* Each panel is moved under its trigger by interactions.js on touch. */
-  .rv-protocol__panel {
-    padding: var(--rv-5) 0 var(--rv-6);
-  }
-
-  .rv-protocol__panel .rv-btn {
-    width: 100%;
-  }
-
-  /* Cosmetologist directions: hairline-separated rows, not three columns. */
+  /* Directions stack; each keeps its orb. */
   .rv-directions {
     grid-template-columns: minmax(0, 1fr);
+    gap: var(--rv-7);
   }
 
   .rv-direction {
-    padding: var(--rv-6) 0;
-    border-right: 0;
-    border-bottom: 1px solid var(--rv-line-soft);
+    padding-top: clamp(var(--rv-7), 22vw, var(--rv-10));
   }
 
-  .rv-direction:last-child {
-    border-bottom: 0;
+  .rv-materials,
+  .rv-docs {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  /* Korea */
+  .rv-materials .rv-btn,
+  .rv-docs .rv-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Korea: pillars lose their stagger at this width. */
   .rv-korea__pillars {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--rv-6);
+    gap: var(--rv-5);
+  }
+
+  .rv-pillar:nth-child(2),
+  .rv-pillar:nth-child(3),
+  .rv-pillar:nth-child(4) {
+    margin-left: 0;
   }
 
   .rv-korea__title {
     font-size: clamp(2.6rem, 16vw, 4.4rem);
   }
 
-  /* Cases: native horizontal scroll with snapping, so a swipe moves it the
-     way a reader expects rather than through a synthetic transform. */
-  .rv-cases__viewport {
-    padding-inline: 0;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+  /* ТРАНСФОРМАЦИЯ is thirteen uppercase characters: at the shared display
+     scale it is wider than a 360px column, so it gets its own ramp. */
+  .rv-transform__title {
+    font-size: clamp(1.75rem, 7.6vw, 2.9rem);
   }
 
-  .rv-cases__viewport::-webkit-scrollbar {
-    display: none;
+  /* Cases */
+  .rv-cases__plate {
+    aspect-ratio: 4 / 3;
   }
 
-  .rv-cases__track {
-    padding-inline: var(--rv-gutter);
-    transform: none !important;
-  }
-
-  .rv-case {
-    width: calc(100vw - var(--rv-gutter) * 2);
-    scroll-snap-align: center;
-  }
-
-  .rv-case__meta {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--rv-4);
-  }
-
-  /* Compare widget: taller crop reads better in portrait. Only the uncropped
-     side carries the placeholder note, so the split never cuts through it. */
+  /* Compare: portrait crop reads better on a phone. */
   .rv-compare {
     aspect-ratio: 3 / 4;
   }
 
-  .rv-compare__frame {
-    place-content: end start;
-    text-align: left;
-  }
-
-  .rv-compare__frame--before .rv-compare__note {
-    display: none;
-  }
-
-  .rv-compare__note {
-    max-width: 24ch;
-    margin-inline: 0;
-  }
-
-  .rv-compare__tag {
-    justify-self: start;
+  .rv-transform__foot {
+    align-items: flex-start;
   }
 
   .rv-transform__foot .rv-btn {
@@ -410,7 +489,7 @@
 
   /* Selection + form */
   .rv-profiles {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .rv-form__grid {
@@ -431,12 +510,27 @@
   .rv-end__actions .rv-btn {
     width: 100%;
   }
+
+  /* Film modal fills the screen on a phone. */
+  .rv-film {
+    padding: var(--rv-4);
+  }
+
+  .rv-film__close {
+    top: calc(-1 * var(--rv-6));
+  }
 }
 
-/* Touch devices of any width: the hover preview does not exist, so the
-   explicit toggle is the only way in — it stays, and nothing is forced open
-   behind the reader's back. */
+/* Fewer simultaneously animating layers on touch: the atmosphere and the
+   large orbs stay, the finer decoration goes. */
 @media (hover: none) {
+  .rv-hero__blob,
+  .rv-formula__arc,
+  .rv-protocols__arc,
+  .rv-cases__arc {
+    display: none;
+  }
+
   .rv-direction__toggle {
     min-height: 44px;
   }

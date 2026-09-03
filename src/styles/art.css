@@ -1,0 +1,335 @@
+/* ==========================================================================
+   The material system.
+
+   Six reusable artistic elements used across the page as a system, not as
+   decoration. Everything here is CSS — gradients, radii, masks, transforms.
+   No images, no canvas, no library. See docs/art-direction.md.
+   ========================================================================== */
+
+/* --- Atmosphere ------------------------------------------------------------
+   One fixed layer behind the whole document. Three large gradient masses take
+   their colour from the current colour chapter and their position from global
+   page progress, so the same forms travel the entire page and colour arrives
+   as a drift rather than a cut. Fixed + transform-only: never repaints on
+   scroll. */
+
+.rv-atmos {
+  position: fixed;
+  inset: -10% -10% -10% -10%;
+  z-index: var(--rv-z-atmos);
+  pointer-events: none;
+  opacity: var(--rv-atm-opacity, 0.85);
+  transition: opacity var(--rv-dur-chapter) var(--rv-ease-soft);
+  contain: strict;
+}
+
+.rv-atmos__mass {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+  transition: background var(--rv-dur-chapter) var(--rv-ease-soft);
+}
+
+.rv-atmos__mass--a {
+  width: 78vmax;
+  height: 78vmax;
+  left: -18vmax;
+  top: -14vmax;
+  background: radial-gradient(circle at 42% 40%, var(--rv-atm-1) 0%, transparent 66%);
+  transform: translate3d(
+    calc(var(--rv-page, 0) * 26vw),
+    calc(var(--rv-page, 0) * -14vh),
+    0
+  );
+}
+
+.rv-atmos__mass--b {
+  width: 66vmax;
+  height: 66vmax;
+  right: -22vmax;
+  top: 18vh;
+  background: radial-gradient(circle at 56% 46%, var(--rv-atm-2) 0%, transparent 64%);
+  transform: translate3d(
+    calc(var(--rv-page, 0) * -30vw),
+    calc(var(--rv-page, 0) * 22vh),
+    0
+  );
+}
+
+.rv-atmos__mass--c {
+  width: 90vmax;
+  height: 90vmax;
+  left: 12vw;
+  bottom: -46vmax;
+  background: radial-gradient(circle at 50% 50%, var(--rv-atm-3) 0%, transparent 62%);
+  transform: translate3d(
+    calc(var(--rv-page, 0) * -16vw),
+    calc(var(--rv-page, 0) * -30vh),
+    0
+  );
+}
+
+/* --- rv-orb ----------------------------------------------------------------
+   The recurring protagonist: a translucent sphere with an inner light, a rim
+   light and an iridescent edge. Colour comes from --rv-orb-tint so one
+   element serves every chapter and every ingredient. */
+
+.rv-orb {
+  --rv-orb-tint: var(--rv-cobalt);
+  --rv-orb-light: 58%;
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    /* specular highlight */
+    radial-gradient(
+      circle at 32% 26%,
+      rgb(255 255 255 / 0.92) 0%,
+      rgb(255 255 255 / 0.34) 12%,
+      transparent 34%
+    ),
+    /* body tint */
+    radial-gradient(
+      circle at 62% 70%,
+      color-mix(in srgb, var(--rv-orb-tint) 72%, transparent) 0%,
+      color-mix(in srgb, var(--rv-orb-tint) 26%, transparent) 44%,
+      transparent 72%
+    ),
+    /* glassy core */
+    radial-gradient(
+      circle at 50% 50%,
+      rgb(255 255 255 / 0.5) 0%,
+      color-mix(in srgb, var(--rv-orb-tint) 12%, rgb(255 255 255 / 0.2)) 58%,
+      color-mix(in srgb, var(--rv-orb-tint) 34%, transparent) 100%
+    );
+  box-shadow:
+    inset -14px -18px 44px color-mix(in srgb, var(--rv-orb-tint) 34%, transparent),
+    inset 10px 12px 36px rgb(255 255 255 / 0.5),
+    0 40px 90px -50px color-mix(in srgb, var(--rv-orb-tint) 70%, transparent);
+  transition:
+    background var(--rv-dur-chapter) var(--rv-ease-soft),
+    box-shadow var(--rv-dur-chapter) var(--rv-ease-soft),
+    transform var(--rv-dur-slow) var(--rv-ease);
+}
+
+/* Iridescent rim — the edge where a real glass sphere would refract. */
+.rv-orb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1px;
+  background: conic-gradient(
+    from 200deg,
+    rgb(255 255 255 / 0.7),
+    color-mix(in srgb, var(--rv-a-pn) 60%, transparent),
+    color-mix(in srgb, var(--rv-a-gsh) 55%, transparent),
+    color-mix(in srgb, var(--rv-a-vitc) 45%, transparent),
+    rgb(255 255 255 / 0.7)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.75;
+}
+
+.rv-orb--dark {
+  --rv-orb-light: 24%;
+  background:
+    radial-gradient(circle at 30% 24%, rgb(255 255 255 / 0.42) 0%, transparent 30%),
+    radial-gradient(
+      circle at 66% 72%,
+      color-mix(in srgb, var(--rv-orb-tint) 84%, transparent) 0%,
+      transparent 62%
+    ),
+    linear-gradient(158deg, #16233d 0%, #070c17 100%);
+  box-shadow:
+    inset -22px -26px 70px rgb(0 0 0 / 0.6),
+    inset 14px 18px 56px color-mix(in srgb, var(--rv-orb-tint) 32%, transparent),
+    0 60px 140px -60px color-mix(in srgb, var(--rv-orb-tint) 80%, transparent);
+}
+
+/* --- rv-blob ---------------------------------------------------------------
+   Organic mass with asymmetric radii and a very slow morph. Used where a
+   circle would read as too geometric. */
+
+.rv-blob {
+  --rv-blob-tint: var(--rv-atm-1);
+  position: absolute;
+  border-radius: 58% 42% 47% 53% / 52% 46% 54% 48%;
+  background: radial-gradient(
+    circle at 40% 36%,
+    color-mix(in srgb, var(--rv-blob-tint) 88%, transparent) 0%,
+    color-mix(in srgb, var(--rv-blob-tint) 42%, transparent) 52%,
+    transparent 76%
+  );
+  pointer-events: none;
+  transition: background var(--rv-dur-chapter) var(--rv-ease-soft);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rv-blob--morph {
+    animation: rv-morph 26s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes rv-morph {
+  0% {
+    border-radius: 58% 42% 47% 53% / 52% 46% 54% 48%;
+  }
+  50% {
+    border-radius: 44% 56% 60% 40% / 46% 58% 42% 54%;
+  }
+  100% {
+    border-radius: 52% 48% 38% 62% / 60% 42% 58% 40%;
+  }
+}
+
+/* --- rv-membrane -----------------------------------------------------------
+   A curved sheet of glass: large radius, backdrop blur, 1px edge highlight.
+   Used sparingly — blur is the most expensive thing on the page. */
+
+.rv-membrane {
+  position: relative;
+  border-radius: clamp(28px, 5vw, 72px);
+  background: linear-gradient(
+    150deg,
+    rgb(255 255 255 / 0.5) 0%,
+    rgb(255 255 255 / 0.16) 46%,
+    color-mix(in srgb, var(--rv-accent) 8%, transparent) 100%
+  );
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.65),
+    inset 0 -1px 0 rgb(255 255 255 / 0.14),
+    0 40px 80px -50px color-mix(in srgb, var(--rv-ink) 60%, transparent);
+  border: 1px solid rgb(255 255 255 / 0.28);
+}
+
+:root[data-rv-ground='dark'] .rv-membrane,
+:root[data-rv-ground='night'] .rv-membrane {
+  background: linear-gradient(
+    150deg,
+    rgb(255 255 255 / 0.1) 0%,
+    rgb(255 255 255 / 0.03) 48%,
+    color-mix(in srgb, var(--rv-electric) 10%, transparent) 100%
+  );
+  border-color: rgb(255 255 255 / 0.12);
+}
+
+/* --- rv-wash ---------------------------------------------------------------
+   A soft colour mass. The workhorse for bleeding colour across a section
+   boundary.
+
+   Named rv-wash, not rv-field: `.rv-field` is the form field wrapper, and
+   giving a decorative absolute-positioned material the same class tore the
+   contact form apart. */
+
+.rv-wash {
+  --rv-wash-tint: var(--rv-atm-1);
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--rv-wash-tint) 76%, transparent) 0%,
+    color-mix(in srgb, var(--rv-wash-tint) 28%, transparent) 46%,
+    transparent 72%
+  );
+  transition: background var(--rv-dur-chapter) var(--rv-ease-soft);
+}
+
+/* --- rv-arc ----------------------------------------------------------------
+   An oversized ring that deliberately leaves the viewport. Draws the eye off
+   the edge and implies the composition continues. */
+
+.rv-arc {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--rv-fg) 14%, transparent);
+  pointer-events: none;
+  transition: border-color var(--rv-dur-chapter) var(--rv-ease-soft);
+}
+
+.rv-arc--thick {
+  border-width: clamp(1px, 0.18vw, 2px);
+  border-color: color-mix(in srgb, var(--rv-accent) 26%, transparent);
+}
+
+/* --- rv-iris ---------------------------------------------------------------
+   Low-opacity conic iridescence, laid over glass surfaces to keep them from
+   reading as flat plastic. */
+
+.rv-iris {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.28;
+  mix-blend-mode: soft-light;
+  background: conic-gradient(
+    from 140deg,
+    #9fd8e6 0deg,
+    #cbb7e8 90deg,
+    #f2cf9a 180deg,
+    #a9d6f0 270deg,
+    #9fd8e6 360deg
+  );
+}
+
+/* --- Shared behaviours ------------------------------------------------------ */
+
+/* Forms that drift with the scene's own progress. Multiplier per element. */
+.rv-drift {
+  transform: translate3d(
+    calc(var(--rv-p, 0) * var(--rv-drift-x, 0px)),
+    calc(var(--rv-p, 0) * var(--rv-drift-y, 0px)),
+    0
+  );
+}
+
+/* Pointer parallax, fine pointers only — set by interactions.js. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .rv-pointer {
+    transform: translate3d(
+      calc(var(--rv-mx, 0) * var(--rv-pointer-x, 0px)),
+      calc(var(--rv-my, 0) * var(--rv-pointer-y, 0px)),
+      0
+    );
+    transition: transform 900ms var(--rv-ease-soft);
+  }
+}
+
+/* Scene decoration layer: sits behind a section's content, never intercepts
+   pointer events, and is allowed to bleed past the section's own edges. */
+.rv-scene {
+  position: absolute;
+  inset: -20% 0;
+  /* Horizontal only: a vertical clip draws a hard line at every section
+     boundary, which is exactly the seam the art direction is trying to
+     dissolve. The mask below does the vertical containment softly instead. */
+  overflow-x: clip;
+  overflow-y: visible;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rv-scene > * {
+  pointer-events: none;
+}
+
+/* Content always sits above its scene. */
+.rv-above {
+  position: relative;
+  z-index: 1;
+}

@@ -176,7 +176,7 @@ packaged as a Claude Code plugin with its own JS/CSS engine
   (`clip-path` wipe), `kinetic` (line-by-line heading assembly), `parallax`
   (layered depth via differential scroll rate), `count` (numeric counters —
   real numbers only, per `CLAUDE.md`'s no-fabrication rule). This vocabulary
-  maps directly onto this project's `src/js/scroll.js`, `src/js/video-scrub.js`,
+  maps directly onto this project's `src/js/scroll.js`, `src/js/video-modal.js`,
   and `src/js/interactions.js`, reimplemented with `IntersectionObserver`,
   `position: sticky`, and a hand-rolled `requestAnimationFrame` lerp loop
   instead of the GSAP-based engine.

@@ -1,36 +1,60 @@
 <!--
   04 — Inside RENUVOL / the formula.
 
-  Structural correction against the wireframe: FIVE components, not four
-  (PDO, PN, Vitamin C, Glutathione, Hyaluronate). See
-  public/references/wireframe/CORRECTIONS.md.
+  Structure unchanged: five components (PDO, PN, Vitamin C, Glutathione,
+  Hyaluronate) in an asymmetric orbital system around one product.
 
-  The five are an asymmetric orbital system around one product, feeding a
-  single editorial detail panel — deliberately not five identical cards.
-  Component descriptions stay [CONTENT REQUIRED] until content/product-facts.md
-  carries verified text.
+  What changed is expressiveness. Each ingredient is a real glass orb with
+  its own material identity, and selecting one transforms the whole scene:
+  the orb scales and lights, connectors take its colour, the ground field
+  warms or cools toward it, and a colour wash crosses the product. The
+  active colour is published as --rv-active on the section root, so one
+  variable drives every part of the composition.
+
+  Ingredient descriptions remain unwritten (content/placeholders.md); the
+  panel is composed so that a name plus its technical name reads as
+  finished, and the description slot simply is not rendered.
 -->
 <section
   class="rv-formula"
   id="rv-formula"
   data-rv-scene="formula"
-  data-rv-ground="pearl"
+  data-rv-ground="glass"
 >
-  <div class="rv-formula__head rv-shell">
-    <p class="rv-eyebrow" data-rv-reveal>Внутри RENUVOL</p>
-    <h2 class="rv-display rv-formula__title" data-rv-reveal>Интеллект формулы</h2>
+  <div class="rv-scene rv-formula__scene">
+    <span class="rv-wash rv-formula__wash" style="--rv-wash-tint: var(--rv-active, #9ccfe0)"></span>
+    <span class="rv-arc rv-formula__arc rv-arc--thick"></span>
   </div>
 
-  <div class="rv-formula__body rv-shell" data-rv-formula>
+  <div class="rv-formula__head rv-shell rv-above">
+    <p class="rv-eyebrow" data-rv-reveal>Внутри RENUVOL</p>
+    <h2 class="rv-display rv-formula__title" data-rv-reveal>
+      Интеллект<br /><span class="rv-formula__title-in">формулы</span>
+    </h2>
+    <p class="rv-formula__concept" data-rv-reveal>
+      <span>5 компонентов</span>
+      <span class="rv-formula__dash" aria-hidden="true"></span>
+      <span>одна система</span>
+    </p>
+  </div>
+
+  <div class="rv-formula__body rv-shell rv-above" data-rv-formula>
     <div class="rv-orbit" data-rv-orbit>
-      <p class="rv-orbit__concept" data-rv-reveal>
-        <span>5 компонентов</span>
-        <span class="rv-orbit__dash" aria-hidden="true"></span>
-        <span>одна система</span>
-      </p>
+      <span class="rv-orbit__halo" aria-hidden="true"></span>
+
+      <svg class="rv-orbit__web" viewBox="0 0 1000 1000" aria-hidden="true" focusable="false">
+        <circle class="rv-orbit__ring" cx="500" cy="500" r="366" />
+        <circle class="rv-orbit__ring rv-orbit__ring--inner" cx="500" cy="500" r="252" />
+        <g class="rv-orbit__links">
+          <line data-rv-link="pdo" x1="500" y1="500" x2="196" y2="272" />
+          <line data-rv-link="pn" x1="500" y1="500" x2="838" y2="330" />
+          <line data-rv-link="vitc" x1="500" y1="500" x2="872" y2="688" />
+          <line data-rv-link="gsh" x1="500" y1="500" x2="486" y2="892" />
+          <line data-rv-link="ha" x1="500" y1="500" x2="138" y2="652" />
+        </g>
+      </svg>
 
       <div class="rv-orbit__core">
-        <span class="rv-orbit__halo" aria-hidden="true"></span>
         <img
           class="rv-orbit__product"
           src="/images/product/renuvol-vial.webp"
@@ -38,57 +62,56 @@
           width="536"
           height="1328"
           loading="lazy"
+          decoding="async"
         />
+        <span class="rv-orbit__light" aria-hidden="true"></span>
       </div>
 
-      <!-- Connector geometry: drawn, not decorative — each line ends on its node. -->
-      <svg class="rv-orbit__web" viewBox="0 0 1000 1000" aria-hidden="true" focusable="false">
-        <circle class="rv-orbit__ring" cx="500" cy="500" r="352" />
-        <circle class="rv-orbit__ring rv-orbit__ring--inner" cx="500" cy="500" r="243" />
-        <g class="rv-orbit__links">
-          <line data-rv-link="pdo"   x1="500" y1="500" x2="205" y2="286" />
-          <line data-rv-link="pn"    x1="500" y1="500" x2="826" y2="345" />
-          <line data-rv-link="vitc"  x1="500" y1="500" x2="861" y2="676" />
-          <line data-rv-link="gsh"   x1="500" y1="500" x2="500" y2="880" />
-          <line data-rv-link="ha"    x1="500" y1="500" x2="150" y2="640" />
-        </g>
-      </svg>
-
-      <!-- Asymmetric radial placement: uneven angles and radii, weighted 3 + 2. -->
+      <!-- Asymmetric radial placement, weighted 3 + 2. -->
       <ul class="rv-orbit__nodes" role="list">
-        <li class="rv-orbit__item" style="--x: 20.5%; --y: 28.6%">
+        <li class="rv-orbit__item" style="--x: 19.6%; --y: 27.2%; --size: 106px">
           <button class="rv-node" type="button" data-rv-node="pdo" data-rv-accent="pdo" aria-pressed="true">
-            <span class="rv-node__index">01</span>
-            <span class="rv-node__name">PDO</span>
-            <span class="rv-node__dot" aria-hidden="true"></span>
+            <span class="rv-node__orb rv-orb" aria-hidden="true"></span>
+            <span class="rv-node__label">
+              <span class="rv-node__index">01</span>
+              <span class="rv-node__name">PDO</span>
+            </span>
           </button>
         </li>
-        <li class="rv-orbit__item" style="--x: 82.6%; --y: 34.5%">
+        <li class="rv-orbit__item" style="--x: 83.8%; --y: 33%; --size: 84px">
           <button class="rv-node" type="button" data-rv-node="pn" data-rv-accent="pn" aria-pressed="false">
-            <span class="rv-node__index">02</span>
-            <span class="rv-node__name">PN</span>
-            <span class="rv-node__dot" aria-hidden="true"></span>
+            <span class="rv-node__orb rv-orb" aria-hidden="true"></span>
+            <span class="rv-node__label">
+              <span class="rv-node__index">02</span>
+              <span class="rv-node__name">PN</span>
+            </span>
           </button>
         </li>
-        <li class="rv-orbit__item" style="--x: 86.1%; --y: 67.6%">
+        <li class="rv-orbit__item" style="--x: 87.2%; --y: 68.8%; --size: 98px">
           <button class="rv-node" type="button" data-rv-node="vitc" data-rv-accent="vitc" aria-pressed="false">
-            <span class="rv-node__index">03</span>
-            <span class="rv-node__name">Vitamin&nbsp;C</span>
-            <span class="rv-node__dot" aria-hidden="true"></span>
+            <span class="rv-node__orb rv-orb" aria-hidden="true"></span>
+            <span class="rv-node__label">
+              <span class="rv-node__index">03</span>
+              <span class="rv-node__name">Vitamin&nbsp;C</span>
+            </span>
           </button>
         </li>
-        <li class="rv-orbit__item" style="--x: 50%; --y: 88%">
+        <li class="rv-orbit__item" style="--x: 48.6%; --y: 89.2%; --size: 76px">
           <button class="rv-node" type="button" data-rv-node="gsh" data-rv-accent="gsh" aria-pressed="false">
-            <span class="rv-node__index">04</span>
-            <span class="rv-node__name">Glutathione</span>
-            <span class="rv-node__dot" aria-hidden="true"></span>
+            <span class="rv-node__orb rv-orb" aria-hidden="true"></span>
+            <span class="rv-node__label">
+              <span class="rv-node__index">04</span>
+              <span class="rv-node__name">Glutathione</span>
+            </span>
           </button>
         </li>
-        <li class="rv-orbit__item" style="--x: 15%; --y: 64%">
+        <li class="rv-orbit__item" style="--x: 13.8%; --y: 65.2%; --size: 92px">
           <button class="rv-node" type="button" data-rv-node="ha" data-rv-accent="ha" aria-pressed="false">
-            <span class="rv-node__index">05</span>
-            <span class="rv-node__name">Hyaluronate</span>
-            <span class="rv-node__dot" aria-hidden="true"></span>
+            <span class="rv-node__orb rv-orb" aria-hidden="true"></span>
+            <span class="rv-node__label">
+              <span class="rv-node__index">05</span>
+              <span class="rv-node__name">Hyaluronate</span>
+            </span>
           </button>
         </li>
       </ul>
@@ -100,31 +123,31 @@
         <p class="rv-detail__index">01</p>
         <h3 class="rv-detail__name">PDO</h3>
         <p class="rv-detail__latin">Полидиоксанон</p>
-        <p class="rv-detail__text rv-required">[CONTENT REQUIRED: verified ingredient description]</p>
+        <!-- [CONTENT REQUIRED: verified ingredient description] -->
       </div>
       <div class="rv-detail__panel" data-rv-panel="pn" data-rv-accent="pn" hidden>
         <p class="rv-detail__index">02</p>
         <h3 class="rv-detail__name">PN</h3>
         <p class="rv-detail__latin">Полинуклеотиды</p>
-        <p class="rv-detail__text rv-required">[CONTENT REQUIRED: verified ingredient description]</p>
+        <!-- [CONTENT REQUIRED: verified ingredient description] -->
       </div>
       <div class="rv-detail__panel" data-rv-panel="vitc" data-rv-accent="vitc" hidden>
         <p class="rv-detail__index">03</p>
         <h3 class="rv-detail__name">Витамин C</h3>
         <p class="rv-detail__latin">Антиоксидантный компонент формулы</p>
-        <p class="rv-detail__text rv-required">[CONTENT REQUIRED: verified ingredient description]</p>
+        <!-- [CONTENT REQUIRED: verified ingredient description] -->
       </div>
       <div class="rv-detail__panel" data-rv-panel="gsh" data-rv-accent="gsh" hidden>
         <p class="rv-detail__index">04</p>
         <h3 class="rv-detail__name">Глутатион</h3>
         <p class="rv-detail__latin">Антиоксидантный компонент формулы</p>
-        <p class="rv-detail__text rv-required">[CONTENT REQUIRED: verified ingredient description]</p>
+        <!-- [CONTENT REQUIRED: verified ingredient description] -->
       </div>
       <div class="rv-detail__panel" data-rv-panel="ha" data-rv-accent="ha" hidden>
         <p class="rv-detail__index">05</p>
         <h3 class="rv-detail__name">Гиалуронат</h3>
         <p class="rv-detail__latin">Sodium hyaluronate</p>
-        <p class="rv-detail__text rv-required">[CONTENT REQUIRED: verified ingredient description]</p>
+        <!-- [CONTENT REQUIRED: verified ingredient description] -->
       </div>
 
       <a class="rv-btn rv-btn--line rv-detail__cta" href="#rv-selection">Получить состав и протоколы</a>

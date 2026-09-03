@@ -29,9 +29,9 @@ All mobile UI is Russian (see `docs/design-system.md` § Language rule).
   `(hover: hover) and (pointer: fine)`, so touch never fires a false hover.
 - Interactive targets are at least 44–48px tall (buttons have a 48px min
   height; accordion triggers 60px).
-- The scrub video uses a wider dead-band on touch (20ms vs 8ms) — a seek
-  smaller than that costs more than it shows on a phone.
-- The mobile clip is a separate, smaller encode
+- The film is behind a CTA and nothing about it is fetched until someone
+  opens the modal, so a phone on mobile data pays nothing for it by default.
+  When opened, it gets a separate smaller encode
   (`renuvol-hero-scrub-mobile.webm` / `.mp4`, ~3MB vs ~6.5–7MB).
 - `100dvh` is used for pinned stages, with a measured-height fallback for
   older Safari (`initViewportUnit` in `src/js/mobile.js`) so the address bar
@@ -57,6 +57,13 @@ disabled animation (`.rv-static`, applied by `src/js/scroll.js`):
 Checked with a headless browser at 390×844 and 360×780: burger menu open,
 link close and scroll lock; formula accordion; protocol accordion; cases
 scroll-snap and counter sync; no horizontal overflow; no console errors.
+Also fixed during that pass: the hero stacked in the wrong order and ran past
+the viewport (the desktop composition pins the product and the copy to one
+shared grid row, which defeats `order` — released at ≤760px), the ingredient
+wash and the word `ТРАНСФОРМАЦИЯ` pushed the page sideways at 360px, and the
+contact form's labels stacked on top of each other because `.rv-field` named
+both a form wrapper and a decorative absolute-positioned mass.
+
 Not verified on a real iOS device — headless Chromium cannot reproduce
-Safari's video decoder, autoplay policy or Low Power Mode, so the hero
-scrub on a physical iPhone remains untested.
+Safari's video decoder, autoplay policy or Low Power Mode, so film playback
+on a physical iPhone remains untested.

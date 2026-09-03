@@ -1,25 +1,42 @@
 <!--
-  03 — Manifesto. An editorial pause: the typography is the composition.
-  Two phases inside one pinned stage — the negation resolves into the promise.
+  03 — Manifesto.
+
+  A physical transition rather than a fade. The negation sits inside a large
+  translucent mass; as scroll continues the mass expands past the viewport,
+  the ground warms, and the promise emerges at a much larger scale through a
+  clip-path mask that opens from the baseline up.
+
+  The two phrases share one grid cell at different sizes, so their cues must
+  not overlap: the negation is fully out by 0.40 before the promise starts
+  ramping in at 0.40. Overlapping ramps print one word on top of the other.
 -->
 <section
   class="rv-manifesto"
   id="rv-manifesto"
   data-rv-scene="manifesto"
   data-rv-ground="pearl"
-  data-rv-span="2.6"
+  data-rv-span="3"
 >
   <div class="rv-manifesto__stage" data-rv-stage>
-    <p class="rv-manifesto__phrase rv-manifesto__phrase--a" data-rv-cue="0 0.52 0">
-      Не заполнять.
-    </p>
-    <p class="rv-manifesto__phrase rv-manifesto__phrase--b" data-rv-cue="0.42 1 0.3 0">
-      Восстанавливать.
-    </p>
-    <p class="rv-manifesto__support" data-rv-cue="0.62 1 0.35 0">
+    <div class="rv-scene rv-manifesto__scene">
+      <!-- The mass the first phrase lives inside; it swells and passes by. -->
+      <span class="rv-blob rv-blob--morph rv-manifesto__mass" style="--rv-blob-tint: #e6cfdc"></span>
+      <span class="rv-wash rv-manifesto__glow" style="--rv-wash-tint: #d6cbef"></span>
+      <span class="rv-arc rv-manifesto__arc"></span>
+    </div>
+
+    <div class="rv-manifesto__type rv-above">
+      <p class="rv-manifesto__phrase rv-manifesto__phrase--a" data-rv-cue="0 0.34 0 0.06">
+        Не заполнять.
+      </p>
+      <p class="rv-manifesto__phrase rv-manifesto__phrase--b" data-rv-cue="0.46 1 0.06 0">
+        <span class="rv-manifesto__mask">Восстанавливать.</span>
+      </p>
+    </div>
+
+    <p class="rv-manifesto__support rv-above" data-rv-cue="0.68 1 0.18 0">
       RENUVOL делает акцент на качестве кожи,<br />
       а не на визуальном маскировании проблемы.
     </p>
-    <span class="rv-manifesto__rule" data-rv-cue="0.3 1 0.2 0" aria-hidden="true"></span>
   </div>
 </section>

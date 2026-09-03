@@ -1,79 +1,45 @@
 <!--
   11 — Cases / results.
 
-  Large case modules in a carousel, deliberately not a grid of small
-  thumbnails. All case content is placeholder: no patient data, procedure
-  counts, timelines or outcomes may be invented, and the wireframe's three
-  illustrative cases are DO-NOT-USE (docs/claims-verification.md row 31).
+  No approved case material exists, and none may be invented
+  (docs/claims-verification.md row 31). Rather than show empty frames or
+  visible placeholders, the section resolves into a finished editorial
+  statement: cases are real material shared with practitioners on request.
+
+  The carousel machinery is intentionally not rendered while there is nothing
+  to page through; it returns with the content.
+  [CONTENT REQUIRED: approved before/after cases]
+  [CONTENT REQUIRED: verified clinical outcomes]
 -->
 <section
   class="rv-cases"
   id="rv-cases"
   data-rv-scene="cases"
-  data-rv-ground="ice"
+  data-rv-ground="warm"
 >
-  <div class="rv-shell rv-cases__head">
-    <h2 class="rv-display rv-cases__title" data-rv-reveal>Кейсы<span class="rv-slash">/</span>результаты</h2>
-    <div class="rv-cases__nav">
-      <button class="rv-arrow" type="button" data-rv-case-prev aria-label="Предыдущий кейс">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4 7 12l8 8" /></svg>
-      </button>
-      <span class="rv-cases__counter"><span data-rv-case-current>01</span> / <span data-rv-case-total>03</span></span>
-      <button class="rv-arrow" type="button" data-rv-case-next aria-label="Следующий кейс">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4l8 8-8 8" /></svg>
-      </button>
-    </div>
+  <div class="rv-scene rv-cases__scene">
+    <span class="rv-blob rv-blob--morph rv-cases__blob" style="--rv-blob-tint: #edd6c2"></span>
+    <span class="rv-orb rv-cases__orb" style="--rv-orb-tint: #c9a27e"></span>
+    <span class="rv-arc rv-cases__arc"></span>
   </div>
 
-  <div class="rv-cases__viewport" data-rv-cases>
-    <div class="rv-cases__track" data-rv-case-track>
-      <article class="rv-case" data-rv-case>
-        <p class="rv-case__index">Case 01</p>
-        <div class="rv-case__pair">
-          <div class="rv-case__frame"><span class="rv-case__tag">BEFORE</span><p class="rv-required">[CONTENT REQUIRED: approved photo]</p></div>
-          <div class="rv-case__frame"><span class="rv-case__tag">AFTER</span><p class="rv-required">[CONTENT REQUIRED: approved photo]</p></div>
-        </div>
-        <dl class="rv-case__meta">
-          <div><dt>Пациент</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-          <div><dt>Запрос</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-          <div><dt>Количество процедур</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-          <div><dt>Результат</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-        </dl>
-      </article>
-
-      <article class="rv-case" data-rv-case>
-        <p class="rv-case__index">Case 02</p>
-        <div class="rv-case__pair">
-          <div class="rv-case__frame"><span class="rv-case__tag">BEFORE</span><p class="rv-required">[CONTENT REQUIRED: approved photo]</p></div>
-          <div class="rv-case__frame"><span class="rv-case__tag">AFTER</span><p class="rv-required">[CONTENT REQUIRED: approved photo]</p></div>
-        </div>
-        <dl class="rv-case__meta">
-          <div><dt>Пациент</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-          <div><dt>Запрос</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-          <div><dt>Количество процедур</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-          <div><dt>Результат</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-        </dl>
-      </article>
-
-      <article class="rv-case" data-rv-case>
-        <p class="rv-case__index">Case 03</p>
-        <div class="rv-case__pair">
-          <div class="rv-case__frame"><span class="rv-case__tag">BEFORE</span><p class="rv-required">[CONTENT REQUIRED: approved photo]</p></div>
-          <div class="rv-case__frame"><span class="rv-case__tag">AFTER</span><p class="rv-required">[CONTENT REQUIRED: approved photo]</p></div>
-        </div>
-        <dl class="rv-case__meta">
-          <div><dt>Пациент</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-          <div><dt>Запрос</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-          <div><dt>Количество процедур</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-          <div><dt>Результат</dt><dd class="rv-required">[CONTENT REQUIRED]</dd></div>
-        </dl>
-      </article>
+  <div class="rv-shell rv-cases__grid rv-above">
+    <div class="rv-cases__lead">
+      <h2 class="rv-display rv-cases__title" data-rv-reveal>
+        Кейсы<span class="rv-slash">/</span>результаты
+      </h2>
+      <p class="rv-cases__text" data-rv-reveal>
+        Клинические материалы и результаты применения передаём практикующим
+        специалистам по запросу — вместе с протоколами и условиями работы.
+      </p>
+      <a class="rv-btn rv-btn--solid rv-cases__cta" data-rv-reveal href="#rv-selection">
+        Запросить материалы
+      </a>
     </div>
-  </div>
 
-  <div class="rv-shell">
-    <p class="rv-required rv-cases__gate">
-      [CONTENT REQUIRED: approved before/after cases] · [CONTENT REQUIRED: verified clinical outcomes]
-    </p>
+    <figure class="rv-cases__plate" data-rv-reveal>
+      <span class="rv-cases__plate-surface" aria-hidden="true"></span>
+      <span class="rv-iris" aria-hidden="true"></span>
+    </figure>
   </div>
 </section>

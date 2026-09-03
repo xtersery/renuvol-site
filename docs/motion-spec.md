@@ -1,12 +1,12 @@
 # Motion Spec
 
-Status: planning document. No motion has been implemented — `src/js/scroll.js`,
-`src/js/video-scrub.js`, `src/js/interactions.js`, and `src/js/mobile.js` are
-all still one-line stubs. This spec defines *how* motion will be built once
-Phase 3 of `docs/implementation-plan.md` is unblocked, drawing on the device
-vocabulary and taste rules identified in `docs/skills-analysis.md` (primarily
-`references/scroll-craft` and `references/taste-skill`), re-implemented in
-vanilla JS/CSS with no animation library, per `CLAUDE.md`.
+Status: implemented. This began as a planning document written before any
+motion existed; the sections below are kept as the reasoning trail, and
+**"What shipped"** at the end is the description of the current build. It
+draws on the device vocabulary and taste rules identified in
+`docs/skills-analysis.md` (primarily `references/scroll-craft` and
+`references/taste-skill`), re-implemented in vanilla JS/CSS with no animation
+library, per `CLAUDE.md`.
 
 ## Why vanilla, not GSAP/Motion
 
@@ -48,7 +48,7 @@ Consolidated from `scroll-craft`'s `taste.md` and `taste-skill`'s Sections
    only for continuously-driven values, and write results to CSS custom
    properties, not to React/JS state (there is none) or directly to
    layout-triggering styles.
-4. **Lerp, don't snap, for scrubbed values.** A target value updates every
+4. **Lerp, don't snap, for continuously driven values.** A target value updates every
    frame; the rendered value eases toward it (`current += (target - current) *
    factor`, factor ≈ 0.15–0.2) so uneven wheel-event timing doesn't read as
    stutter. Reduced-motion mode sets the factor to 1 (no smoothing).
@@ -86,7 +86,9 @@ the real copy/imagery once it lands.
 
 **Correction from the prior draft of this spec:** earlier versions of this
 table assumed a `scrub` (video-playhead) device for the hero and
-transformation sections. The actual wireframes specify a **static** hero
+transformation sections. A later build did briefly ship a scroll-scrubbed
+hero; the art-direction pass removed it, and the note below is the standing
+position again. The actual wireframes specify a **static** hero
 packshot with pointer parallax (no video) and a **drag slider** for
 before/after (also no video), not a scroll-scrubbed clip. `scrub` is dropped
 from the assignment table; `public/video/renuvol-intro.mp4`'s placement is
@@ -153,7 +155,7 @@ specified above. What shipped:
 | Module | Responsibility |
 |---|---|
 | `src/js/scroll.js` | One rAF loop for the whole page. Publishes `--rv-p` (0..1) per scene, drives cue opacity, ground drift, reveals, header state, nav spy. Runs only while a scene is on screen. |
-| `src/js/video-scrub.js` | Hero film scrubbing: lerp (0.18/frame), dead-band (8ms desktop / 20ms touch), seek coalescing, blob load, poster held until a frame paints, source picked by codec support. |
+| `src/js/video-modal.js` | The optional film: lazy source assignment on first open (nothing is fetched until someone asks for it), source picked by codec support, focus trap, ESC, scroll lock. Replaced `video-scrub.js`, deleted in the art-direction pass — the page scroll is no longer mapped to a video timeline. |
 | `src/js/interactions.js` | Formula orbit, comparison slider, chapter rail travel, protocol tabs, direction toggles, cases carousel, private selection, lead form. |
 | `src/js/mobile.js` | Menu, protocol accordion, swipe fallback, viewport-unit fallback. |
 
@@ -191,3 +193,19 @@ button's state.
 
 **Not verified:** behaviour on a real iOS device. Headless Chromium cannot
 reproduce Safari's video decoder, autoplay policy or Low Power Mode.
+
+## Two mechanics the implementation added
+
+Neither was in the plan; both came out of verifying the built page.
+
+- **Faded cues must be inert.** `[data-rv-cue]` elements are full-width
+  blocks driven to `opacity: 0`, and an element at zero opacity still
+  hit-tests. One of them sat over the hero's film CTA and swallowed the
+  click. `scroll.js` now sets `pointer-events: none` below 2% opacity and
+  clears it above — skipped entirely under reduced motion, where cues never
+  fade.
+- **Cue ranges that share a position must not overlap.** The manifesto's two
+  phrases occupy the same grid cell at different sizes. Their original ramps
+  overlapped for a fifth of the scene and printed one word over the other.
+  The rule: when two cues share a position, the first must reach 0 before the
+  second leaves 0.

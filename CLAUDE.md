@@ -5,7 +5,10 @@ Guidance for Claude Code when working in this repository.
 ## Project
 
 RENUVOL marketing website (product of LA BEAUTEX). The homepage is
-implemented: 13 sections, Russian-language, with a scroll-scrubbed hero film.
+implemented: 13 sections, Russian-language, art-directed as one continuous
+artwork — nine colour chapters, a fixed atmosphere layer and a CSS material
+system (see `docs/art-direction.md`). The film is an optional modal behind a
+CTA, not the hero; the page is complete without it.
 
 ## Language
 
@@ -32,8 +35,18 @@ are all Russian.
   silently breaks every `position: sticky` pinned section.
 - A hover preview must not share a class with a click toggle, or hovering
   inverts the button's state.
-- `preload="none"` on the hero video prevents it from ever decoding, so the
-  scrubber has nothing to seek.
+- `preload="none"` prevents a video from ever decoding. The film modal sets
+  `preload` before assigning the source for exactly this reason.
+- **Two things must not share a class name across layers.** `.rv-field` was
+  both a decorative absolute-positioned mass and the contact form's field
+  wrapper; every form label stacked on top of the next. The decorative one is
+  now `.rv-wash`.
+- **Never clip a scene or a pinned stage vertically.** `overflow: hidden`
+  there cuts the section's own colour at its boundary and draws a hard seam
+  between every section. Clip on the horizontal axis only (`overflow-x:
+  clip`) and contain vertically with a `mask-image` fade.
+- A cue at `opacity: 0` still receives clicks. `scroll.js` toggles
+  `pointer-events` so a faded cue cannot swallow the control underneath it.
 
 ## Commands
 

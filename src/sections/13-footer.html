@@ -1,13 +1,21 @@
 <!--
-  13 — Final CTA + footer. Shares the biotech scene's dark ground so the page
-  closes in the same visual world it peaked in, rather than dropping into a
-  generic footer.
+  13 — Final CTA + footer.
 
-  Contact details are placeholders: the wireframe's address is fictional
-  ("ул. Примерная") and no real contact data has been supplied.
+  Returns to the biotech world so the page closes where it peaked. Contact
+  and legal details are not supplied; those rows are omitted entirely rather
+  than shown as empty slots, and the footer is composed to read as finished
+  without them.
+  [CONTENT REQUIRED: телефон, e-mail, адрес, режим работы,
+   политика конфиденциальности, пользовательское соглашение]
 -->
-<footer class="rv-end" id="rv-contacts" data-rv-scene="end" data-rv-ground="dark">
-  <div class="rv-shell rv-end__cta">
+<footer class="rv-end" id="rv-contacts" data-rv-scene="end" data-rv-ground="night">
+  <div class="rv-scene rv-end__scene">
+    <span class="rv-wash rv-end__glow" style="--rv-wash-tint: #1b3a72"></span>
+    <span class="rv-orb rv-orb--dark rv-end__orb" style="--rv-orb-tint: #3f7fd0"></span>
+    <span class="rv-arc rv-end__arc"></span>
+  </div>
+
+  <div class="rv-shell rv-end__cta rv-above">
     <h2 class="rv-display rv-display--en rv-end__title" data-rv-reveal>
       Ready to discover<br />RENUVOL?
     </h2>
@@ -20,7 +28,7 @@
     </div>
   </div>
 
-  <div class="rv-shell rv-end__grid">
+  <div class="rv-shell rv-end__grid rv-above">
     <div class="rv-end__brand">
       <img
         class="rv-end__logo"
@@ -31,9 +39,7 @@
         loading="lazy"
       />
       <p class="rv-end__product">RENUVOL</p>
-      <p class="rv-end__descr">
-        Профессиональная линия для эстетической медицины.
-      </p>
+      <p class="rv-end__descr">Профессиональная линия для эстетической медицины.</p>
     </div>
 
     <nav class="rv-end__col" aria-label="Навигация в подвале">
@@ -53,20 +59,17 @@
       <a href="#rv-pro">Протоколы применения</a>
     </div>
 
-    <div class="rv-end__col">
-      <p class="rv-label">Контакты</p>
-      <p class="rv-required">[CONTENT REQUIRED: телефон]</p>
-      <p class="rv-required">[CONTENT REQUIRED: e-mail]</p>
-      <p class="rv-required">[CONTENT REQUIRED: адрес]</p>
-      <p class="rv-required">[CONTENT REQUIRED: режим работы]</p>
+    <div class="rv-end__col rv-end__col--contact">
+      <p class="rv-label">Связаться</p>
+      <p class="rv-end__contactText">
+        Оставьте контакты в форме — ответим и передадим материалы.
+      </p>
+      <a class="rv-btn rv-btn--line rv-btn--onDark" href="#rv-selection">Написать нам</a>
     </div>
   </div>
 
-  <div class="rv-shell rv-end__legal">
+  <div class="rv-shell rv-end__legal rv-above">
     <p>© <span data-rv-year>2026</span> RENUVOL · LA BEAUTEX</p>
-    <div class="rv-end__legal-links">
-      <a class="rv-required" href="#rv-contacts">[CONTENT REQUIRED: политика конфиденциальности]</a>
-      <a class="rv-required" href="#rv-contacts">[CONTENT REQUIRED: пользовательское соглашение]</a>
-    </div>
+    <p>Информация предназначена для специалистов эстетической медицины.</p>
   </div>
 </footer>

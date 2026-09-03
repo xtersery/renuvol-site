@@ -69,11 +69,15 @@ export function createScrollEngine({ reducedMotion = false } = {}) {
       stage,
       pinned: Boolean(span > 0 && stage),
       ground: el.dataset.rvGround || 'pearl',
-      cues: Array.from(el.querySelectorAll('[data-rv-cue]')).map((node) => ({
-        node,
-        cue: parseCue(node.dataset.rvCue),
-        last: -1,
-      })),
+      cues: Array.from(el.querySelectorAll('[data-rv-cue]')).map((node) => {
+        // A faded cue is invisible but still hit-testable, and several of
+        // them are full-width blocks laid over live controls. Start them
+        // inert; the loop restores hit-testing as they come in. Under
+        // reduced motion every cue is shown at once and never fades, so
+        // there is nothing to make inert.
+        if (!reducedMotion) node.style.pointerEvents = 'none';
+        return { node, cue: parseCue(node.dataset.rvCue), last: -1 };
+      }),
       visible: false,
       p: -1,
     });
@@ -95,21 +99,33 @@ export function createScrollEngine({ reducedMotion = false } = {}) {
   // Ground drift: whichever scene owns the middle of the viewport sets the
   // page ground, so colour changes hand off between scenes instead of
   // switching at hard section boundaries.
+  //
+  // This is resolved per frame from the scene rects rather than by an
+  // IntersectionObserver on a thin centre band. The observer version fired
+  // only on intersection *changes*, so a chapter whose entry event coincided
+  // with a neighbour's — or any chapter re-entered while scrolling up, where
+  // no new event fires at all — was silently skipped. Three of the nine
+  // chapters never appeared. Reading the midpoint each frame is
+  // deterministic, symmetric in both directions, and costs one pass over a
+  // list the loop already walks.
   let currentGround = '';
-  const groundIo = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const scene = scenes.find((s) => s.el === entry.target);
-        if (scene && scene.ground !== currentGround) {
-          currentGround = scene.ground;
-          root.dataset.rvGround = scene.ground;
-        }
-      });
-    },
-    { rootMargin: '-45% 0px -45% 0px' }
-  );
-  scenes.forEach((s) => groundIo.observe(s.el));
+
+  function updateGround() {
+    const mid = (window.innerHeight || document.documentElement.clientHeight) / 2;
+    let pick = null;
+
+    for (const scene of scenes) {
+      if (!scene.visible) continue;
+      const rect = scene.el.getBoundingClientRect();
+      // Later sections win an overlap, so the ground advances with the page.
+      if (rect.top <= mid && rect.bottom > mid) pick = scene;
+    }
+
+    if (pick && pick.ground !== currentGround) {
+      currentGround = pick.ground;
+      root.dataset.rvGround = pick.ground;
+    }
+  }
 
   function progressOf(scene) {
     const rect = scene.el.getBoundingClientRect();
@@ -126,9 +142,28 @@ export function createScrollEngine({ reducedMotion = false } = {}) {
     return clamp01((vh - rect.top) / travel);
   }
 
+  let lastPage = -1;
+
+  /**
+   * Global page progress, published on :root as --rv-page. The fixed
+   * atmosphere layer reads it, which is what carries the same forms through
+   * the whole document instead of restarting them per section.
+   */
+  function publishPageProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? clamp01(window.scrollY / max) : 0;
+    if (Math.abs(p - lastPage) < 0.0015) return;
+    lastPage = p;
+    root.style.setProperty('--rv-page', p.toFixed(4));
+  }
+
   function tick() {
     frame = 0;
     let active = false;
+
+    publishPageProgress();
+
+    updateGround();
 
     for (const scene of scenes) {
       if (!scene.visible) continue;
@@ -142,8 +177,12 @@ export function createScrollEngine({ reducedMotion = false } = {}) {
         for (const entry of scene.cues) {
           const o = cueOpacity(p, entry.cue);
           if (Math.abs(o - entry.last) > 0.004) {
+            const wasInert = entry.last <= 0.02;
             entry.last = o;
             entry.node.style.setProperty('--rv-o', o.toFixed(3));
+
+            const inert = !reducedMotion && o <= 0.02;
+            if (inert !== wasInert) entry.node.style.pointerEvents = inert ? 'none' : '';
           }
         }
 

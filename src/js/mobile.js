@@ -105,49 +105,6 @@ export function initProtocolAccordion() {
 }
 
 /**
- * Horizontal swipe for the cases carousel — only where the viewport is not
- * already natively scrollable. Below the mobile breakpoint the rail uses real
- * scroll-snap, and a synthetic swipe handler would fight it.
- */
-export function initSwipe(carousel) {
-  const viewport = document.querySelector('[data-rv-cases]');
-  if (!viewport || !carousel) return;
-  if (carousel.nativeScroll?.()) return;
-
-  let startX = 0;
-  let startY = 0;
-  let tracking = false;
-
-  viewport.addEventListener(
-    'touchstart',
-    (event) => {
-      if (event.touches.length !== 1) return;
-      tracking = true;
-      startX = event.touches[0].clientX;
-      startY = event.touches[0].clientY;
-    },
-    { passive: true }
-  );
-
-  viewport.addEventListener(
-    'touchend',
-    (event) => {
-      if (!tracking) return;
-      tracking = false;
-
-      const touch = event.changedTouches[0];
-      const dx = touch.clientX - startX;
-      const dy = touch.clientY - startY;
-
-      // Ignore anything that reads as a vertical scroll.
-      if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
-      carousel.go(carousel.index + (dx < 0 ? 1 : -1));
-    },
-    { passive: true }
-  );
-}
-
-/**
  * iOS viewport height: 100dvh is well supported now, but older Safari still
  * needs a measured fallback for the pinned stages.
  */

@@ -8,11 +8,18 @@ practitioners, with a clinical-light editorial language, leaning toward
 premium Korean cosmeceutical × editorial fashion rather than a
 pharmaceutical catalogue.
 
-**Dials** (`taste-skill` vocabulary): `DESIGN_VARIANCE 7` — asymmetric
-composition and an orbital formula system, but a disciplined grid;
-`MOTION_INTENSITY 7` — one scroll-scrubbed film and two pinned scenes, no
-ambient loops; `VISUAL_DENSITY 3` — an editorial amount of air, since the
-page is a considered read for a professional audience, not a dashboard.
+**Dials** (`taste-skill` vocabulary), as the art-direction pass left them:
+`DESIGN_VARIANCE 8` — every section has a bespoke composition and no two
+share a layout gesture; `MOTION_INTENSITY 7` — four pinned scenes, a fixed
+atmosphere layer that drifts with global page progress, and colour chapters
+that interpolate, but no ambient loops and no scroll-driven video;
+`VISUAL_DENSITY 3` — an editorial amount of air, since the page is a
+considered read for a professional audience, not a dashboard.
+
+The colour and material layer built on top of these tokens has its own
+document: `docs/art-direction.md`. Read it alongside this one — the nine
+colour chapters and the `rv-orb` / `rv-blob` / `rv-membrane` / `rv-wash` /
+`rv-arc` / `rv-iris` material set live there, not here.
 
 No mood/inspiration references were ever supplied
 (`public/references/inspiration/` is still empty), so the visual language

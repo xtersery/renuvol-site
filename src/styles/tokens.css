@@ -1,40 +1,75 @@
 /* ==========================================================================
    RENUVOL — design tokens
-   All custom properties are namespaced --rv-* so the stylesheet can coexist
-   with a Tilda page without collisions. See docs/design-system.md.
+   Namespaced --rv-* so the stylesheet can coexist with a Tilda page.
+   Reasoning: docs/design-system.md and docs/art-direction.md.
    ========================================================================== */
 
+/* Atmosphere colours are registered so they interpolate between colour
+   chapters instead of jumping. Without @property support the switch is
+   instant, which degrades gracefully. */
+@property --rv-atm-1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #cfe3ef;
+}
+@property --rv-atm-2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #e7dcef;
+}
+@property --rv-atm-3 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f0e7dd;
+}
+@property --rv-bg {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #eef3f6;
+}
+@property --rv-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #2a5ea8;
+}
+
 :root {
-  /* --- Ground / surface ------------------------------------------------ */
-  --rv-pearl: #f2efea; /* warm white, primary editorial ground */
+  /* --- Core palette ----------------------------------------------------- */
+  --rv-pearl: #f2efea;
   --rv-ivory: #faf8f5;
-  --rv-ice: #e6eef3; /* icy light blue, product-world ground */
-  --rv-ice-deep: #d5e3ec;
-  --rv-mineral: #c3c6c8; /* mineral gray */
+  --rv-ice: #e4eff5;
+  --rv-ice-deep: #cfe1ec;
+  --rv-mineral: #c3c6c8;
 
-  --rv-ink: #14171a; /* near-black, never #000 */
+  --rv-ink: #14171a;
   --rv-graphite: #1d2226;
-  --rv-navy: #0b1220; /* deep navy, biotech scene */
-  --rv-navy-soft: #131c2e;
+  --rv-navy: #080d18;
+  --rv-navy-soft: #101a2e;
 
-  /* --- Accent ----------------------------------------------------------- */
-  --rv-cobalt: #2a5ea8; /* the single page accent */
-  --rv-cobalt-bright: #3d78c9;
+  --rv-cobalt: #2a5ea8;
+  --rv-cobalt-bright: #4d8ada;
+  --rv-electric: #5ea9ff;
 
-  /* Component accents — used only inside Section 04 and the chapter rail. */
-  --rv-a-pdo: #7d94a8; /* silver-ice: the structural base ingredient */
-  --rv-a-pn: #5fa9bd; /* soft aqua */
-  --rv-a-vitc: #c08a3e; /* the one warm note */
-  --rv-a-gsh: #9a92bd; /* restrained lilac */
-  --rv-a-ha: #4272ad; /* deeper blue */
+  /* Ingredient identities — used in Section 04 and the chapter rail. */
+  --rv-a-pdo: #b9a48a; /* warm silver-gold */
+  --rv-a-pn: #4fb3c4; /* aqua / turquoise */
+  --rv-a-vitc: #d99235; /* amber */
+  --rv-a-gsh: #9b8fd0; /* opalescent violet */
+  --rv-a-ha: #3f7fd0; /* deep clear blue */
 
-  /* --- Semantic (re-pointed per scene by the ground drift) -------------- */
-  --rv-bg: var(--rv-pearl);
+  /* --- Semantic (re-pointed per colour chapter) ------------------------- */
+  --rv-bg: var(--rv-ice);
   --rv-fg: var(--rv-ink);
   --rv-fg-soft: #5c6167;
   --rv-line: rgb(20 23 26 / 0.14);
-  --rv-line-soft: rgb(20 23 26 / 0.08);
+  --rv-line-soft: rgb(20 23 26 / 0.07);
   --rv-accent: var(--rv-cobalt);
+
+  /* Atmosphere masses behind everything. */
+  --rv-atm-1: #bcdcee;
+  --rv-atm-2: #dfe4f4;
+  --rv-atm-3: #f2ece4;
+  --rv-atm-opacity: 0.6;
 
   /* --- Type ------------------------------------------------------------- */
   --rv-font-display: 'Prata', 'Georgia', 'Times New Roman', serif;
@@ -69,7 +104,7 @@
 
   --rv-gutter: clamp(20px, 5vw, 72px);
   --rv-shell: 1420px;
-  --rv-section-y: clamp(88px, 11vh, 176px);
+  --rv-section-y: clamp(96px, 12vh, 190px);
 
   /* --- Motion ----------------------------------------------------------- */
   --rv-ease: cubic-bezier(0.23, 1, 0.32, 1);
@@ -77,6 +112,7 @@
   --rv-dur-fast: 140ms;
   --rv-dur: 240ms;
   --rv-dur-slow: 620ms;
+  --rv-dur-chapter: 900ms; /* colour-chapter interpolation */
 
   /* --- Depth ------------------------------------------------------------ */
   --rv-e1: 0 1px 2px rgb(20 23 26 / 0.05), 0 8px 24px -12px rgb(20 23 26 / 0.14);
@@ -85,43 +121,135 @@
 
   /* --- Layers ----------------------------------------------------------- */
   --rv-z-ground: 0;
-  --rv-z-content: 1;
+  --rv-z-atmos: 1;
+  --rv-z-content: 2;
   --rv-z-header: 60;
   --rv-z-menu: 70;
+  --rv-z-modal: 90;
   --rv-z-grain: 80;
 
-  --rv-header-h: 72px;
+  --rv-header-h: 76px;
 }
 
-/* Scene grounds. scroll.js sets data-rv-ground on <html> as scenes pass. */
-:root[data-rv-ground='pearl'] {
-  --rv-bg: var(--rv-pearl);
-  --rv-fg: var(--rv-ink);
-  --rv-fg-soft: #5c6167;
-  --rv-line: rgb(20 23 26 / 0.14);
-  --rv-line-soft: rgb(20 23 26 / 0.08);
-}
+/* ==========================================================================
+   Colour chapters. scroll.js sets data-rv-ground on <html> as scenes pass;
+   every value below interpolates over --rv-dur-chapter.
+   ========================================================================== */
 
 :root[data-rv-ground='ice'] {
-  --rv-bg: var(--rv-ice);
+  --rv-bg: #e6f1f7;
   --rv-fg: var(--rv-ink);
-  --rv-fg-soft: #4f5c66;
-  --rv-line: rgb(20 40 56 / 0.16);
-  --rv-line-soft: rgb(20 40 56 / 0.09);
+  --rv-fg-soft: #4f6069;
+  --rv-line: rgb(16 42 58 / 0.16);
+  --rv-line-soft: rgb(16 42 58 / 0.07);
+  --rv-accent: var(--rv-cobalt);
+  --rv-atm-1: #9ecfe8;
+  --rv-atm-2: #cfe0f5;
+  --rv-atm-3: #f4f1ea;
+}
+
+:root[data-rv-ground='pearl'] {
+  --rv-bg: #f3ece6;
+  --rv-fg: #191518;
+  --rv-fg-soft: #6a5f63;
+  --rv-line: rgb(40 26 32 / 0.15);
+  --rv-line-soft: rgb(40 26 32 / 0.07);
+  --rv-accent: #8f6fa8;
+  --rv-atm-1: #e8d2dd;
+  --rv-atm-2: #d9cdea;
+  --rv-atm-3: #f7efe6;
+}
+
+:root[data-rv-ground='glass'] {
+  --rv-bg: #edf2f5;
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #576169;
+  --rv-line: rgb(20 34 46 / 0.15);
+  --rv-line-soft: rgb(20 34 46 / 0.07);
+  --rv-accent: var(--rv-cobalt);
+  --rv-atm-1: #b9e0e6;
+  --rv-atm-2: #ded3ef;
+  --rv-atm-3: #f5e8d6;
+}
+
+:root[data-rv-ground='skin'] {
+  --rv-bg: #f5ebe6;
+  --rv-fg: #1b1517;
+  --rv-fg-soft: #6f6062;
+  --rv-line: rgb(48 28 30 / 0.14);
+  --rv-line-soft: rgb(48 28 30 / 0.06);
+  --rv-accent: #b3697a;
+  --rv-atm-1: #f0d2cd;
+  --rv-atm-2: #d9e6ef;
+  --rv-atm-3: #f8efe6;
+}
+
+:root[data-rv-ground='flux'] {
+  --rv-bg: #ecf1f2;
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #566065;
+  --rv-line: rgb(20 34 40 / 0.14);
+  --rv-line-soft: rgb(20 34 40 / 0.06);
+  --rv-accent: #2f7f92;
+  --rv-atm-1: #a8dbdf;
+  --rv-atm-2: #edd6cd;
+  --rv-atm-3: #f2ecdf;
 }
 
 :root[data-rv-ground='dark'] {
-  --rv-bg: var(--rv-navy);
+  --rv-bg: #080d18;
   --rv-fg: #eef2f6;
-  --rv-fg-soft: #9aa7b6;
-  --rv-line: rgb(238 242 246 / 0.18);
+  --rv-fg-soft: #93a3b8;
+  --rv-line: rgb(238 242 246 / 0.2);
   --rv-line-soft: rgb(238 242 246 / 0.1);
-  --rv-accent: var(--rv-cobalt-bright);
+  --rv-accent: var(--rv-electric);
+  --rv-atm-1: #14356b;
+  --rv-atm-2: #3a2a70;
+  --rv-atm-3: #071021;
+  --rv-atm-opacity: 1;
+}
+
+:root[data-rv-ground='clinic'] {
+  --rv-bg: #eef1f4;
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #5a636b;
+  --rv-line: rgb(20 30 44 / 0.15);
+  --rv-line-soft: rgb(20 30 44 / 0.07);
+  --rv-accent: #21518f;
+  --rv-atm-1: #c6d6e8;
+  --rv-atm-2: #dfe6ee;
+  --rv-atm-3: #eef1f4;
+}
+
+:root[data-rv-ground='warm'] {
+  --rv-bg: #f4ede5;
+  --rv-fg: #1a1613;
+  --rv-fg-soft: #6d635a;
+  --rv-line: rgb(44 32 20 / 0.15);
+  --rv-line-soft: rgb(44 32 20 / 0.07);
+  --rv-accent: #a8763a;
+  --rv-atm-1: #f0dcc5;
+  --rv-atm-2: #e2d5e6;
+  --rv-atm-3: #f7f1e8;
+}
+
+:root[data-rv-ground='night'] {
+  --rv-bg: #070b14;
+  --rv-fg: #eef2f6;
+  --rv-fg-soft: #8b9bb0;
+  --rv-line: rgb(238 242 246 / 0.18);
+  --rv-line-soft: rgb(238 242 246 / 0.09);
+  --rv-accent: var(--rv-electric);
+  --rv-atm-1: #101f42;
+  --rv-atm-2: #2a2258;
+  --rv-atm-3: #06090f;
+  --rv-atm-opacity: 1;
 }
 
 @media (max-width: 900px) {
   :root {
-    --rv-header-h: 60px;
+    --rv-header-h: 62px;
     --rv-measure: 34ch;
+    --rv-section-y: clamp(72px, 9vh, 120px);
   }
 }

@@ -8,19 +8,18 @@
  */
 
 import { createScrollEngine, initReveals, initHeader } from './scroll.js';
-import { initVideoScrub } from './video-scrub.js';
+import { initFilm } from './video-modal.js';
 import {
+  initPointer,
   initFormula,
   initCompare,
   initRail,
   initProtocolSelector,
-  initDirections,
-  initCases,
   initSelection,
   initForm,
   initYear,
 } from './interactions.js';
-import { initMenu, initProtocolAccordion, initSwipe, initViewportUnit } from './mobile.js';
+import { initMenu, initProtocolAccordion, initViewportUnit } from './mobile.js';
 
 function boot() {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -35,27 +34,25 @@ function boot() {
   initHeader();
   initReveals();
   initMenu();
-
-  const scrub = initVideoScrub({ engine, reducedMotion });
+  initPointer();
 
   initFormula();
   initCompare();
   initRail({ engine });
   initProtocolSelector();
   initProtocolAccordion();
-  initDirections();
-
-  const cases = initCases();
-  initSwipe(cases);
 
   initSelection();
   initForm();
   initYear();
 
+  // The film is optional and loads nothing until it is opened.
+  const film = initFilm();
+
   window.RENUVOL = {
     engine,
+    film,
     destroy() {
-      scrub?.destroy();
       engine.destroy();
     },
   };

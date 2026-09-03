@@ -118,7 +118,7 @@ assumed here.
 
 | Section | Video need per wireframe | Status |
 |---|---|---|
-| `02-hero.html` | Oversized title + parallax packshot; wireframe does not show scrub-video, uses static packshot with mouse parallax instead | `renuvol-intro.mp4` is a candidate, needs confirmation |
+| `02-hero.html` | Oversized title + parallax packshot; wireframe does not show scrub-video, uses static packshot with mouse parallax instead | Built that way. `renuvol-intro.mp4` is offered from the hero as an optional modal, not as the hero itself |
 | `05-transformation.html` | Before/after **image** slider (drag), not video | No video need per wireframe — was assumed in the prior audit pass, corrected here |
 | `07-biotech.html` | "Slow dramatic scroll," ambient glow animation around a network/globe graphic | Could use `renuvol-intro.mp4` or a generated/CSS effect; not decided |
 
@@ -338,9 +338,10 @@ review before use.
 
 | Asset | Status | Used on the site? | Note |
 |---|---|---|---|
+| `public/favicon.svg` | FINAL-CANDIDATE (authored here) | **Yes** — browser tab icon | Drawn in this repo from the site's own glass-orb material. No third-party artwork, nothing to clear |
 | `public/images/brand/la-beautex-logo.png` | FINAL-CANDIDATE | **Yes** — header and footer | Supplied directly by the project owner. Low resolution (382×256px); a vector/higher-res source is still worth requesting, and the black artwork is inverted by CSS on the dark scenes |
-| `public/video/renuvol-intro.mp4` | FINAL-CANDIDATE (owner-supplied, owner-directed) | **Yes** — source for the hero | Reviewed frame by frame against the claims policy: it carries no blocked claim as on-screen text. It does end on a **METABIOMED end-card**, which the hero deliberately stops before (`data-rv-end="39.4"`) — a third-party manufacturer mark is not something to surface without a rights decision |
-| `public/video/renuvol-hero-scrub.{webm,mp4}`, `-mobile.{webm,mp4}`, `renuvol-hero-poster.jpg` | FINAL-CANDIDATE (derived) | **Yes** | Re-encodes of the above for scrubbing (dense GOP) plus a poster frame. Regeneration commands are in `docs/tilda-integration.md` |
+| `public/video/renuvol-intro.mp4` | FINAL-CANDIDATE (owner-supplied, owner-directed) | **Yes** — source for the film modal | Reviewed frame by frame against the claims policy: it carries no blocked claim as on-screen text. It does end on a **METABIOMED end-card** — a third-party manufacturer mark is not something to surface without a rights decision. The film modal stops playback at `data-rv-end="39.4"` of 43.7s, before the card. Drop the attribute once a trimmed master exists or the rights are cleared |
+| `public/video/renuvol-hero-scrub.{webm,mp4}`, `-mobile.{webm,mp4}`, `renuvol-hero-poster.jpg` | FINAL-CANDIDATE (derived) | **Yes** — played by the film modal, fetched only when someone opens it | Re-encodes of the above (dense GOP, from when the hero scrubbed) plus a poster frame. The names are now historical; regeneration commands are in `docs/tilda-integration.md` |
 | `public/images/product/renuvol-vial.webp` | FINAL-CANDIDATE (derived) | **Yes** — centre of Section 04 | A still cut from the owner-supplied film. Chosen over the supplied renders because its packaging text is clean and legible |
 | `public/images/product/*.png` (the 5 original renders) | **DO-NOT-USE** as public assets | No | Beyond the AI-generation/Photoroom provenance already noted, the label text is visibly garbled and inconsistent across them ("PREMIUM COMETOLOGY", "PREMIUM COME TOLOGY"), which is disqualifying at any size a viewer could read. They also show composition figures (`100mg / Vial`, `PDO 35mg, PN 8mg`) that are unverified — see `docs/claims-verification.md` row 35. Kept in the repo as reference |
 | `public/fonts/*.woff2` (4 files) | FINAL-CANDIDATE | **Yes** | Self-hosted Onest + Prata, Latin and Cyrillic subsets only, ~92KB total |

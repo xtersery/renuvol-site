@@ -1,66 +1,71 @@
 <!--
   06 — What changes in the skin.
 
-  Desktop: the section pins and vertical scroll drives a horizontal rail of
-  five editorial chapters. Mobile: the rail becomes a swipeable sequence
-  (see docs/mobile-spec.md) rather than a shrunken copy of the desktop.
+  No longer five independent cards. One central form evolves through the five
+  chapters as the rail travels: liquid → compressed layers → stretched →
+  refined → iridescent. Each chapter publishes its own accent, which drives
+  the central form, the connecting line and the section's atmosphere.
 
-  Chapter titles are approved topic labels. Each supporting description stays
-  [CONTENT REQUIRED] — no effect claims are published here.
+  The five chapter names are approved topic labels. Descriptions are not
+  written yet, and the panels are composed to read as finished without them.
+  [CONTENT REQUIRED: verified description × 5]
 -->
 <section
   class="rv-changes"
   id="rv-changes"
   data-rv-scene="changes"
-  data-rv-ground="pearl"
-  data-rv-span="4.4"
+  data-rv-ground="flux"
+  data-rv-span="4.6"
 >
   <div class="rv-changes__stage" data-rv-stage>
-    <div class="rv-changes__head rv-shell">
-      <h2 class="rv-display rv-changes__title">Что меняется в коже</h2>
-      <p class="rv-changes__hint">
-        <span class="rv-changes__hint-line" aria-hidden="true"></span>
-        Прокрутка вниз ведёт последовательность
-      </p>
+    <div class="rv-scene rv-changes__scene">
+      <span class="rv-wash rv-changes__wash" style="--rv-wash-tint: var(--rv-stage-tint, #a8dbdf)"></span>
+      <span class="rv-arc rv-changes__arc"></span>
     </div>
 
-    <div class="rv-rail" data-rv-rail>
+    <!-- The evolving protagonist: one form, five states. -->
+    <div class="rv-morph rv-above" data-rv-morph aria-hidden="true">
+      <span class="rv-morph__body"></span>
+      <span class="rv-morph__ring"></span>
+      <span class="rv-morph__core"></span>
+    </div>
+
+    <div class="rv-changes__head rv-shell rv-above">
+      <h2 class="rv-display rv-changes__title">Что меняется<br />в коже</h2>
+    </div>
+
+    <div class="rv-rail rv-above" data-rv-rail>
       <article class="rv-chapter" data-rv-accent="ha">
         <p class="rv-chapter__index">01</p>
         <h3 class="rv-chapter__title">Увлажнение</h3>
-        <div class="rv-chapter__visual" aria-hidden="true"><span></span></div>
-        <p class="rv-chapter__text rv-required">[CONTENT REQUIRED: verified description]</p>
+        <span class="rv-chapter__rule" aria-hidden="true"></span>
       </article>
 
       <article class="rv-chapter" data-rv-accent="pdo">
         <p class="rv-chapter__index">02</p>
         <h3 class="rv-chapter__title">Плотность</h3>
-        <div class="rv-chapter__visual" aria-hidden="true"><span></span></div>
-        <p class="rv-chapter__text rv-required">[CONTENT REQUIRED: verified description]</p>
+        <span class="rv-chapter__rule" aria-hidden="true"></span>
       </article>
 
       <article class="rv-chapter" data-rv-accent="pn">
         <p class="rv-chapter__index">03</p>
         <h3 class="rv-chapter__title">Эластичность</h3>
-        <div class="rv-chapter__visual" aria-hidden="true"><span></span></div>
-        <p class="rv-chapter__text rv-required">[CONTENT REQUIRED: verified description]</p>
+        <span class="rv-chapter__rule" aria-hidden="true"></span>
       </article>
 
       <article class="rv-chapter" data-rv-accent="gsh">
         <p class="rv-chapter__index">04</p>
         <h3 class="rv-chapter__title">Рельеф</h3>
-        <div class="rv-chapter__visual" aria-hidden="true"><span></span></div>
-        <p class="rv-chapter__text rv-required">[CONTENT REQUIRED: verified description]</p>
+        <span class="rv-chapter__rule" aria-hidden="true"></span>
       </article>
 
-      <article class="rv-chapter rv-chapter--wide" data-rv-accent="vitc">
+      <article class="rv-chapter" data-rv-accent="vitc">
         <p class="rv-chapter__index">05</p>
-        <h3 class="rv-chapter__title">Glow<span class="rv-chapter__slash">/</span>Сияние</h3>
-        <div class="rv-chapter__visual" aria-hidden="true"><span></span></div>
-        <p class="rv-chapter__text rv-required">[CONTENT REQUIRED: verified description]</p>
+        <h3 class="rv-chapter__title">Glow<span class="rv-slash">/</span>Сияние</h3>
+        <span class="rv-chapter__rule" aria-hidden="true"></span>
       </article>
     </div>
 
-    <div class="rv-rail__progress" aria-hidden="true"><span data-rv-rail-bar></span></div>
+    <div class="rv-rail__progress rv-above" aria-hidden="true"><span></span></div>
   </div>
 </section>

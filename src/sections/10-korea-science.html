@@ -1,59 +1,66 @@
 <!--
-  10 — South Korea / science / quality. SAFE INTERIM VERSION.
+  10 — South Korea / science / quality. SAFE INTERIM VERSION, unchanged in
+  substance: no founding year, patent count, country count, award, factory
+  figure or first-in-world claim (docs/claims-verification.md rows 13-21),
+  and no fabricated certificate cards.
 
-  Every manufacturer credential from the reference material (founding year,
-  patent counts, country counts, awards, factory figures, first-in-world
-  claims, vertical integration) is UNVERIFIED and deliberately absent — see
-  docs/claims-verification.md rows 13-20. Certificates are a neutral
-  placeholder, not fabricated ISO/KFDA/CE cards (row 21).
+  Recomposed: the wordmark runs oversized against a large arc, the four
+  pillars sit as a stepped editorial index, and the documents block resolves
+  into an honest request rather than an empty placeholder.
+  [CONTENT REQUIRED: verified pillar descriptions; verified certificates]
 -->
 <section
   class="rv-korea"
   id="rv-korea"
   data-rv-scene="korea"
-  data-rv-ground="pearl"
+  data-rv-ground="clinic"
 >
-  <div class="rv-shell rv-korea__grid">
+  <div class="rv-scene rv-korea__scene">
+    <span class="rv-arc rv-korea__arc rv-arc--thick"></span>
+    <span class="rv-wash rv-korea__wash" style="--rv-wash-tint: #b9cee6"></span>
+    <span class="rv-orb rv-korea__orb" style="--rv-orb-tint: #7fa8d8"></span>
+  </div>
+
+  <div class="rv-shell rv-korea__grid rv-above">
     <div class="rv-korea__lead">
       <h2 class="rv-display rv-display--en rv-korea__title" data-rv-reveal>
         Made in<br />South<br />Korea
       </h2>
-      <p class="rv-korea__sub" data-rv-reveal>Южная Корея<span class="rv-slash">/</span>наука<span class="rv-slash">/</span>качество</p>
+      <p class="rv-korea__sub" data-rv-reveal>
+        Южная Корея<span class="rv-slash">/</span>наука<span class="rv-slash">/</span>качество
+      </p>
     </div>
 
-    <div class="rv-korea__pillars">
-      <article class="rv-pillar" data-rv-reveal>
+    <ol class="rv-korea__pillars" role="list">
+      <li class="rv-pillar" data-rv-reveal>
         <span class="rv-pillar__index">01</span>
         <h3 class="rv-pillar__title">Технологический подход</h3>
-        <p class="rv-pillar__text rv-required">[CONTENT REQUIRED: verified description]</p>
-      </article>
-      <article class="rv-pillar" data-rv-reveal>
+      </li>
+      <li class="rv-pillar" data-rv-reveal>
         <span class="rv-pillar__index">02</span>
         <h3 class="rv-pillar__title">Производственная культура</h3>
-        <p class="rv-pillar__text rv-required">[CONTENT REQUIRED: verified description]</p>
-      </article>
-      <article class="rv-pillar" data-rv-reveal>
+      </li>
+      <li class="rv-pillar" data-rv-reveal>
         <span class="rv-pillar__index">03</span>
         <h3 class="rv-pillar__title">Контроль качества</h3>
-        <p class="rv-pillar__text rv-required">[CONTENT REQUIRED: verified description]</p>
-      </article>
-      <article class="rv-pillar" data-rv-reveal>
+      </li>
+      <li class="rv-pillar" data-rv-reveal>
         <span class="rv-pillar__index">04</span>
         <h3 class="rv-pillar__title">Исследовательская база</h3>
-        <p class="rv-pillar__text rv-required">[CONTENT REQUIRED: verified description]</p>
-      </article>
-    </div>
+      </li>
+    </ol>
   </div>
 
-  <div class="rv-shell">
-    <div class="rv-docs">
-      <div class="rv-docs__head">
+  <div class="rv-shell rv-above">
+    <div class="rv-docs rv-membrane">
+      <span class="rv-iris" aria-hidden="true"></span>
+      <div>
         <h3 class="rv-docs__title">Документы и регистрационные материалы</h3>
         <p class="rv-docs__note">
-          Публикуем только после подтверждения оригинальными документами.
+          Предоставляем практикующим специалистам по запросу.
         </p>
       </div>
-      <p class="rv-required rv-docs__placeholder">[CONTENT REQUIRED: verified certificates]</p>
+      <a class="rv-btn rv-btn--line" href="#rv-selection">Запросить документы</a>
     </div>
   </div>
 </section>

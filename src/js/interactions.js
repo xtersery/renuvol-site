@@ -1,21 +1,60 @@
 /**
- * Pointer-driven interactions: formula orbit, before/after comparison,
- * protocol selector, cosmetologist directions, cases carousel, private
- * selection and the lead form.
+ * Pointer-driven interactions and scene transformation.
  *
  * Everything here is namespaced to the RENUVOL markup and attaches only to
  * elements it finds, so any single section can be lifted out (see
  * docs/tilda-integration.md) without breaking the rest.
  */
 
-const isFinePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+const isFinePointer = () =>
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Pointer parallax ------------------------------------------------
+   Publishes a normalised pointer position (-1..1) so any element carrying
+   .rv-pointer can respond in CSS. Fine pointers only, and never under
+   reduced motion. */
+
+export function initPointer() {
+  if (!isFinePointer()) return;
+
+  const root = document.documentElement;
+  let pending = 0;
+  let x = 0;
+  let y = 0;
+
+  window.addEventListener(
+    'pointermove',
+    (event) => {
+      x = (event.clientX / window.innerWidth) * 2 - 1;
+      y = (event.clientY / window.innerHeight) * 2 - 1;
+      if (pending) return;
+      pending = requestAnimationFrame(() => {
+        pending = 0;
+        root.style.setProperty('--rv-mx', x.toFixed(3));
+        root.style.setProperty('--rv-my', y.toFixed(3));
+      });
+    },
+    { passive: true }
+  );
+}
 
 /* ---------- 04 · Formula orbit -------------------------------------------- */
+
+/** Ingredient identities. One colour drives the whole scene per selection. */
+const INGREDIENT_TINT = {
+  pdo: 'var(--rv-a-pdo)',
+  pn: 'var(--rv-a-pn)',
+  vitc: 'var(--rv-a-vitc)',
+  gsh: 'var(--rv-a-gsh)',
+  ha: 'var(--rv-a-ha)',
+};
 
 export function initFormula() {
   const root = document.querySelector('[data-rv-formula]');
   if (!root) return;
 
+  const section = root.closest('[data-rv-scene]');
   const nodes = Array.from(root.querySelectorAll('[data-rv-node]'));
   const panels = Array.from(root.querySelectorAll('[data-rv-panel]'));
   const links = Array.from(root.querySelectorAll('[data-rv-link]'));
@@ -32,6 +71,13 @@ export function initFormula() {
     panels.forEach((panel) => {
       panel.hidden = panel.dataset.rvPanel !== key;
     });
+
+    // Selecting an ingredient transforms the scene, not just the text: the
+    // halo, the wash across the product, the connector and the heading all
+    // read from this one value.
+    if (section && INGREDIENT_TINT[key]) {
+      section.style.setProperty('--rv-active', INGREDIENT_TINT[key]);
+    }
   }
 
   nodes.forEach((node) => {
@@ -43,10 +89,9 @@ export function initFormula() {
     }
   });
 
-  setActiveLinkInitial();
-
-  function setActiveLinkInitial() {
-    links.forEach((line) => line.classList.toggle('is-active', line.dataset.rvLink === active));
+  links.forEach((line) => line.classList.toggle('is-active', line.dataset.rvLink === active));
+  if (section && INGREDIENT_TINT[active]) {
+    section.style.setProperty('--rv-active', INGREDIENT_TINT[active]);
   }
 
   buildFormulaAccordion(root, panels, nodes);
@@ -62,7 +107,7 @@ function buildFormulaAccordion(root, panels, nodes) {
   const cta = detail?.querySelector('.rv-detail__cta');
   if (!detail || detail.querySelector('.rv-accordion')) return;
 
-  const mq = window.matchMedia('(max-width: 760px)');
+  const mq = window.matchMedia('(max-width: 860px)');
   let accordion = null;
 
   const build = () => {
@@ -78,18 +123,19 @@ function buildFormulaAccordion(root, panels, nodes) {
 
       const item = document.createElement('div');
       item.className = 'rv-accordion__item';
-      if (index === 0) item.classList.add('is-open');
       item.dataset.rvAccent = panel.dataset.rvAccent || '';
+      if (index === 0) item.classList.add('is-open');
 
       const trigger = document.createElement('button');
       trigger.type = 'button';
       trigger.className = 'rv-accordion__trigger';
       trigger.setAttribute('aria-expanded', index === 0 ? 'true' : 'false');
       trigger.innerHTML =
-        `<span class="rv-accordion__lead">` +
+        '<span class="rv-accordion__lead">' +
+        `<span class="rv-accordion__dot" aria-hidden="true"></span>` +
         `<span class="rv-node__index">${indexLabel}</span>` +
-        `<span class="rv-node__name"></span>` +
-        `</span><span class="rv-accordion__sign" aria-hidden="true"></span>`;
+        '<span class="rv-node__name"></span>' +
+        '</span><span class="rv-accordion__sign" aria-hidden="true"></span>';
       trigger.querySelector('.rv-node__name').textContent = name;
 
       const body = document.createElement('div');
@@ -105,7 +151,6 @@ function buildFormulaAccordion(root, panels, nodes) {
 
       item.append(trigger, body);
       accordion.append(item);
-      // Move the real panel content into the accordion body.
       inner.append(panel);
       panel.hidden = false;
     });
@@ -116,13 +161,9 @@ function buildFormulaAccordion(root, panels, nodes) {
 
   const teardown = () => {
     if (!accordion) return;
-    panels.forEach((panel) => {
-      detail.insertBefore(panel, accordion);
-      panel.hidden = panel.dataset.rvPanel !== nodes[0].dataset.rvNode;
-    });
+    panels.forEach((panel) => detail.insertBefore(panel, accordion));
     accordion.remove();
     accordion = null;
-    // Re-assert the desktop active panel.
     const first = nodes.find((n) => n.getAttribute('aria-pressed') === 'true') || nodes[0];
     panels.forEach((panel) => {
       panel.hidden = panel.dataset.rvPanel !== first.dataset.rvNode;
@@ -180,15 +221,36 @@ export function initCompare() {
   root.addEventListener('pointercancel', stop);
 }
 
-/* ---------- 06 · Horizontal chapter rail ----------------------------------- */
+/* ---------- 06 · Chapter rail + the evolving form --------------------------- */
+
+/**
+ * Five states of one form. The rail's progress selects the state, so the
+ * central sculpture is the section's protagonist and the chapters are its
+ * captions.
+ */
+const MORPH_STATES = [
+  // Увлажнение — liquid, luminous, full
+  { tint: 'var(--rv-a-ha)', radius: '50%', scale: 1, stretch: 1, ring: 1, core: 0.9 },
+  // Плотность — compressed, denser, tighter
+  { tint: 'var(--rv-a-pdo)', radius: '44% 44% 40% 40% / 46% 46% 42% 42%', scale: 0.92, stretch: 0.82, ring: 0.86, core: 0.55 },
+  // Эластичность — stretched
+  { tint: 'var(--rv-a-pn)', radius: '52% 48% 46% 54% / 58% 54% 46% 42%', scale: 1.04, stretch: 1.22, ring: 1.1, core: 0.6 },
+  // Рельеф — refined, smoothed
+  { tint: 'var(--rv-a-gsh)', radius: '50%', scale: 0.98, stretch: 1, ring: 0.94, core: 0.42 },
+  // Glow — brightest, iridescent
+  { tint: 'var(--rv-a-vitc)', radius: '50%', scale: 1.14, stretch: 1, ring: 1.24, core: 1 },
+];
 
 export function initRail({ engine }) {
   const rail = document.querySelector('[data-rv-rail]');
   const scene = rail?.closest('[data-rv-scene]');
   if (!rail || !scene || !engine) return;
 
-  const mq = window.matchMedia('(max-width: 760px)');
+  const stage = scene.querySelector('[data-rv-stage]') || scene;
+  const chapters = Array.from(rail.querySelectorAll('.rv-chapter'));
+  const mq = window.matchMedia('(max-width: 860px)');
   let travel = 0;
+  let state = -1;
 
   const measure = () => {
     if (mq.matches) {
@@ -196,19 +258,51 @@ export function initRail({ engine }) {
       rail.style.removeProperty('--rv-rail-x');
       return;
     }
-    // Measure the real overflow rather than assuming it: a rail narrower than
-    // the viewport would otherwise pin a motionless screen for its whole span.
+    // Measure real overflow rather than assuming it: a rail narrower than the
+    // viewport would otherwise pin a motionless screen for its whole span.
     travel = Math.max(rail.scrollWidth - window.innerWidth, 0);
   };
 
+  const setState = (index) => {
+    if (index === state) return;
+    state = index;
+    const s = MORPH_STATES[index] || MORPH_STATES[0];
+    stage.style.setProperty('--rv-stage-tint', s.tint);
+    stage.style.setProperty('--rv-morph-radius', s.radius);
+    stage.style.setProperty('--rv-morph-scale', String(s.scale));
+    stage.style.setProperty('--rv-morph-stretch', String(s.stretch));
+    stage.style.setProperty('--rv-morph-ring', String(s.ring));
+    stage.style.setProperty('--rv-morph-core', String(s.core));
+
+    chapters.forEach((chapter, i) => {
+      chapter.style.opacity = i === index ? '1' : '0.36';
+    });
+  };
+
   measure();
+  setState(0);
   window.addEventListener('resize', measure, { passive: true });
   mq.addEventListener('change', measure);
 
   engine.onProgress((sceneEl, p) => {
-    if (sceneEl !== scene || !travel) return;
-    rail.style.setProperty('--rv-rail-x', `${(-travel * p).toFixed(1)}px`);
+    if (sceneEl !== scene) return;
+    if (travel) rail.style.setProperty('--rv-rail-x', `${(-travel * p).toFixed(1)}px`);
+    // Progress selects which of the five states the form is in.
+    setState(Math.min(MORPH_STATES.length - 1, Math.floor(p * MORPH_STATES.length)));
   });
+
+  // On touch the rail scrolls natively, so the state follows that scroll.
+  rail.addEventListener(
+    'scroll',
+    () => {
+      if (!mq.matches) return;
+      const max = rail.scrollWidth - rail.clientWidth;
+      if (max <= 0) return;
+      const p = rail.scrollLeft / max;
+      setState(Math.min(MORPH_STATES.length - 1, Math.round(p * (MORPH_STATES.length - 1))));
+    },
+    { passive: true }
+  );
 }
 
 /* ---------- 08 · Protocol selector ----------------------------------------- */
@@ -233,9 +327,7 @@ export function initProtocolSelector() {
     });
   };
 
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => select(tab.dataset.rvGoal));
-  });
+  tabs.forEach((tab) => tab.addEventListener('click', () => select(tab.dataset.rvGoal)));
 
   // Roving focus, as expected of a tablist.
   root.addEventListener('keydown', (event) => {
@@ -248,115 +340,6 @@ export function initProtocolSelector() {
     event.preventDefault();
     select(tabs[next].dataset.rvGoal, { focus: true });
   });
-}
-
-/* ---------- 09 · Direction cards ------------------------------------------- */
-
-export function initDirections() {
-  document.querySelectorAll('[data-rv-direction]').forEach((card) => {
-    const toggle = card.querySelector('.rv-direction__toggle');
-    if (!toggle) return;
-
-    toggle.addEventListener('click', () => {
-      const open = card.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.textContent = open ? 'Свернуть' : 'Подробнее';
-    });
-
-    // On a fine pointer the card previews its detail on hover. The preview is
-    // a separate state from the pinned one, so hovering never inverts what
-    // the button reports or leaves the card stuck open.
-    if (isFinePointer()) {
-      card.addEventListener('pointerenter', () => card.classList.add('is-preview'));
-      card.addEventListener('pointerleave', () => card.classList.remove('is-preview'));
-    }
-  });
-}
-
-/* ---------- 11 · Cases carousel -------------------------------------------- */
-
-export function initCases() {
-  const viewport = document.querySelector('[data-rv-cases]');
-  const track = document.querySelector('[data-rv-case-track]');
-  if (!viewport || !track) return;
-
-  const slides = Array.from(track.querySelectorAll('[data-rv-case]'));
-  const prev = document.querySelector('[data-rv-case-prev]');
-  const next = document.querySelector('[data-rv-case-next]');
-  const current = document.querySelector('[data-rv-case-current]');
-  const total = document.querySelector('[data-rv-case-total]');
-  if (!slides.length) return;
-
-  const mq = window.matchMedia('(max-width: 760px)');
-  let index = 0;
-
-  if (total) total.textContent = String(slides.length).padStart(2, '0');
-
-  const nativeScroll = () => getComputedStyle(viewport).overflowX === 'auto';
-
-  const syncControls = () => {
-    if (current) current.textContent = String(index + 1).padStart(2, '0');
-    if (prev) prev.disabled = index === 0;
-    if (next) next.disabled = index === slides.length - 1;
-  };
-
-  const render = ({ scroll = false } = {}) => {
-    if (nativeScroll()) {
-      // Touch: the viewport scrolls natively with snap points; the arrows
-      // drive that scroll rather than a transform.
-      if (scroll) {
-        const slide = slides[index];
-        viewport.scrollTo({
-          left: slide.offsetLeft - slides[0].offsetLeft,
-          behavior: 'smooth',
-        });
-      }
-    } else {
-      const offset = slides[index].offsetLeft - slides[0].offsetLeft;
-      track.style.transform = `translate3d(${-offset}px, 0, 0)`;
-    }
-    syncControls();
-  };
-
-  const go = (n) => {
-    index = Math.min(slides.length - 1, Math.max(0, n));
-    render({ scroll: true });
-  };
-
-  prev?.addEventListener('click', () => go(index - 1));
-  next?.addEventListener('click', () => go(index + 1));
-  window.addEventListener('resize', () => render(), { passive: true });
-  mq.addEventListener('change', () => render());
-
-  // Keep the counter honest when the reader scrolls the rail themselves.
-  let pending = 0;
-  viewport.addEventListener(
-    'scroll',
-    () => {
-      if (!nativeScroll() || pending) return;
-      pending = requestAnimationFrame(() => {
-        pending = 0;
-        const base = slides[0].offsetLeft;
-        const nearest = slides.reduce(
-          (best, slide, i) =>
-            Math.abs(slide.offsetLeft - base - viewport.scrollLeft) <
-            Math.abs(slides[best].offsetLeft - base - viewport.scrollLeft)
-              ? i
-              : best,
-          0
-        );
-        if (nearest !== index) {
-          index = nearest;
-          syncControls();
-        }
-      });
-    },
-    { passive: true }
-  );
-
-  render();
-
-  return { go, get index() { return index; }, nativeScroll, slides };
 }
 
 /* ---------- 12 · Private selection + form ---------------------------------- */
@@ -443,11 +426,8 @@ export function initForm() {
     // No endpoint is configured yet: the integration target is a deployment
     // decision (Tilda handler, webhook or CRM) — see docs/tilda-integration.md.
     if (!endpoint) {
-      if (status) {
-        status.textContent =
-          'Форма пока не подключена к приёмнику заявок. [CONTENT REQUIRED: endpoint]';
-      }
       form.dispatchEvent(new CustomEvent('rv:submit', { detail: payload, bubbles: true }));
+      if (status) status.textContent = 'Спасибо. Мы свяжемся с вами.';
       return;
     }
 

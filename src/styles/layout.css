@@ -34,7 +34,11 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
+  /* Clip sideways only. Clipping vertically cuts the stage's own scene at
+     the stage edge and leaves a visible seam where the next section starts;
+     the scene masks its own top and bottom instead. */
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 /* Cue elements are driven by --rv-o (opacity 0..1), written per frame by

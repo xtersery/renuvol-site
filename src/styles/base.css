@@ -82,7 +82,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  transition: color var(--rv-dur-slow) var(--rv-ease-soft);
+  transition: color var(--rv-dur-chapter) var(--rv-ease-soft);
+}
+
+/* Internal content markers must never reach a visitor. The slots stay in the
+   markup as HTML comments and in content/placeholders.md; anything that does
+   carry the class is hidden from both the page and the accessibility tree. */
+.rv-required {
+  display: none !important;
 }
 
 /* The single painted ground behind everything. Its colour drifts per scene,
@@ -92,7 +99,7 @@ body {
   inset: 0;
   z-index: var(--rv-z-ground);
   background: var(--rv-bg);
-  transition: background-color var(--rv-dur-slow) var(--rv-ease-soft);
+  transition: background-color var(--rv-dur-chapter) var(--rv-ease-soft);
   pointer-events: none;
 }
 
@@ -205,17 +212,6 @@ p {
   font-weight: 300;
 }
 
-/* Placeholder marker for content that must not be invented. Deliberately
-   visible: an unfilled slot should read as unfinished, not as design. */
-.rv-required {
-  font-family: var(--rv-font-text);
-  font-size: var(--rv-t-sm);
-  letter-spacing: 0.01em;
-  color: color-mix(in srgb, var(--rv-fg) 52%, transparent);
-  border-left: 1px solid color-mix(in srgb, var(--rv-accent) 45%, transparent);
-  padding-left: var(--rv-3);
-  display: block;
-}
 
 /* --- Browser surfaces ----------------------------------------------------- */
 
