@@ -6,6 +6,21 @@ assets arrive, and states what blocks each phase today. See
 `docs/skills-analysis.md` for the methodology this plan draws on and
 `docs/asset-audit.md` for the full list of current `[CONTENT REQUIRED]` gaps.
 
+## Binding rules across every phase
+
+- **Language:** the public site is Russian throughout. English is allowed
+  only as a restrained visual/editorial accent (e.g. `MADE IN SOUTH KOREA`),
+  never as a parallel copy track. See `docs/design-system.md` § Language
+  rule.
+- **Source-of-truth hierarchy:** `content/product-facts.md` and
+  `content/certificates.md` first, then primary manufacturer/clinical
+  documents, then other verified project documents, then
+  `public/references/instagram/` (positioning/visual ideas only), then any
+  other visual reference. Every claim from Instagram or the wireframes is
+  tracked in `docs/claims-verification.md` before it can reach
+  `content/*.md`. See `docs/asset-audit.md` § Instagram reference library —
+  image classification for which assets may even be considered.
+
 ## Phase 0 — Content & asset intake (blocking everything below)
 
 Full detail in `docs/asset-audit.md`; summary here, updated after wireframes,
@@ -74,7 +89,10 @@ strictly the numeric order, e.g.:
    lightest dependency; good first build once Phase 0/1 land.
 2. `02-hero.html` — highest-visibility section, gets the most design-DNA
    attention and (per `scroll-craft`) the page's `scrub` device budget.
-3. `03-manifesto.html`, `04-formula.html` — copy-led sections.
+3. `03-manifesto.html`, `04-formula.html` — copy-led sections. `04-formula`
+   is corrected to **5** components (PDO, PN, Vitamin C, Glutathione,
+   Hyaluronate) per `docs/design-system.md` § Section 04 — content still
+   `[CONTENT REQUIRED]` per ingredient, but the structure is now decided.
 4. `05-transformation.html`, `06-skin-changes.html`, `07-biotech.html` —
    image/video-heavy sections, blocked on `images/skin/` and video assets.
 5. `08-protocol-selector.html` — needs `protocols.md` and
@@ -82,7 +100,11 @@ strictly the numeric order, e.g.:
    section (a selector implies state, handled in `src/js/interactions.js`).
 6. `09-cosmetologists.html`, `10-korea-science.html`, `11-cases.html`,
    `12-private-selection.html` — each blocked on its own specific content per
-   the dependency map.
+   the dependency map. `10-korea-science` and `11-cases` now have an
+   approved *safe-interim* content model (`docs/design-system.md` §
+   Section 10, § Section 11) — they can be built with `[CONTENT REQUIRED]`
+   markers in place of unverified manufacturer claims and fabricated case
+   data, rather than waiting fully idle for verification.
 
 ## Phase 3 — Motion implementation
 
@@ -132,12 +154,25 @@ verification approach (methodology only, not their tooling — see
   (see `docs/skills-analysis.md`).
 - No invented product facts, certifications, statistics, or testimonials at
   any phase (`CLAUDE.md` § Rules).
+- No claim from `public/references/instagram/` reaches `content/*.md`
+  without first being logged and cleared in `docs/claims-verification.md`.
+- No Nobel Prize / Prof. Omar M. Yaghi name, likeness, or implied
+  endorsement anywhere on the public site (UI, copy, metadata, alt text,
+  SEO, structured data) — `docs/claims-verification.md` rows 1–3.
+- No bilingual copy track. The site is Russian; English appears only as a
+  restrained editorial accent per `docs/design-system.md` § Language rule.
 
 ## Current status
 
 **Phase 0 is partially unblocked**: wireframes, a headline video, product
 renders, and the brand logo have been supplied, giving Phase 1 real layout
-and brand material to work from. Mood/inspiration references, verified copy,
-and all four document types remain `[CONTENT REQUIRED]` (see
-`docs/asset-audit.md`). No section has been drafted, no design tokens have
-been chosen, and no code beyond the initial scaffold exists in `src/`.
+and brand material to work from. The Instagram reference library has also
+been reviewed and fully triaged (`docs/claims-verification.md`,
+`docs/asset-audit.md`), which resolved the Section 04 structural mismatch
+(4→5 components) and produced approved safe-interim content models for
+Section 10 and Section 11. Mood/inspiration references, verified product
+facts/protocols/cases/certificates, and all four document types remain
+`[CONTENT REQUIRED]` (see `docs/asset-audit.md`). No section markup has been
+drafted, no full design tokens have been chosen (typography, spacing,
+site-wide palette — still Phase 1), and no code beyond the initial scaffold
+exists in `src/`.

@@ -7,6 +7,15 @@ started. This revision reflects assets added directly to `main` after the
 first pass: three wireframes, a headline video, and product renders. Gaps
 still remain and stay marked `[CONTENT REQUIRED]`.
 
+**Source-of-truth hierarchy** (binding on this whole document and on
+`content/*.md`): `content/product-facts.md` and `content/certificates.md`
+first, then primary manufacturer/clinical documents, then other verified
+project documents, then `public/references/instagram/` (positioning/visual
+ideas only, never facts), then any other visual reference (wireframes, mood
+boards) for visual direction only. Every claim carried in from Instagram or
+the wireframes is tracked in `docs/claims-verification.md` before it can be
+considered for `content/*.md`.
+
 ## Method
 
 Compared the directory structure under `public/` and `content/` against the
@@ -57,15 +66,29 @@ as-is:
 **Structural content the wireframes do supply reliably** (layout and IA, not
 facts): fixed header nav (О препарate / Эффект / Протоколы / Кейсы / Для
 косметолога / Контакты), the split "RENU / VOL" hero typography treatment,
-the 4-component formula diagram (component names only — see
-`content/product-facts.md`, still a placeholder for the actual claims), the
-before/after slider pattern, the 5-attribute skin-change grid (Hydration,
-Density, Elasticity, Texture, Glow), the protocol-selector tab pattern (5
-patient-need categories), the cosmetologist-facing 3-protocol-type layout
-plus 3 named downloadable PDFs (protocols, presentation, partnership terms —
-sizes shown in the mockup, files themselves not supplied, see Documents
-below), the Korea/certificates 2x2 block layout, the cases carousel, and the
-private-selection lead-capture form (5 need categories).
+a formula diagram (component names only — see `content/product-facts.md`,
+still a placeholder for the actual claims), the before/after slider pattern,
+the 5-attribute skin-change grid (Hydration, Density, Elasticity, Texture,
+Glow), the protocol-selector tab pattern (5 patient-need categories), the
+cosmetologist-facing 3-protocol-type layout plus 3 named downloadable PDFs
+(protocols, presentation, partnership terms — sizes shown in the mockup,
+files themselves not supplied, see Documents below), the Korea/certificates
+2x2 block layout, the cases carousel, and the private-selection lead-capture
+form (5 need categories).
+
+**Correction — Section 04 is now 5 components, not 4.** The wireframe as
+drawn shows 4 formula hotspots. The Instagram source library
+(`public/references/instagram/01-formula-all-in-one/` and related
+ingredient categories) consistently shows RENUVOL's formula as **5**
+components — PDO, PN, Vitamin C, Glutathione, Hyaluronate/Sodium
+Hyaluronate. This is a confirmed structural correction to the approved
+wireframe, decided in project direction (not a wireframe edit — the PNGs are
+static and are not modified; this note is the source of truth for the
+deviation). See `docs/design-system.md` § Section 04 for the redesigned
+geometry (asymmetric/orbital 5-node layout, not 5 identical cards) and
+`docs/motion-spec.md`'s updated `04-formula` device entry. The wireframe
+images themselves are left as-is; treat this note, not the PNG, as
+authoritative for the component count.
 
 **One direct conflict with the taste rules in `docs/motion-spec.md`:** the
 hero (section 02) includes a "SCROLL TO DISCOVER" cue. Both `taste-skill` and
@@ -126,9 +149,199 @@ list without supplying the files:
 | Directory | Contents | Named in wireframe (section 09/10) | Status |
 |---|---|---|---|
 | `public/documents/protocols/` | `.gitkeep` only | "Протоколы" PDF, ~2.3MB | `[CONTENT REQUIRED]` |
-| `public/documents/certificates/` | `.gitkeep` only | ISO 13485, KFDA registration, CE certificate (each a separate PDF) | `[CONTENT REQUIRED]` — existence of these specific certifications is itself unconfirmed, see wireframe caveat above |
+| `public/documents/certificates/` | `.gitkeep` only | ISO 13485, KFDA registration, CE certificate (each a separate PDF) | `[CONTENT REQUIRED]` — **decision:** do not name these specific certificates anywhere in the public UI until the actual documents exist here. Build Section 10's document area as a neutral "Документы и регистрационные материалы" placeholder with `[CONTENT REQUIRED: verified certificates]`, not fake ISO/KFDA/CE cards. See `docs/claims-verification.md` row 21. |
 | `public/documents/presentations/` | `.gitkeep` only | "Презентация" PDF, ~5.1MB | `[CONTENT REQUIRED]` |
 | `public/documents/partnership/` | `.gitkeep` only | "Условия сотрудничества" PDF, ~1.6MB | `[CONTENT REQUIRED]` |
+
+## Instagram reference library — image classification
+
+`public/references/instagram/` (added directly to `main`) is a 19-category
+source library of RENUVOL/Metabiomed/INCUBE Instagram marketing material,
+with a `README.md` (plus `README-BATCH2.md`/`README-BATCH3.md`) and per-
+category `source.md` files. Per project policy (`docs/claims-verification.md`
+§ Source-of-truth hierarchy), this library ranks below all primary/verified
+sources and is never itself evidence — it may inform positioning, visual
+language, and terminology only.
+
+Every image is classified below as one of `FINAL-CANDIDATE`,
+`REFERENCE-ONLY`, `REQUIRES-PROVENANCE-CHECK`, or `DO-NOT-USE`. **Only
+`FINAL-CANDIDATE` assets may be used in the public website.** No image in
+this library currently qualifies — the strongest candidates
+(`04-product-visuals`) are `REQUIRES-PROVENANCE-CHECK`, pending confirmation
+of rights and whether they are real photography or renders, before they can
+be promoted.
+
+Images actually opened and visually inspected this session are marked
+*(inspected)*; the rest are classified from the category's own `source.md`
+and filename, and default to `REQUIRES-PROVENANCE-CHECK` unless the
+category's stated content (e.g. embedded clinical percentages, named
+individuals) makes a stronger classification clearly safe to assign without
+inspection — those cases are noted as "expected," to be confirmed on actual
+review before use.
+
+### 01 — formula-all-in-one
+
+| File | Status | Note |
+|---|---|---|
+| `formula-5-components-overview.jpg` *(inspected)* | REFERENCE-ONLY | RENUVOL-branded infographic with Instagram-style hook copy ("Почему RENUVOL продает сам себя?"); useful for Section 04's 5-component visual direction, not a shippable web asset as-is |
+| `five-forces-bottle-visual.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `five-key-ingredients-intro.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `formula-components-plus-results.jpg` | REQUIRES-PROVENANCE-CHECK | Likely carries result/effect claims per category name — expect DO-NOT-USE pending inspection |
+| `formula-skin-layer-5-components.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `formula-symphony-5-components-a.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `formula-symphony-5-components-b.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `ingredient-role-list.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+
+### 02 — events-credibility
+
+| File | Status | Note |
+|---|---|---|
+| `imcas-world-congress-2026.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; `source.md` flags IMCAS participation/association as needing verification before any factual claim |
+
+### 03 — pdo-positioning
+
+| File | Status | Note |
+|---|---|---|
+| `pdo-vs-plla-positioning.jpg` *(inspected)* | DO-NOT-USE (as-is) | Carries the blocked comparative claim ("works as long as PLLA, without the risks") baked into the image text — see `docs/claims-verification.md` row 4. The underlying packshot photography, isolated from the text, would still need `REQUIRES-PROVENANCE-CHECK` |
+
+### 04 — product-visuals
+
+| File | Status | Note |
+|---|---|---|
+| `renuvol-packshot-glow.jpg` *(inspected)* | REQUIRES-PROVENANCE-CHECK | Clean packshot, no overlaid claims — the strongest candidate in the library, but real-photo-vs-render and usage rights are unconfirmed |
+| `renuvol-packshot-glow-variant.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; same caveats likely apply as the variant above |
+
+### 05 — incube-cubrix-technology
+
+| File | Status | Note |
+|---|---|---|
+| `cubrix-mofac-incube-diagram.jpg` *(inspected)* | REFERENCE-ONLY | Appears to be INCUBE/LABINCUBE's own corporate/technical material (third-party sub-brand), not a RENUVOL asset — visual language (dark navy, molecular lattice) only |
+| `incube-preserves-vitamin-c-activity.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; `source.md` flags "100% preserved activity" as high-risk — see claims row 11 |
+| `incube-vitc-glutathione-capsule-visual.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `vitamin-c-protected-by-incube-nobel-claim.jpg` | DO-NOT-USE | Filename and category both indicate Nobel-linked claim content — treat as DO-NOT-USE without needing further inspection, per the blanket Nobel/Yaghi exclusion (claims rows 1–3) |
+
+### 06 — brand-visual-language
+
+| File | Status | Note |
+|---|---|---|
+| `doctor-holding-renuvol.jpg` *(inspected)* | REFERENCE-ONLY | Visible AI-generation tell: the vial's "PREMIUM PDO BOOSTER" label is mirrored/reversed. Tone/composition reference only, not a usable photo |
+
+### 07 — incube-credibility
+
+| File | Status | Note |
+|---|---|---|
+| `nobel-medal-reference.jpg` *(inspected)* | DO-NOT-USE | Nobel medal imagery — see claims row 1 |
+| `omar-yaghi-tribute.jpg` *(inspected)* | LEGAL-REVIEW / DO-NOT-USE until cleared | Named, identifiable real individual — see claims row 2 |
+
+### 08 — pdo-benefits-safety
+
+| File | Status | Note |
+|---|---|---|
+| `pdo-size-time-experience.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; likely carries the 30–60 μm / 6–8 month / "30+ years" claims as image text — see claims row 12 |
+| `pdo-benefits-safety-claims.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; filename indicates claim content |
+
+### 09 — clinical-evidence
+
+| File | Status | Note |
+|---|---|---|
+| `clinical-hydration-35-2-102-8.jpg` *(inspected)* | DO-NOT-USE | Exact hydration percentages baked into the image as headline text — see claims row 7 |
+| `clinical-data-intro.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `clinical-metrics-elasticity-fullness.jpg` | DO-NOT-USE (expected) | Filename embeds the specific claim figures — see claims row 10; treat as DO-NOT-USE pending inspection confirming the same template as the hydration asset |
+| `clinical-pigmentation-34-8.jpg` | DO-NOT-USE (expected) | Same reasoning — see claims row 8 |
+| `clinical-pores-roughness.jpg` | DO-NOT-USE (expected) | Same reasoning — see claims row 9 |
+
+### 10 — incube-brand-world
+
+| File | Status | Note |
+|---|---|---|
+| `labincube-incube-brand-board.jpg` *(inspected)* | REFERENCE-ONLY | Third-party sub-brand's own brand board (LABINCUBE/INCUBE); confirms the navy/orange/white visual language noted in `README.md`, not a RENUVOL asset |
+
+### 11 — manufacturing-metabiomed
+
+| File | Status | Note |
+|---|---|---|
+| `metabiomed-white-pdo-manufacturing.jpg` *(inspected)* | REQUIRES-PROVENANCE-CHECK | Appears to be authentic cleanroom/manufacturing photography (no AI tells observed), but is a third-party manufacturer's facility — needs explicit rights confirmation before use on RENUVOL's own site, and also displays a "first in the world" claim as caption text (claims row 13) that would need removing even if the photo itself is cleared |
+| `metabiomed-pdo-lab-visual.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `metabiomed-renuvol-quality-cta.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `second-factory-expansion.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; likely carries investment/floor-area figures as text — claims row 19 |
+| `vertical-integration-process.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; likely carries vertical-integration claim text — claims row 20 |
+
+### 12 — manufacturer-credibility
+
+| File | Status | Note |
+|---|---|---|
+| `world-class-300-patents.jpg` *(inspected)* | DO-NOT-USE (as-is) | Otherwise-authentic-looking award-ceremony photo, but "70+ патентов" and "120+ стран" are baked into the image as overlay text — cannot be used even if the underlying photo and award were independently confirmed, without redoing the graphic. See claims rows 16–18 |
+| `renuvol-manufacturer-credentials-summary.jpg` | DO-NOT-USE (expected) | Filename and `source.md` both indicate a claims-summary graphic (35 years, 70+ patents, 120+ countries, World Class 300) — same treatment expected as the inspected file above |
+
+### 13 — founder-story
+
+| File | Status | Note |
+|---|---|---|
+| `seok-song-oh-founder-story.jpg` *(inspected)* | REFERENCE-ONLY | Visible AI-generation tell: garbled product label text ("CINNAMAM PDO DECAYER"); narrative voice/tone reference only |
+| `founder-restart-story.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `metabiomed-1993-origin-story.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+
+### 14 — pdo-mechanism
+
+| File | Status | Note |
+|---|---|---|
+| `pdo-collagen-stimulation.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; mechanism claim — claims row 27 |
+| `pdo-lifting-foundation-visual.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; mechanism claim — claims row 27 |
+
+### 15 — component-synergy
+
+| File | Status | Note |
+|---|---|---|
+| `five-component-synergy-map.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; potentially useful for Section 04's "5 components, one system" concept diagram, subject to inspection |
+| `pdo-vitamin-c-collagen-protection.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `pn-recovers-pdo-builds.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `pn-vitamin-c-restoration-protection.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `vitc-gluta-incube-glow-youth.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `vitc-gluta-mutual-restoration.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `vitc-pdo-collagen-protection.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+
+### 16 — pn-mechanism
+
+| File | Status | Note |
+|---|---|---|
+| `pn-three-effects.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; `source.md` flags anti-inflammatory/regeneration claims — claims rows 22, 25 |
+| `pn-before-after-cells.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `pn-cell-restoration-visual.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+
+### 17 — vitamin-c
+
+| File | Status | Note |
+|---|---|---|
+| `vitamin-c-pigmentation-claim.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; `source.md` singles out cancer-prevention-adjacent wording in this category as especially high-risk — claims row 23 |
+| `vitamin-c-antioxidant-free-radicals.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `vitamin-c-four-effects.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `vitamin-c-protects-collagen.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+
+### 18 — hyaluronate
+
+| File | Status | Note |
+|---|---|---|
+| `hyaluronate-ideal-medium.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `hyaluronate-activates-components.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `hyaluronate-supports-pdo-environment.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `hyaluronate-three-properties.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `sodium-hyaluronate-instant-hydration.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; "instant hydration" is an effect-timing claim — claims row 29 |
+
+### 19 — glutathione
+
+| File | Status | Note |
+|---|---|---|
+| `glutathione-antioxidant-hero.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected |
+| `glutathione-three-actions.jpg` | REQUIRES-PROVENANCE-CHECK | Not inspected; `source.md` flags detoxification/depigmenting claims — claims rows 24, 26 |
+
+### Existing project assets (non-Instagram)
+
+| Asset | Status | Note |
+|---|---|---|
+| `public/images/brand/la-beautex-logo.png` | FINAL-CANDIDATE (for the mark itself) | Supplied directly by the project owner, not sourced from Instagram; low resolution (382×256px) — a vector/higher-res source is still worth requesting, but the mark itself is approved |
+| `public/images/product/*.png` (5 files) | REQUIRES-PROVENANCE-CHECK | Filenames indicate AI generation / Photoroom background removal (`docs/asset-audit.md` § Images, above); not confirmed as approved final packaging art |
+| `public/video/renuvol-intro.mp4` | REQUIRES-PROVENANCE-CHECK | Placement and content not yet reviewed against the claims policy above (e.g. must not carry any blocked claim as on-screen text or narration) |
+| `public/references/wireframe/*.png` (3 files) | Structural reference only, not a site asset | Not applicable to the FINAL-CANDIDATE scale — these are internal planning material and are never shipped |
 
 ## Content copy — `[CONTENT REQUIRED]` (all six files still placeholders)
 
@@ -159,15 +372,15 @@ case data — they stay blocked until real, confirmed content is supplied.
 |---|---|---|---|
 | 01 | `header.html` | Wireframe 01 | `images/brand/` satisfied (logo supplied) |
 | 02 | `hero.html` | Wireframe 01 | `site-copy.md`; video placement decision (see Video above); drop the "scroll to discover" cue per taste rules |
-| 03 | `manifesto.html` | Wireframe 01 | `site-copy.md`; the 93% stat needs verification or removal |
-| 04 | `formula.html` | Wireframe 01 | `product-facts.md` (component names shown, claims/composition not verified); `images/product/` satisfied |
+| 03 | `manifesto.html` | Wireframe 01 | `site-copy.md`; the 93% stat is blocked (`docs/claims-verification.md` row 32) — use neutral copy or `[CONTENT REQUIRED]` |
+| 04 | `formula.html` | Wireframe 01 (corrected: 5 components, not 4 — see `docs/design-system.md`) | `product-facts.md` (component names known, claims/composition not verified); `images/product/` satisfied |
 | 05 | `transformation.html` | Wireframe 02 | `images/skin/` before/after pairs (not video, corrected above) |
 | 06 | `skin-changes.html` | Wireframe 02 | `images/skin/`, `product-facts.md` |
 | 07 | `biotech.html` | Wireframe 02 | `product-facts.md`; ambient/video treatment decision |
-| 08 | `protocol-selector.html` | Wireframe 02 | `protocols.md`, `documents/protocols/`; wireframe's specific intervals need verification |
+| 08 | `protocol-selector.html` | Wireframe 02 | `protocols.md`, `documents/protocols/`; wireframe's specific intervals blocked (`docs/claims-verification.md` row 30) |
 | 09 | `cosmetologists.html` | Wireframe 03 | `documents/presentations/`, `documents/partnership/`, `documents/protocols/` |
-| 10 | `korea-science.html` | Wireframe 03 | `images/korea/`, `product-facts.md`, `documents/certificates/`; named certifications need verification |
-| 11 | `cases.html` | Wireframe 03 | `cases.md`, `images/skin/`; wireframe's illustrative cases must not ship as real |
+| 10 | `korea-science.html` | Wireframe 03, but see the safe-interim direction in `docs/design-system.md` § Section 10 | `images/korea/`; named certifications and manufacturer figures blocked (`docs/claims-verification.md` rows 13–21) — use neutral "Документы и регистрационные материалы" + `[CONTENT REQUIRED]` instead |
+| 11 | `cases.html` | Wireframe 03, but see `docs/design-system.md` § Section 11 | `cases.md`, `images/skin/`; wireframe's illustrative cases are `DO-NOT-USE` (`docs/claims-verification.md` row 31) — ship as `[CONTENT REQUIRED]` placeholders, not fabricated cases |
 | 12 | `private-selection.html` | Wireframe 03 | `product-facts.md`, `documents/partnership/`; `images/product/` satisfied |
 | 13 | `footer.html` | Wireframe 03 | `images/brand/` satisfied (logo supplied); real contact/legal copy still needed (wireframe's address is a placeholder) |
 
@@ -183,3 +396,16 @@ information the wireframes display is illustrative only, and `content/*.md`
 remain placeholders. Skin imagery (`images/skin/`), Korea imagery
 (`images/korea/`), and all four document subdirectories remain empty and
 `[CONTENT REQUIRED]`.
+
+The Instagram reference library added a large amount of positioning and
+visual-language material, none of which is currently `FINAL-CANDIDATE` (see
+§ Instagram reference library above) — the strongest image candidates are
+`REQUIRES-PROVENANCE-CHECK`, and a meaningful subset is `DO-NOT-USE` outright
+(Nobel/Yaghi material, and several clinical/credibility graphics with
+unverified statistics baked into the image text). Every claim surfaced by
+this library is tracked in `docs/claims-verification.md`, which is the
+authoritative record of what may and may not be published, and supersedes
+any impression given by the wireframe's own illustrative copy (the 93% stat,
+protocol intervals, named certificates, and case data called out above).
+Section 04 has also been corrected from 4 to 5 formula components per the
+Instagram library's consistent formula composition — see `docs/design-system.md`.
