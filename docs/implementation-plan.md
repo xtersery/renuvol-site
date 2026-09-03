@@ -8,28 +8,40 @@ assets arrive, and states what blocks each phase today. See
 
 ## Phase 0 — Content & asset intake (blocking everything below)
 
-Nothing in Phase 1 onward can start until these arrive. Full detail in
-`docs/asset-audit.md`; summary here:
+Full detail in `docs/asset-audit.md`; summary here, updated after wireframes,
+a headline video, and product renders were added directly to `main`:
 
-- `[CONTENT REQUIRED]` Three wireframes in `public/references/wireframe/`
-  (currently empty).
+- **Supplied**: three wireframes in `public/references/wireframe/`, covering
+  all 13 sections' layout and interaction (but not verified copy — see the
+  caveat in `docs/asset-audit.md`).
+- **Supplied**: a headline video, `public/video/renuvol-intro.mp4` (placement
+  not yet decided) and 5 product renders in `public/images/product/`
+  (provenance/approval not yet confirmed).
 - `[CONTENT REQUIRED]` Mood/inspiration references in
-  `public/references/inspiration/` (currently empty).
-- `[CONTENT REQUIRED]` Brand assets: logo/wordmark, brand color/type
-  references, in `public/images/brand/` (currently empty).
-- `[CONTENT REQUIRED]` Real copy in all six `content/*.md` files (currently
-  placeholders).
-- `[CONTENT REQUIRED]` Product, skin, and Korea-science photography and any
-  hero/process video (`public/images/*`, `public/video/`, all empty).
+  `public/references/inspiration/` (still empty) — needed for the visual-style
+  side of Phase 1, since the wireframes are grayscale/structural only.
+- `[CONTENT REQUIRED]` Brand assets: a standalone logo/wordmark file in
+  `public/images/brand/` (still empty — the wordmark only exists baked into
+  the wireframes and product renders so far).
+- `[CONTENT REQUIRED]` Real, verified copy in all six `content/*.md` files
+  (still placeholders — the wireframes' copy is illustrative only, not a
+  source of truth; see `docs/asset-audit.md`).
+- `[CONTENT REQUIRED]` Skin and Korea-science photography
+  (`public/images/skin/`, `public/images/korea/`, still empty).
 - `[CONTENT REQUIRED]` Protocol, certificate, presentation, and partnership
-  documents (`public/documents/*`, all empty).
+  documents (`public/documents/*`, still empty; the wireframes now name three
+  specific expected PDFs plus three specific certificates — see
+  `docs/asset-audit.md`).
 
-Per `CLAUDE.md`, none of this may be fabricated to unblock the schedule.
-Phase 0 has no target date — it ends when RENUVOL supplies the material.
+Per `CLAUDE.md`, none of the remaining gaps may be fabricated to unblock the
+schedule. Phase 0 is partially unblocked (layout material has arrived) but
+still open on visual references, brand assets, real copy, and documents.
 
 ## Phase 1 — Design DNA extraction
 
-Blocked on Phase 0's wireframes and inspiration references. Once available:
+Layout material (the three wireframes) has arrived, so this phase can begin
+on structure; it remains blocked on mood/inspiration references for the
+visual-style side (palette, type, effects). Once both are available:
 
 1. Run `references/design-dna`'s Analyze phase against the supplied
    wireframes/references to produce a Design DNA JSON (tokens, style,
@@ -123,7 +135,9 @@ verification approach (methodology only, not their tooling — see
 
 ## Current status
 
-**Phase 0 is the only active phase, and it is entirely blocked on content and
-assets that have not yet been supplied.** No section has been drafted, no
-design tokens have been chosen, and no code beyond the initial scaffold
-exists in `src/`.
+**Phase 0 is partially unblocked**: wireframes, a headline video, and product
+renders have been supplied, giving Phase 1 real layout material to work from.
+Mood/inspiration references, brand assets, verified copy, and all four
+document types remain `[CONTENT REQUIRED]` (see `docs/asset-audit.md`). No
+section has been drafted, no design tokens have been chosen, and no code
+beyond the initial scaffold exists in `src/`.

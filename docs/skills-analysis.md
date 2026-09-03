@@ -215,14 +215,29 @@ not just one library's opinion.
 
 Per the task, this analysis selects methodology, not final design. Actual
 color/type/layout decisions (`docs/design-system.md`, not yet in scope here)
-depend on real inputs that don't exist yet — see `docs/asset-audit.md` for the
-full list of `[CONTENT REQUIRED]` gaps. In particular:
+depend on real inputs — see `docs/asset-audit.md` for the full, current list
+of `[CONTENT REQUIRED]` gaps. Since this analysis was first written, the
+three wireframes, a headline video, and product renders were added directly
+to `main` (merged into this branch), so `design-dna`'s Analyze phase now has
+real layout material to run against — but with an important caveat carried
+over from `docs/asset-audit.md`: the wireframes' copy (a usage statistic,
+protocol intervals, named certificates, case data, contact details) is
+illustrative placeholder text, not verified content, and must not be treated
+as source material for `content/*.md`. What's still genuinely blocked:
 
-- `[CONTENT REQUIRED]` — the three expected wireframes are missing from
-  `public/references/wireframe/` (only `.gitkeep`), so `design-dna`'s
-  Analyze phase has nothing to run against.
-- `[CONTENT REQUIRED]` — no brand assets exist (`public/images/brand/` empty),
-  so `brand-guidelines` and the accent-color lock decision are blocked.
-- `[CONTENT REQUIRED]` — no product facts, protocol descriptions, case studies,
-  or certificates exist (`content/*.md` are all placeholders), so `count`
-  devices, testimonial/case sections, and any copy at all remain unwritten.
+- `[CONTENT REQUIRED]` — no mood/inspiration references exist
+  (`public/references/inspiration/` empty), so the *visual-style* dimension
+  of `design-dna`'s Analyze phase (palette, type character, effects) has
+  nothing to run against yet — the wireframes supply structure, not style.
+- `[CONTENT REQUIRED]` — no standalone brand asset file exists
+  (`public/images/brand/` empty; the wordmark only appears baked into the
+  wireframes and product renders), so `brand-guidelines` and the accent-color
+  lock decision are still blocked.
+- `[CONTENT REQUIRED]` — no verified product facts, protocol descriptions,
+  case studies, or certificates exist (`content/*.md` are all placeholders,
+  and `content/placeholders.md` now carries an explicit "Missing Content"
+  list matching this), so `count` devices, testimonial/case sections, and any
+  shippable copy at all remain unwritten. The product renders in
+  `public/images/product/` also carry unconfirmed provenance (filenames
+  suggest AI generation plus background removal) and should not be assumed
+  final without approval — see `docs/asset-audit.md`.
