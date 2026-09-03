@@ -4,13 +4,36 @@ Guidance for Claude Code when working in this repository.
 
 ## Project
 
-RENUVOL marketing website. This repository currently contains only the initial
-project scaffolding — no design or implementation has been done yet.
+RENUVOL marketing website (product of LA BEAUTEX). The homepage is
+implemented: 13 sections, Russian-language, with a scroll-scrubbed hero film.
+
+## Language
+
+**The public site is Russian.** English is allowed only as a restrained
+editorial accent (`MADE IN SOUTH KOREA`, `ONE PRODUCT. MULTIPLE PROTOCOLS.`,
+`READY TO DISCOVER RENUVOL?`). Do not add a parallel English copy track.
+Navigation, buttons, forms, tooltips, error messages and accessibility labels
+are all Russian.
 
 ## Stack
 
 - Vite + vanilla HTML/CSS/JavaScript. No frontend framework.
 - No CSS preprocessor or utility framework unless a future decision adds one.
+- No animation library: the scroll engine is hand-rolled in `src/js/`.
+- Classes are namespaced `rv-`, custom properties `--rv-*`, hooks
+  `data-rv-*`, and JS exposes only `window.RENUVOL` — this keeps the build
+  portable into Tilda (`docs/tilda-integration.md`).
+- Sections live as standalone fragments in `src/sections/` and are composed
+  into `src/index.html` by a small zero-dependency Vite plugin.
+
+## Gotchas that have already bitten
+
+- **Never set `overflow` on `html`.** It propagates to the viewport and
+  silently breaks every `position: sticky` pinned section.
+- A hover preview must not share a class with a click toggle, or hovering
+  inverts the button's state.
+- `preload="none"` on the hero video prevents it from ever decoding, so the
+  scrubber has nothing to seek.
 
 ## Commands
 

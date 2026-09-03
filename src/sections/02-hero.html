@@ -1,1 +1,90 @@
-<!-- Hero section — not yet implemented. -->
+<!--
+  02 — Cinematic hero.
+
+  The section is tall; the stage inside is sticky, so scrolling through the
+  section scrubs the film rather than moving the layout. Copy is keyed to
+  scroll progress (data-rv-cue="from to [greet]"), never to absolute video
+  seconds, so the video file can be replaced without touching the cues.
+
+  data-rv-start / data-rv-end trim the clip to the part the hero uses. They
+  are optional (the whole clip is used when absent) and are the only values
+  to revisit if the film is swapped: the current file ends on a
+  manufacturer end-card, which the hero deliberately stops before.
+-->
+<section
+  class="rv-hero"
+  id="rv-top"
+  data-rv-scene="hero"
+  data-rv-ground="ice"
+  data-rv-span="3.6"
+>
+  <div class="rv-hero__stage" data-rv-stage>
+    <div class="rv-hero__media">
+      <img
+        class="rv-hero__poster"
+        src="/video/renuvol-hero-poster.jpg"
+        alt=""
+        aria-hidden="true"
+        data-rv-poster
+      />
+      <video
+        class="rv-hero__video"
+        data-rv-scrub
+        data-rv-start="0"
+        data-rv-end="39.4"
+        data-rv-src-webm="/video/renuvol-hero-scrub.webm"
+        data-rv-src-webm-mobile="/video/renuvol-hero-scrub-mobile.webm"
+        data-rv-src="/video/renuvol-hero-scrub.mp4"
+        data-rv-src-mobile="/video/renuvol-hero-scrub-mobile.mp4"
+        playsinline
+        muted
+        preload="none"
+        disablepictureinpicture
+        aria-hidden="true"
+      ></video>
+      <div class="rv-hero__veil" aria-hidden="true"></div>
+    </div>
+
+    <!-- Oversized wordmark: the two halves separate as the film advances. -->
+    <h1 class="rv-hero__title" aria-label="RENUVOL">
+      <span class="rv-hero__word rv-hero__word--lead" aria-hidden="true">RENU</span>
+      <span class="rv-hero__word rv-hero__word--trail" aria-hidden="true">VOL</span>
+    </h1>
+
+    <div class="rv-hero__copy">
+      <!-- Scene 01 — present from the first frame (greet form), holds through the opening. -->
+      <div class="rv-hero__cue rv-hero__cue--lead" data-rv-cue="0 0.32 0">
+        <p class="rv-hero__statement">Кожа, которая снова<br />умеет восстанавливаться.</p>
+        <p class="rv-hero__support">
+          Инновационный препарат для работы с качеством кожи.
+        </p>
+        <div class="rv-hero__actions">
+          <a class="rv-btn rv-btn--solid" href="#rv-formula">Узнать о препарате</a>
+          <a class="rv-btn rv-btn--ghost" href="#rv-selection">Запросить условия сотрудничества</a>
+        </div>
+      </div>
+
+      <!-- Scene 02 — the film reaches the product. -->
+      <div class="rv-hero__cue rv-hero__cue--mid" data-rv-cue="0.38 0.62 0.07 0.06">
+        <p class="rv-hero__line">
+          Южная Корея<span class="rv-hero__slash">/</span>профессиональная<br />эстетическая медицина.
+        </p>
+      </div>
+
+      <!-- Scene 03 — hands off to the formula section. Its ramp begins only
+           after scene 02 has fully cleared, so the two never overlap. -->
+      <div class="rv-hero__cue rv-hero__cue--trail" data-rv-cue="0.78 1 0.09 0">
+        <p class="rv-hero__line rv-hero__line--wide">
+          5 компонентов<span class="rv-hero__slash">—</span>одна система
+        </p>
+      </div>
+    </div>
+
+    <div class="rv-hero__cue rv-hero__scroll" data-rv-cue="0 0.06 0">
+      <span class="rv-hero__scroll-label">SCROLL TO DISCOVER</span>
+      <span class="rv-hero__scroll-line" aria-hidden="true"></span>
+    </div>
+
+    <div class="rv-hero__progress" aria-hidden="true"><span data-rv-progress-bar></span></div>
+  </div>
+</section>

@@ -1,1 +1,97 @@
-<!-- Cosmetologists section — not yet implemented. -->
+<!--
+  09 — For cosmetologists.
+
+  Three protocol directions with an expand-on-interaction reveal, then a
+  downloads strip. No document files exist yet in public/documents/, so the
+  download items are rendered as unavailable placeholders rather than as
+  links to files that would 404 (docs/asset-audit.md § Documents).
+-->
+<section
+  class="rv-pro"
+  id="rv-pro"
+  data-rv-scene="pro"
+  data-rv-ground="ice"
+>
+  <div class="rv-shell">
+    <header class="rv-pro__head">
+      <h2 class="rv-display rv-display--en rv-pro__title" data-rv-reveal>
+        One product.<br />Multiple protocols.
+      </h2>
+      <p class="rv-pro__lead" data-rv-reveal>
+        Гибкие протоколы под разные цели и задачи пациентов.
+      </p>
+    </header>
+
+    <div class="rv-directions" data-rv-directions>
+      <article class="rv-direction" data-rv-direction>
+        <span class="rv-direction__mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" focusable="false"><circle cx="24" cy="24" r="9" /></svg>
+        </span>
+        <h3 class="rv-direction__title">Монопротокол</h3>
+        <p class="rv-direction__text rv-required">[CONTENT REQUIRED: verified description]</p>
+        <div class="rv-direction__more">
+          <ul role="list">
+            <li class="rv-required">[CONTENT REQUIRED: verified benefit]</li>
+            <li class="rv-required">[CONTENT REQUIRED: verified benefit]</li>
+          </ul>
+        </div>
+        <button class="rv-direction__toggle" type="button" aria-expanded="false">Подробнее</button>
+      </article>
+
+      <article class="rv-direction" data-rv-direction>
+        <span class="rv-direction__mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" focusable="false">
+            <circle cx="17" cy="24" r="9" /><circle cx="31" cy="24" r="9" />
+          </svg>
+        </span>
+        <h3 class="rv-direction__title">Сочетанные процедуры</h3>
+        <p class="rv-direction__text rv-required">[CONTENT REQUIRED: verified description]</p>
+        <div class="rv-direction__more">
+          <ul role="list">
+            <li class="rv-required">[CONTENT REQUIRED: verified benefit]</li>
+            <li class="rv-required">[CONTENT REQUIRED: verified benefit]</li>
+          </ul>
+        </div>
+        <button class="rv-direction__toggle" type="button" aria-expanded="false">Подробнее</button>
+      </article>
+
+      <article class="rv-direction" data-rv-direction>
+        <span class="rv-direction__mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" focusable="false">
+            <circle cx="13" cy="24" r="7" /><circle cx="24" cy="24" r="7" /><circle cx="35" cy="24" r="7" />
+          </svg>
+        </span>
+        <h3 class="rv-direction__title">Курсовая терапия</h3>
+        <p class="rv-direction__text rv-required">[CONTENT REQUIRED: verified description]</p>
+        <div class="rv-direction__more">
+          <ul role="list">
+            <li class="rv-required">[CONTENT REQUIRED: verified benefit]</li>
+            <li class="rv-required">[CONTENT REQUIRED: verified benefit]</li>
+          </ul>
+        </div>
+        <button class="rv-direction__toggle" type="button" aria-expanded="false">Подробнее</button>
+      </article>
+    </div>
+
+    <div class="rv-downloads">
+      <p class="rv-label">Материалы для скачивания</p>
+      <ul class="rv-downloads__list" role="list">
+        <li class="rv-download is-unavailable">
+          <span class="rv-download__name">Протоколы</span>
+          <span class="rv-download__meta rv-required">[CONTENT REQUIRED: файл]</span>
+        </li>
+        <li class="rv-download is-unavailable">
+          <span class="rv-download__name">Презентация</span>
+          <span class="rv-download__meta rv-required">[CONTENT REQUIRED: файл]</span>
+        </li>
+        <li class="rv-download is-unavailable">
+          <span class="rv-download__name">Условия сотрудничества</span>
+          <span class="rv-download__meta rv-required">[CONTENT REQUIRED: файл]</span>
+        </li>
+      </ul>
+      <p class="rv-downloads__note">
+        Материалы отправим по запросу — оставьте контакты в форме ниже.
+      </p>
+    </div>
+  </div>
+</section>

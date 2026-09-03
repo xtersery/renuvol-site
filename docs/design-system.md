@@ -1,12 +1,24 @@
 # Design System
 
-Status: partially populated. Full tokens (typography, spacing, the site-wide
-palette) are still blocked on Phase 1 of `docs/implementation-plan.md`
-(mood/inspiration references in `public/references/inspiration/`, still
-empty — see `docs/asset-audit.md`). What follows is the set of design
-decisions that *are* settled: the site-wide language rule, and the Section
-04/10/11 content models corrected after reviewing the Instagram reference
-library (see `docs/claims-verification.md` for why).
+Status: implemented. The tokens below are live in
+`src/styles/tokens.css`; this document is the reasoning behind them.
+
+**Design read:** a professional-facing product site for aesthetic-medicine
+practitioners, with a clinical-light editorial language, leaning toward
+premium Korean cosmeceutical × editorial fashion rather than a
+pharmaceutical catalogue.
+
+**Dials** (`taste-skill` vocabulary): `DESIGN_VARIANCE 7` — asymmetric
+composition and an orbital formula system, but a disciplined grid;
+`MOTION_INTENSITY 7` — one scroll-scrubbed film and two pinned scenes, no
+ambient loops; `VISUAL_DENSITY 3` — an editorial amount of air, since the
+page is a considered read for a professional audience, not a dashboard.
+
+No mood/inspiration references were ever supplied
+(`public/references/inspiration/` is still empty), so the visual language
+was extracted from the assets that do exist: the owner-supplied product
+film, the packaging, and the ice-blue/pearl/molecular vocabulary that runs
+through the Instagram library.
 
 ## Language rule (binding on the whole site)
 
@@ -162,10 +174,83 @@ with explicit placeholders:
 Do not invent patient ages, procedure counts, clinical percentages,
 timelines, or outcomes to fill the shell in the meantime.
 
-## Outstanding (blocked on Phase 1)
+## Implemented tokens
 
-Typography pairing, the full site-wide color palette (beyond the Section 04
-ingredient-color directions above), spacing scale, and the three
-`taste-skill` dials (`DESIGN_VARIANCE`, `MOTION_INTENSITY`, `VISUAL_DENSITY`)
-remain undecided pending mood/inspiration references — see
-`docs/implementation-plan.md` Phase 1.
+### Palette
+
+Six roles plus one locked accent, with the ingredient hues confined to
+Section 04 and the chapter rail. The ground drifts between three states as
+scenes hand off (`data-rv-ground` on `<html>`), which is what makes the page
+read as one journey rather than a stack.
+
+| Token | Value | Role |
+|---|---|---|
+| `--rv-pearl` | `#f2efea` | Warm-white editorial ground (default) |
+| `--rv-ice` | `#e6eef3` | Icy ground for the product-world scenes |
+| `--rv-mineral` | `#c3c6c8` | Neutral for placeholder surfaces |
+| `--rv-ink` | `#14171a` | Near-black text (never `#000`) |
+| `--rv-navy` | `#0b1220` | Deep ground for the biotech scene and footer |
+| `--rv-cobalt` | `#2a5ea8` | The single page accent |
+
+Ingredient accents (Section 04 only): PDO `#7d94a8` (silver-ice, the
+structural base), PN `#5fa9bd` (aqua), Vitamin C `#c08a3e` (the one warm
+note), Glutathione `#9a92bd` (restrained lilac), Hyaluronate `#4272ad`.
+
+Deliberately avoided: generic medical blue everywhere, neon, purple
+gradients, and the cream-and-brass palette that every premium-consumer brief
+defaults to.
+
+### Typography
+
+Two families, no third.
+
+- **Display — Prata** (`--rv-font-display`): an elegant Cyrillic didone,
+  used for every editorial statement and section title. Chosen because the
+  wireframe's own headings are set in a thin high-contrast serif, and
+  because the brief explicitly asks for an editorial-fashion register.
+- **Text — Onest** (`--rv-font-text`): a contemporary Cyrillic neo-grotesk
+  for all functional copy, labels and UI.
+
+Both are **self-hosted** (`public/fonts/`, ~92KB total for Latin +
+Cyrillic subsets, `font-display: swap`). No Google Fonts request, so there
+is no third-party render-blocking dependency. Onest ships as one variable
+file per subset, so a single face covers weights 300–700.
+
+Scale is fluid (`clamp()`) throughout; tracking tightens as size grows
+(`--rv-track-tight: -0.03em` on display), body measure is capped at 42ch,
+display line-height 0.96 against body 1.62.
+
+### Spacing, depth, motion
+
+- 4px base scale (`--rv-1` … `--rv-11`), fluid gutter
+  (`clamp(20px, 5vw, 72px)`) and section rhythm
+  (`clamp(88px, 11vh, 176px)`).
+- Depth comes from hairlines, overlap and a fixed grain layer at ~3%
+  opacity — not from card containers. Three elevation steps exist and are
+  barely used: the page groups by proximity and rule, not by boxes.
+- One easing curve (`cubic-bezier(0.23, 1, 0.32, 1)`), UI transitions under
+  300ms, and only `transform` / `opacity` / `clip-path` animated.
+
+### What the page deliberately does not do
+
+No card grids as page structure, no eyebrow above every section (three in
+total across thirteen sections), no gradient text, no neon glow, no custom
+cursor, and no invented statistics — so there are no counters, badges or
+infographics anywhere on the page.
+
+### Two deliberate deviations from the reference libraries
+
+1. **The hero keeps a `SCROLL TO DISCOVER` cue**, which both `taste-skill`
+   and `scroll-craft` list as an anti-pattern. It is retained because the
+   brief specifies it explicitly; it is set in the smallest type on the page
+   and fades out within the first 6% of hero scroll.
+
+2. **The em-dash ban does not apply to Russian copy.** Both libraries ban
+   `—` outright, but that rule is written for English, where the em dash is
+   an LLM stylistic tell. In Russian, тире is *required* punctuation — a
+   dash between a subject and a predicate noun (`RENUVOL — препарат…`) is
+   grammar, not decoration, and replacing it with a hyphen would be an
+   orthographic error. The dash is therefore used where Russian requires it
+   and nowhere else: it appears three times on the page
+   (`5 компонентов — одна система`, the downloads note, the document title)
+   and never as a decorative separator, in an eyebrow, a label or a button.

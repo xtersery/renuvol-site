@@ -145,12 +145,49 @@ reaches full opacity. Manually verify `pan` rail overflow at multiple
 viewport widths, since a rail that fits the viewport exactly produces zero
 travel and looks like a frozen section rather than an error.
 
-## Current status
+## Current status — implemented
 
-No motion exists in the codebase. The device-per-section table above is now
-grounded in the three wireframes' actual interaction annotations rather than
-guessed, and has already surfaced one real issue (the device-repeat rule
-violation across sections 08–12) to resolve during Phase 2/3. This spec is
-still the target behavior for Phase 3 of `docs/implementation-plan.md`,
-which remains blocked on Phase 0/1/2 (verified content, design tokens, and
-section markup) landing first.
+The motion system is built in vanilla JS/CSS, no animation library, as
+specified above. What shipped:
+
+| Module | Responsibility |
+|---|---|
+| `src/js/scroll.js` | One rAF loop for the whole page. Publishes `--rv-p` (0..1) per scene, drives cue opacity, ground drift, reveals, header state, nav spy. Runs only while a scene is on screen. |
+| `src/js/video-scrub.js` | Hero film scrubbing: lerp (0.18/frame), dead-band (8ms desktop / 20ms touch), seek coalescing, blob load, poster held until a frame paints, source picked by codec support. |
+| `src/js/interactions.js` | Formula orbit, comparison slider, chapter rail travel, protocol tabs, direction toggles, cases carousel, private selection, lead form. |
+| `src/js/mobile.js` | Menu, protocol accordion, swipe fallback, viewport-unit fallback. |
+
+**Device assignment as built** — `flow` (01) → title-split + pointer
+parallax (02) → `reveal` (03) → `pointer` orbit (04) → `pointer` drag
+comparison (05) → `pin` + `pan` rail (06) → `pin` ambient (07) → `pointer`
+tabs (08) → `pointer` reveal (09) → `flow` (10) → `pointer` carousel (11) →
+`pointer` step + form (12) → `flow` (13).
+
+The device-repeat concern raised in the previous revision was addressed by
+breaking up the 08–12 run: section 10 is a `flow` section with no
+click-driven interaction at all (its certificate area is a static
+placeholder), and 09 and 11 use materially different interactions
+(hover-expand vs. a scroll-snapping carousel). Sections 06 and 07 both pin,
+but do different things with the pin — 06 converts vertical travel into
+lateral travel, 07 holds a single frame and builds a three-line composition.
+
+### Verified
+
+With a headless browser against the dev server:
+
+- Playhead tracks scroll forward (0 → 39.4s) and reverses correctly.
+- Pinned stages hold at `top: 0` through their whole travel.
+- Cue windows never overlap in the hero; the greet cue is fully visible at
+  progress 0.
+- Chapter rail travel is measured from real overflow, not assumed.
+- No horizontal page scroll at 360/390/834/1180/1440/1920px.
+- Reduced motion collapses every pinned scene and shows all cues.
+- No console errors on desktop or mobile.
+
+Two bugs found and fixed during verification, both worth remembering:
+`overflow-x` on the root element silently breaks every `position: sticky`
+pin; and a hover-preview that shares a class with a click-toggle inverts the
+button's state.
+
+**Not verified:** behaviour on a real iOS device. Headless Chromium cannot
+reproduce Safari's video decoder, autoplay policy or Low Power Mode.

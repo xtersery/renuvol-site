@@ -1,1 +1,56 @@
-<!-- Biotech section — not yet implemented. -->
+<!--
+  07 — Biotech moment. The page's engineered peak: the ground inverts to
+  graphite/navy and the pace slows. Built entirely in CSS/SVG — no video, no
+  particle library — so the contrast costs nothing at runtime.
+-->
+<section
+  class="rv-biotech"
+  id="rv-biotech"
+  data-rv-scene="biotech"
+  data-rv-ground="dark"
+  data-rv-span="3.2"
+>
+  <div class="rv-biotech__stage" data-rv-stage>
+    <div class="rv-biotech__field" aria-hidden="true">
+      <span class="rv-biotech__orb"></span>
+      <span class="rv-biotech__orb rv-biotech__orb--b"></span>
+      <span class="rv-biotech__glow"></span>
+      <svg class="rv-biotech__lattice" viewBox="0 0 600 600" focusable="false">
+        <g class="rv-biotech__lattice-g">
+          <circle cx="300" cy="300" r="176" />
+          <circle cx="300" cy="300" r="132" />
+          <circle cx="300" cy="300" r="232" />
+          <ellipse cx="300" cy="300" rx="232" ry="86" />
+          <ellipse cx="300" cy="300" rx="86" ry="232" />
+          <ellipse cx="300" cy="300" rx="196" ry="196" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="rv-biotech__copy rv-shell">
+      <!-- The three lines build into one standing composition rather than
+           cross-fading past each other: each arrives and holds, and they
+           leave together when the stage un-pins. -->
+      <p class="rv-biotech__line" data-rv-cue="0.06 1 0.1 0">
+        <span class="rv-biotech__prefix">RE<span class="rv-biotech__slash">/</span></span>
+        <span class="rv-biotech__suffix">generation</span>
+      </p>
+      <p class="rv-biotech__line rv-biotech__line--b" data-rv-cue="0.26 1 0.1 0">
+        <span class="rv-biotech__prefix">NEW<span class="rv-biotech__slash">/</span></span>
+        <span class="rv-biotech__suffix">skin</span>
+      </p>
+      <p class="rv-biotech__line rv-biotech__line--c" data-rv-cue="0.46 1 0.1 0">
+        <span class="rv-biotech__prefix">VOL<span class="rv-biotech__slash">/</span></span>
+        <span class="rv-biotech__suffix">ume of quality</span>
+      </p>
+
+      <div class="rv-biotech__foot" data-rv-cue="0.66 1 0.12 0">
+        <p class="rv-biotech__support">
+          Точка встречи биотехнологии, эстетической медицины<br />
+          и качества кожи.
+        </p>
+        <a class="rv-btn rv-btn--solid rv-btn--onDark" href="#rv-selection">Запросить презентацию</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -336,12 +336,21 @@ review before use.
 
 ### Existing project assets (non-Instagram)
 
-| Asset | Status | Note |
-|---|---|---|
-| `public/images/brand/la-beautex-logo.png` | FINAL-CANDIDATE (for the mark itself) | Supplied directly by the project owner, not sourced from Instagram; low resolution (382×256px) — a vector/higher-res source is still worth requesting, but the mark itself is approved |
-| `public/images/product/*.png` (5 files) | REQUIRES-PROVENANCE-CHECK | Filenames indicate AI generation / Photoroom background removal (`docs/asset-audit.md` § Images, above); not confirmed as approved final packaging art |
-| `public/video/renuvol-intro.mp4` | REQUIRES-PROVENANCE-CHECK | Placement and content not yet reviewed against the claims policy above (e.g. must not carry any blocked claim as on-screen text or narration) |
-| `public/references/wireframe/*.png` (3 files) | Structural reference only, not a site asset | Not applicable to the FINAL-CANDIDATE scale — these are internal planning material and are never shipped |
+| Asset | Status | Used on the site? | Note |
+|---|---|---|---|
+| `public/images/brand/la-beautex-logo.png` | FINAL-CANDIDATE | **Yes** — header and footer | Supplied directly by the project owner. Low resolution (382×256px); a vector/higher-res source is still worth requesting, and the black artwork is inverted by CSS on the dark scenes |
+| `public/video/renuvol-intro.mp4` | FINAL-CANDIDATE (owner-supplied, owner-directed) | **Yes** — source for the hero | Reviewed frame by frame against the claims policy: it carries no blocked claim as on-screen text. It does end on a **METABIOMED end-card**, which the hero deliberately stops before (`data-rv-end="39.4"`) — a third-party manufacturer mark is not something to surface without a rights decision |
+| `public/video/renuvol-hero-scrub.{webm,mp4}`, `-mobile.{webm,mp4}`, `renuvol-hero-poster.jpg` | FINAL-CANDIDATE (derived) | **Yes** | Re-encodes of the above for scrubbing (dense GOP) plus a poster frame. Regeneration commands are in `docs/tilda-integration.md` |
+| `public/images/product/renuvol-vial.webp` | FINAL-CANDIDATE (derived) | **Yes** — centre of Section 04 | A still cut from the owner-supplied film. Chosen over the supplied renders because its packaging text is clean and legible |
+| `public/images/product/*.png` (the 5 original renders) | **DO-NOT-USE** as public assets | No | Beyond the AI-generation/Photoroom provenance already noted, the label text is visibly garbled and inconsistent across them ("PREMIUM COMETOLOGY", "PREMIUM COME TOLOGY"), which is disqualifying at any size a viewer could read. They also show composition figures (`100mg / Vial`, `PDO 35mg, PN 8mg`) that are unverified — see `docs/claims-verification.md` row 35. Kept in the repo as reference |
+| `public/fonts/*.woff2` (4 files) | FINAL-CANDIDATE | **Yes** | Self-hosted Onest + Prata, Latin and Cyrillic subsets only, ~92KB total |
+| `public/references/wireframe/*.png` (3 files) | Structural reference only, not a site asset | No | Internal planning material; never shipped. See `CORRECTIONS.md` beside them |
+
+**Three different label texts appear across the supplied product assets** —
+"PREMIUM PDO BOOSTER" (film and carton), "PREMIUM PDO COLLAGEN BOOSTER"
+(film titling) and "PREMIUM COMETOLOGY" (renders). Only the first is used on
+the site, via the film still. Which is the approved packaging copy needs
+confirming before any packaging imagery ships.
 
 ## Content copy — `[CONTENT REQUIRED]` (all six files still placeholders)
 

@@ -1,1 +1,127 @@
-/* Design tokens (colors, type scale, spacing, etc.) — not yet defined. */
+/* ==========================================================================
+   RENUVOL — design tokens
+   All custom properties are namespaced --rv-* so the stylesheet can coexist
+   with a Tilda page without collisions. See docs/design-system.md.
+   ========================================================================== */
+
+:root {
+  /* --- Ground / surface ------------------------------------------------ */
+  --rv-pearl: #f2efea; /* warm white, primary editorial ground */
+  --rv-ivory: #faf8f5;
+  --rv-ice: #e6eef3; /* icy light blue, product-world ground */
+  --rv-ice-deep: #d5e3ec;
+  --rv-mineral: #c3c6c8; /* mineral gray */
+
+  --rv-ink: #14171a; /* near-black, never #000 */
+  --rv-graphite: #1d2226;
+  --rv-navy: #0b1220; /* deep navy, biotech scene */
+  --rv-navy-soft: #131c2e;
+
+  /* --- Accent ----------------------------------------------------------- */
+  --rv-cobalt: #2a5ea8; /* the single page accent */
+  --rv-cobalt-bright: #3d78c9;
+
+  /* Component accents — used only inside Section 04 and the chapter rail. */
+  --rv-a-pdo: #7d94a8; /* silver-ice: the structural base ingredient */
+  --rv-a-pn: #5fa9bd; /* soft aqua */
+  --rv-a-vitc: #c08a3e; /* the one warm note */
+  --rv-a-gsh: #9a92bd; /* restrained lilac */
+  --rv-a-ha: #4272ad; /* deeper blue */
+
+  /* --- Semantic (re-pointed per scene by the ground drift) -------------- */
+  --rv-bg: var(--rv-pearl);
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #5c6167;
+  --rv-line: rgb(20 23 26 / 0.14);
+  --rv-line-soft: rgb(20 23 26 / 0.08);
+  --rv-accent: var(--rv-cobalt);
+
+  /* --- Type ------------------------------------------------------------- */
+  --rv-font-display: 'Prata', 'Georgia', 'Times New Roman', serif;
+  --rv-font-text: 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+  --rv-t-xs: 0.75rem;
+  --rv-t-sm: 0.8125rem;
+  --rv-t-base: clamp(0.95rem, 0.9rem + 0.2vw, 1.0625rem);
+  --rv-t-lead: clamp(1.05rem, 0.95rem + 0.5vw, 1.375rem);
+  --rv-t-h3: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
+  --rv-t-h2: clamp(2.1rem, 1.3rem + 3.4vw, 4.6rem);
+  --rv-t-h1: clamp(3.2rem, 1.2rem + 8.6vw, 11rem);
+
+  --rv-lh-display: 0.96;
+  --rv-lh-text: 1.62;
+  --rv-track-tight: -0.03em;
+  --rv-track-wide: 0.16em;
+  --rv-measure: 42ch;
+
+  /* --- Space (4px base) ------------------------------------------------- */
+  --rv-1: 4px;
+  --rv-2: 8px;
+  --rv-3: 12px;
+  --rv-4: 16px;
+  --rv-5: 24px;
+  --rv-6: 32px;
+  --rv-7: 48px;
+  --rv-8: 64px;
+  --rv-9: 96px;
+  --rv-10: 128px;
+  --rv-11: 176px;
+
+  --rv-gutter: clamp(20px, 5vw, 72px);
+  --rv-shell: 1420px;
+  --rv-section-y: clamp(88px, 11vh, 176px);
+
+  /* --- Motion ----------------------------------------------------------- */
+  --rv-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --rv-ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --rv-dur-fast: 140ms;
+  --rv-dur: 240ms;
+  --rv-dur-slow: 620ms;
+
+  /* --- Depth ------------------------------------------------------------ */
+  --rv-e1: 0 1px 2px rgb(20 23 26 / 0.05), 0 8px 24px -12px rgb(20 23 26 / 0.14);
+  --rv-e2: 0 2px 6px rgb(20 23 26 / 0.06), 0 22px 48px -24px rgb(20 23 26 / 0.2);
+  --rv-edge: inset 0 1px 0 rgb(255 255 255 / 0.6);
+
+  /* --- Layers ----------------------------------------------------------- */
+  --rv-z-ground: 0;
+  --rv-z-content: 1;
+  --rv-z-header: 60;
+  --rv-z-menu: 70;
+  --rv-z-grain: 80;
+
+  --rv-header-h: 72px;
+}
+
+/* Scene grounds. scroll.js sets data-rv-ground on <html> as scenes pass. */
+:root[data-rv-ground='pearl'] {
+  --rv-bg: var(--rv-pearl);
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #5c6167;
+  --rv-line: rgb(20 23 26 / 0.14);
+  --rv-line-soft: rgb(20 23 26 / 0.08);
+}
+
+:root[data-rv-ground='ice'] {
+  --rv-bg: var(--rv-ice);
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #4f5c66;
+  --rv-line: rgb(20 40 56 / 0.16);
+  --rv-line-soft: rgb(20 40 56 / 0.09);
+}
+
+:root[data-rv-ground='dark'] {
+  --rv-bg: var(--rv-navy);
+  --rv-fg: #eef2f6;
+  --rv-fg-soft: #9aa7b6;
+  --rv-line: rgb(238 242 246 / 0.18);
+  --rv-line-soft: rgb(238 242 246 / 0.1);
+  --rv-accent: var(--rv-cobalt-bright);
+}
+
+@media (max-width: 900px) {
+  :root {
+    --rv-header-h: 60px;
+    --rv-measure: 34ch;
+  }
+}

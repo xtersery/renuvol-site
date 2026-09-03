@@ -162,17 +162,30 @@ verification approach (methodology only, not their tooling — see
 - No bilingual copy track. The site is Russian; English appears only as a
   restrained editorial accent per `docs/design-system.md` § Language rule.
 
-## Current status
+## Current status — homepage built
 
-**Phase 0 is partially unblocked**: wireframes, a headline video, product
-renders, and the brand logo have been supplied, giving Phase 1 real layout
-and brand material to work from. The Instagram reference library has also
-been reviewed and fully triaged (`docs/claims-verification.md`,
-`docs/asset-audit.md`), which resolved the Section 04 structural mismatch
-(4→5 components) and produced approved safe-interim content models for
-Section 10 and Section 11. Mood/inspiration references, verified product
-facts/protocols/cases/certificates, and all four document types remain
-`[CONTENT REQUIRED]` (see `docs/asset-audit.md`). No section markup has been
-drafted, no full design tokens have been chosen (typography, spacing,
-site-wide palette — still Phase 1), and no code beyond the initial scaffold
-exists in `src/`.
+All 13 sections are implemented in `src/`, in the approved wireframe order,
+with Section 04 corrected to five components. Phases 1–5 have been carried
+out against the assets that exist:
+
+- **Phase 1** — design tokens, type pairing and palette are live; see
+  `docs/design-system.md`. Note the mood/inspiration references were never
+  supplied, so the visual language was derived from the product film,
+  packaging and the Instagram library's visual vocabulary instead.
+- **Phase 2** — every section is built. Copy is the owner-approved Russian
+  text; everything unverified is a visible `[CONTENT REQUIRED]` marker
+  rather than invented filler.
+- **Phase 3** — motion implemented and verified; see `docs/motion-spec.md`.
+- **Phase 4** — responsive and accessibility pass done; see
+  `docs/mobile-spec.md`.
+- **Phase 5** — verified with a headless browser: scrubbing in both
+  directions, pinning, interaction states, no horizontal overflow, no
+  console errors, reduced-motion layout, Russian-language validation
+  messages.
+
+**Still outstanding, and still blocking a real launch:** verified product
+facts, protocols, case data and certificates; approved before/after and
+skin imagery; the four document types under `public/documents/`; real
+contact and legal copy; and a lead-form endpoint. Each is marked in the UI
+with `[CONTENT REQUIRED]` and tracked in `docs/asset-audit.md` and
+`docs/claims-verification.md`.

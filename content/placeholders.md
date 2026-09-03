@@ -28,6 +28,25 @@ When needed in the frontend, use:
 
 [CONTENT REQUIRED]
 
+# Where [CONTENT REQUIRED] appears on the built site
+
+The homepage is implemented; these are the slots that render a visible
+placeholder until real content is supplied. Each is deliberate — nothing was
+filled with invented text to make the page look finished.
+
+| Section | Slot |
+|---|---|
+| 03 Manifesto | none — the unverified 93% statistic was removed, not replaced |
+| 04 Formula | ingredient description × 5 (PDO, PN, Vitamin C, Glutathione, Hyaluronate) |
+| 05 Transformation | approved before/after imagery; verified clinical data |
+| 06 What changes | description × 5 chapters |
+| 08 Protocols | protocol description, three benefits, indications, course, compatibility |
+| 09 For cosmetologists | direction descriptions and benefits; three document files |
+| 10 Korea / science | four pillar descriptions; verified certificates |
+| 11 Cases | approved photos, patient, request, procedure count, result, outcomes |
+| 12 Private selection | personalised recommendation; lead-form endpoint |
+| 13 Footer | phone, e-mail, address, hours, privacy policy, terms |
+
 # Source-of-Truth Hierarchy
 
 When drafting any of the files in this directory, trust sources in this

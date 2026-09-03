@@ -1,1 +1,67 @@
-<!-- Transformation section — not yet implemented. -->
+<!--
+  05 — Skin transformation.
+
+  The comparison mechanism is built and interactive; the imagery itself is a
+  labelled placeholder. No before/after assets have been approved, and none
+  may be fabricated (docs/claims-verification.md row 31). The comparison
+  parameters below are topic labels only — no measured values are shown.
+-->
+<section
+  class="rv-transform"
+  id="rv-transform"
+  data-rv-scene="transform"
+  data-rv-ground="ice"
+>
+  <div class="rv-shell rv-transform__head">
+    <h2 class="rv-display rv-transform__title" data-rv-reveal>Трансформация кожи</h2>
+  </div>
+
+  <div class="rv-shell">
+    <div
+      class="rv-compare"
+      data-rv-compare
+      role="group"
+      aria-label="Сравнение до и после"
+    >
+      <div class="rv-compare__frame rv-compare__frame--after">
+        <span class="rv-compare__tag rv-compare__tag--after">AFTER RENUVOL</span>
+        <p class="rv-required rv-compare__note">[CONTENT REQUIRED: approved before/after cases]</p>
+      </div>
+
+      <div class="rv-compare__frame rv-compare__frame--before" data-rv-compare-clip>
+        <span class="rv-compare__tag rv-compare__tag--before">BEFORE</span>
+        <p class="rv-required rv-compare__note">[CONTENT REQUIRED: approved before/after cases]</p>
+      </div>
+
+      <div class="rv-compare__handle" data-rv-compare-handle>
+        <span class="rv-compare__line" aria-hidden="true"></span>
+        <span class="rv-compare__grip" aria-hidden="true"></span>
+      </div>
+
+      <input
+        class="rv-compare__input"
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        step="0.1"
+        aria-label="Положение линии сравнения"
+        data-rv-compare-input
+      />
+    </div>
+
+    <div class="rv-transform__foot">
+      <div class="rv-transform__params">
+        <p class="rv-label">Параметры сравнения</p>
+        <ul class="rv-params" role="list">
+          <li>Увлажнение</li>
+          <li>Плотность</li>
+          <li>Эластичность</li>
+          <li>Сияние</li>
+        </ul>
+        <p class="rv-required">[CONTENT REQUIRED: verified clinical data]</p>
+      </div>
+      <a class="rv-btn rv-btn--line" href="#rv-cases">Смотреть результаты</a>
+    </div>
+  </div>
+</section>

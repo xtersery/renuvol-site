@@ -1,1 +1,443 @@
-/* Responsive/breakpoint overrides — not yet defined. */
+/* ==========================================================================
+   Responsive — mobile is designed, not scaled down. Full rationale in
+   docs/mobile-spec.md.
+   ========================================================================== */
+
+/* --- Tablet / narrow desktop ---------------------------------------------- */
+
+@media (max-width: 1180px) {
+  .rv-formula__body,
+  .rv-protocols__body,
+  .rv-selection__body,
+  .rv-korea__grid,
+  .rv-docs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rv-orbit {
+    max-width: 560px;
+  }
+
+  .rv-end__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rv-pro__head {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+@media (max-width: 1024px) {
+  .rv-nav {
+    display: none;
+  }
+
+  .rv-header__cta {
+    display: none;
+  }
+
+  .rv-burger {
+    display: flex;
+  }
+}
+
+/* --- Mobile ---------------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  /* Hero: the wordmark steps down a rung so a Cyrillic statement never wraps
+     to six lines, and the split travel shortens on a narrow viewport. It also
+     moves to the upper third, because at this width it would otherwise sit
+     behind the opening statement. */
+  .rv-hero__title {
+    font-size: clamp(3rem, 20vw, 5.4rem);
+    justify-content: flex-start;
+    padding-top: calc(var(--rv-header-h) + var(--rv-8));
+  }
+
+  .rv-hero__word--lead {
+    transform: translate3d(calc(min(var(--rv-p, 0), 0.75) * -12vw), 0, 0);
+  }
+
+  .rv-hero__word--trail {
+    transform: translate3d(calc(min(var(--rv-p, 0), 0.75) * 12vw), 0, 0);
+  }
+
+  .rv-hero__statement {
+    font-size: clamp(1.5rem, 6.4vw, 2rem);
+    max-width: 16ch;
+  }
+
+  .rv-hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rv-hero__actions .rv-btn {
+    width: 100%;
+  }
+
+  .rv-hero__scroll {
+    display: none;
+  }
+
+  .rv-hero__line {
+    font-size: clamp(1.5rem, 7vw, 2.3rem);
+  }
+
+  /* Manifesto: the two phrases stack rather than overlaying. The size is set
+     by the longest word ("ВОССТАНАВЛИВАТЬ."), which must not overflow. */
+  .rv-manifesto__phrase {
+    position: static;
+    font-size: clamp(1.75rem, 8.4vw, 3rem);
+    letter-spacing: -0.045em;
+  }
+
+  .rv-manifesto__phrase--b {
+    margin-top: var(--rv-2);
+  }
+
+  .rv-manifesto__rule,
+  .rv-manifesto__support {
+    position: static;
+    transform: translate3d(0, calc((1 - var(--rv-o, 0)) * 14px), 0);
+  }
+
+  .rv-manifesto__rule {
+    margin: var(--rv-6) auto;
+  }
+
+  .rv-manifesto__support {
+    font-size: var(--rv-t-base);
+  }
+
+  /* Formula: the orbit is not usable at phone width — the same five
+     components become a native accordion list, product first. */
+  .rv-orbit__web,
+  .rv-orbit__nodes {
+    display: none;
+  }
+
+  .rv-orbit {
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--rv-5);
+  }
+
+  .rv-orbit__concept {
+    position: static;
+    transform: none;
+    white-space: normal;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Stays positioned so the halo keeps this element as its containing block;
+     as a static box the halo would resolve its percentages against the whole
+     section and spill past the viewport. */
+  .rv-orbit__core {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: min(62vw, 260px);
+  }
+
+  .rv-orbit__halo {
+    inset: -14% -18%;
+  }
+
+  .rv-detail {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  /* Mobile accordion built from the same panels — see interactions.js. */
+  .rv-accordion {
+    border-top: 1px solid var(--rv-line);
+  }
+
+  .rv-accordion__item {
+    border-bottom: 1px solid var(--rv-line-soft);
+  }
+
+  .rv-accordion__trigger {
+    width: 100%;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--rv-4);
+    padding: var(--rv-4) 0;
+    text-align: left;
+  }
+
+  .rv-accordion__trigger .rv-node__name {
+    font-family: var(--rv-font-display);
+    font-size: 1.15rem;
+  }
+
+  .rv-accordion__lead {
+    display: flex;
+    align-items: center;
+    gap: var(--rv-4);
+  }
+
+  .rv-accordion__sign {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+  }
+
+  .rv-accordion__sign::before,
+  .rv-accordion__sign::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 1px;
+    background: var(--rv-fg);
+    transition: transform var(--rv-dur) var(--rv-ease);
+  }
+
+  .rv-accordion__sign::after {
+    transform: rotate(90deg);
+  }
+
+  .rv-accordion__item.is-open .rv-accordion__sign::after {
+    transform: rotate(0deg);
+  }
+
+  .rv-accordion__body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--rv-dur-slow) var(--rv-ease);
+  }
+
+  .rv-accordion__item.is-open .rv-accordion__body {
+    grid-template-rows: 1fr;
+  }
+
+  .rv-accordion__inner {
+    overflow: hidden;
+  }
+
+  .rv-accordion__inner > * {
+    padding-bottom: var(--rv-5);
+  }
+
+  /* The trigger already carries the number and name — don't repeat them
+     inside the opened panel. */
+  .rv-accordion__inner .rv-detail__index,
+  .rv-accordion__inner .rv-detail__name {
+    display: none;
+  }
+
+  /* Skin changes: the pinned horizontal rail becomes a swipeable, snapping
+     sequence — vertical scroll keeps its normal meaning on touch. */
+  .rv-changes {
+    height: auto !important;
+  }
+
+  .rv-changes__stage {
+    position: static;
+    height: auto;
+    padding-block: var(--rv-section-y);
+    gap: var(--rv-6);
+  }
+
+  .rv-rail {
+    transform: none !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: var(--rv-4);
+  }
+
+  .rv-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rv-chapter,
+  .rv-chapter--wide {
+    width: min(78vw, 320px);
+    scroll-snap-align: start;
+  }
+
+  .rv-changes__hint {
+    display: none;
+  }
+
+  /* Biotech: shorter pin, copy stacked above the orb rather than beside it. */
+  .rv-biotech__line--b {
+    padding-left: var(--rv-4);
+  }
+
+  .rv-biotech__line--c {
+    padding-left: var(--rv-6);
+  }
+
+  .rv-biotech__orb,
+  .rv-biotech__glow,
+  .rv-biotech__lattice {
+    left: 78%;
+    top: 26%;
+  }
+
+  .rv-biotech__orb {
+    width: 54vw;
+  }
+
+  .rv-biotech__foot {
+    gap: var(--rv-5);
+  }
+
+  .rv-biotech__foot .rv-btn {
+    width: 100%;
+  }
+
+  /* Protocol selector: list + panel become an accordion stack. */
+  .rv-protocols__body {
+    gap: 0;
+  }
+
+  .rv-goals {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rv-goal {
+    min-height: 60px;
+  }
+
+  .rv-goal[aria-selected='true'] {
+    padding-left: 0;
+  }
+
+  /* Each panel is moved under its trigger by interactions.js on touch. */
+  .rv-protocol__panel {
+    padding: var(--rv-5) 0 var(--rv-6);
+  }
+
+  .rv-protocol__panel .rv-btn {
+    width: 100%;
+  }
+
+  /* Cosmetologist directions: hairline-separated rows, not three columns. */
+  .rv-directions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rv-direction {
+    padding: var(--rv-6) 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--rv-line-soft);
+  }
+
+  .rv-direction:last-child {
+    border-bottom: 0;
+  }
+
+  /* Korea */
+  .rv-korea__pillars {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--rv-6);
+  }
+
+  .rv-korea__title {
+    font-size: clamp(2.6rem, 16vw, 4.4rem);
+  }
+
+  /* Cases: native horizontal scroll with snapping, so a swipe moves it the
+     way a reader expects rather than through a synthetic transform. */
+  .rv-cases__viewport {
+    padding-inline: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .rv-cases__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rv-cases__track {
+    padding-inline: var(--rv-gutter);
+    transform: none !important;
+  }
+
+  .rv-case {
+    width: calc(100vw - var(--rv-gutter) * 2);
+    scroll-snap-align: center;
+  }
+
+  .rv-case__meta {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--rv-4);
+  }
+
+  /* Compare widget: taller crop reads better in portrait. Only the uncropped
+     side carries the placeholder note, so the split never cuts through it. */
+  .rv-compare {
+    aspect-ratio: 3 / 4;
+  }
+
+  .rv-compare__frame {
+    place-content: end start;
+    text-align: left;
+  }
+
+  .rv-compare__frame--before .rv-compare__note {
+    display: none;
+  }
+
+  .rv-compare__note {
+    max-width: 24ch;
+    margin-inline: 0;
+  }
+
+  .rv-compare__tag {
+    justify-self: start;
+  }
+
+  .rv-transform__foot .rv-btn {
+    width: 100%;
+  }
+
+  /* Selection + form */
+  .rv-profiles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rv-form__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--rv-5);
+  }
+
+  .rv-form__submit {
+    width: 100%;
+  }
+
+  /* Footer */
+  .rv-end__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--rv-6);
+  }
+
+  .rv-end__actions .rv-btn {
+    width: 100%;
+  }
+}
+
+/* Touch devices of any width: the hover preview does not exist, so the
+   explicit toggle is the only way in — it stays, and nothing is forced open
+   behind the reader's back. */
+@media (hover: none) {
+  .rv-direction__toggle {
+    min-height: 44px;
+  }
+}
