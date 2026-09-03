@@ -49,8 +49,10 @@ as-is:
   "ul. Primernaya" (literally "Example Street" in Russian) — a deliberate
   placeholder, not a real address.
 - The brand name in the header reads "LA BEAUTEX" above "RENUVOL," implying
-  RENUVOL is a product line under a parent brand called LA BEAUTEX. Not yet
-  reflected anywhere in `content/` — needs confirmation before use.
+  RENUVOL is a product line under a parent brand called La BEAUTEX. **Now
+  confirmed** by the supplied logo file (`public/images/brand/la-beautex-logo.png`)
+  — see Images below — though the parent/product-line relationship itself is
+  still not written up anywhere in `content/`.
 
 **Structural content the wireframes do supply reliably** (layout and IA, not
 facts): fixed header nav (О препарate / Эффект / Протоколы / Кейсы / Для
@@ -97,12 +99,12 @@ assumed here.
 | `05-transformation.html` | Before/after **image** slider (drag), not video | No video need per wireframe — was assumed in the prior audit pass, corrected here |
 | `07-biotech.html` | "Slow dramatic scroll," ambient glow animation around a network/globe graphic | Could use `renuvol-intro.mp4` or a generated/CSS effect; not decided |
 
-## Images — product renders supplied, three subdirectories still empty
+## Images — product renders and brand logo supplied, two subdirectories still empty
 
 | Directory | Contents | Status |
 |---|---|---|
 | `public/images/product/` | 5 PNGs: transparent-background product renders (vial + syringe, and a 5-vial gift box), filenames indicate they are AI-generated and/or background-removed via Photoroom (`grok-image-*-Photoroom.png`, `image-Photoroom*.png`), not confirmed studio photography | Supplied, provenance needs confirmation before treating as final packshots (see caveat below) |
-| `public/images/brand/` | `.gitkeep` only | `[CONTENT REQUIRED]` — no logo/wordmark file yet, despite the wordmark appearing in the wireframes and product renders |
+| `public/images/brand/` | `la-beautex-logo.png` — the "La BEAUTEX" wordmark and wing mark (black on transparent, 382×256px) | Supplied. Confirms the parent-brand name flagged as unverified in the earlier wireframe caveat: the site's header/footer reads "La BEAUTEX" above/around "RENUVOL." Resolution is low for a logo asset (382×256px raster) — a vector (SVG) or higher-resolution source should be requested before final build if this PNG is only a reference/preview export. |
 | `public/images/skin/` | `.gitkeep` only | `[CONTENT REQUIRED]` — needed for `05-transformation.html`'s before/after slider and `06-skin-changes.html` |
 | `public/images/korea/` | `.gitkeep` only | `[CONTENT REQUIRED]` — needed for `10-korea-science.html` |
 
@@ -155,7 +157,7 @@ case data — they stay blocked until real, confirmed content is supplied.
 
 | # | Section | Layout reference | Asset/content still needed |
 |---|---|---|---|
-| 01 | `header.html` | Wireframe 01 | brand logo file (`images/brand/`, wordmark only exists inside product renders/wireframe today) |
+| 01 | `header.html` | Wireframe 01 | `images/brand/` satisfied (logo supplied) |
 | 02 | `hero.html` | Wireframe 01 | `site-copy.md`; video placement decision (see Video above); drop the "scroll to discover" cue per taste rules |
 | 03 | `manifesto.html` | Wireframe 01 | `site-copy.md`; the 93% stat needs verification or removal |
 | 04 | `formula.html` | Wireframe 01 | `product-facts.md` (component names shown, claims/composition not verified); `images/product/` satisfied |
@@ -167,17 +169,17 @@ case data — they stay blocked until real, confirmed content is supplied.
 | 10 | `korea-science.html` | Wireframe 03 | `images/korea/`, `product-facts.md`, `documents/certificates/`; named certifications need verification |
 | 11 | `cases.html` | Wireframe 03 | `cases.md`, `images/skin/`; wireframe's illustrative cases must not ship as real |
 | 12 | `private-selection.html` | Wireframe 03 | `product-facts.md`, `documents/partnership/`; `images/product/` satisfied |
-| 13 | `footer.html` | Wireframe 03 | `images/brand/`; real contact/legal copy (wireframe's address is a placeholder) |
+| 13 | `footer.html` | Wireframe 03 | `images/brand/` satisfied (logo supplied); real contact/legal copy still needed (wireframe's address is a placeholder) |
 
 ## Summary
 
 Layout and interaction structure for all 13 sections is now supplied via the
-three wireframes, and product renders and a headline video give the design
-and motion phases real material to start from. This unblocks
-`docs/implementation-plan.md` Phase 1 (Design DNA extraction). It does
-**not** unblock section content drafting (Phase 2): every fact, statistic,
-protocol detail, certificate, case, and piece of contact information the
-wireframes display is illustrative only, and `content/*.md` remain
-placeholders. Brand imagery (`images/brand/`), skin imagery
-(`images/skin/`), Korea imagery (`images/korea/`), and all four document
-subdirectories remain empty and `[CONTENT REQUIRED]`.
+three wireframes, and product renders, a headline video, and the brand logo
+give the design and motion phases real material to start from. This
+unblocks `docs/implementation-plan.md` Phase 1 (Design DNA extraction). It
+does **not** unblock section content drafting (Phase 2): every fact,
+statistic, protocol detail, certificate, case, and piece of contact
+information the wireframes display is illustrative only, and `content/*.md`
+remain placeholders. Skin imagery (`images/skin/`), Korea imagery
+(`images/korea/`), and all four document subdirectories remain empty and
+`[CONTENT REQUIRED]`.

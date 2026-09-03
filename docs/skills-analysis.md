@@ -82,8 +82,11 @@ a marketing site build.
   as an ad hoc tool (`npx playwright` or similar, run outside `package.json`),
   not a project dependency.
 - **`brand-guidelines`** — relevant once RENUVOL supplies real brand assets
-  (logo, palette, type). Not actionable today; `public/images/brand/` and
-  `content/product-facts.md` are both empty/placeholder.
+  (logo, palette, type). Partially actionable now: the logo has landed
+  (`public/images/brand/la-beautex-logo.png`, confirming the parent brand is
+  "La BEAUTEX"), but palette and type references have not, and
+  `content/product-facts.md` is still a placeholder, so this skill's fuller
+  use is still blocked.
 
 **Not selected (out of scope for this project):**
 - `docx`, `pptx`, `pdf`, `xlsx` — document-format skills, not site-build tools.
@@ -229,10 +232,12 @@ as source material for `content/*.md`. What's still genuinely blocked:
   (`public/references/inspiration/` empty), so the *visual-style* dimension
   of `design-dna`'s Analyze phase (palette, type character, effects) has
   nothing to run against yet — the wireframes supply structure, not style.
-- `[CONTENT REQUIRED]` — no standalone brand asset file exists
-  (`public/images/brand/` empty; the wordmark only appears baked into the
-  wireframes and product renders), so `brand-guidelines` and the accent-color
-  lock decision are still blocked.
+- **Resolved**: a standalone logo file now exists
+  (`public/images/brand/la-beautex-logo.png`), confirming the parent brand
+  name. Still `[CONTENT REQUIRED]`: a brand color palette and type
+  references — the logo alone is black-on-transparent and doesn't supply a
+  color system, so the accent-color lock decision (`taste-skill` § 4.2) is
+  still blocked.
 - `[CONTENT REQUIRED]` — no verified product facts, protocol descriptions,
   case studies, or certificates exist (`content/*.md` are all placeholders,
   and `content/placeholders.md` now carries an explicit "Missing Content"

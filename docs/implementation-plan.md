@@ -9,20 +9,20 @@ assets arrive, and states what blocks each phase today. See
 ## Phase 0 — Content & asset intake (blocking everything below)
 
 Full detail in `docs/asset-audit.md`; summary here, updated after wireframes,
-a headline video, and product renders were added directly to `main`:
+a headline video, product renders, and the brand logo were supplied:
 
 - **Supplied**: three wireframes in `public/references/wireframe/`, covering
   all 13 sections' layout and interaction (but not verified copy — see the
   caveat in `docs/asset-audit.md`).
 - **Supplied**: a headline video, `public/video/renuvol-intro.mp4` (placement
-  not yet decided) and 5 product renders in `public/images/product/`
-  (provenance/approval not yet confirmed).
+  not yet decided); 5 product renders in `public/images/product/`
+  (provenance/approval not yet confirmed); the brand logo,
+  `public/images/brand/la-beautex-logo.png` (confirms the "La BEAUTEX"
+  parent-brand name; low-resolution raster, a vector source may still be
+  needed for final build).
 - `[CONTENT REQUIRED]` Mood/inspiration references in
   `public/references/inspiration/` (still empty) — needed for the visual-style
   side of Phase 1, since the wireframes are grayscale/structural only.
-- `[CONTENT REQUIRED]` Brand assets: a standalone logo/wordmark file in
-  `public/images/brand/` (still empty — the wordmark only exists baked into
-  the wireframes and product renders so far).
 - `[CONTENT REQUIRED]` Real, verified copy in all six `content/*.md` files
   (still placeholders — the wireframes' copy is illustrative only, not a
   source of truth; see `docs/asset-audit.md`).
@@ -34,8 +34,8 @@ a headline video, and product renders were added directly to `main`:
   `docs/asset-audit.md`).
 
 Per `CLAUDE.md`, none of the remaining gaps may be fabricated to unblock the
-schedule. Phase 0 is partially unblocked (layout material has arrived) but
-still open on visual references, brand assets, real copy, and documents.
+schedule. Phase 0 is partially unblocked (layout material and brand logo
+have arrived) but still open on visual references, real copy, and documents.
 
 ## Phase 1 — Design DNA extraction
 
@@ -135,9 +135,9 @@ verification approach (methodology only, not their tooling — see
 
 ## Current status
 
-**Phase 0 is partially unblocked**: wireframes, a headline video, and product
-renders have been supplied, giving Phase 1 real layout material to work from.
-Mood/inspiration references, brand assets, verified copy, and all four
-document types remain `[CONTENT REQUIRED]` (see `docs/asset-audit.md`). No
-section has been drafted, no design tokens have been chosen, and no code
-beyond the initial scaffold exists in `src/`.
+**Phase 0 is partially unblocked**: wireframes, a headline video, product
+renders, and the brand logo have been supplied, giving Phase 1 real layout
+and brand material to work from. Mood/inspiration references, verified copy,
+and all four document types remain `[CONTENT REQUIRED]` (see
+`docs/asset-audit.md`). No section has been drafted, no design tokens have
+been chosen, and no code beyond the initial scaffold exists in `src/`.
