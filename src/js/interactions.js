@@ -15,10 +15,12 @@ const isFinePointer = () =>
    .rv-pointer can respond in CSS. Fine pointers only, and never under
    reduced motion. */
 
+import { siteRoot, q } from './root.js';
+
 export function initPointer() {
   if (!isFinePointer()) return;
 
-  const root = document.documentElement;
+  const root = siteRoot();
   let pending = 0;
   let x = 0;
   let y = 0;
@@ -51,7 +53,7 @@ const INGREDIENT_TINT = {
 };
 
 export function initFormula() {
-  const root = document.querySelector('[data-rv-formula]');
+  const root = q('[data-rv-formula]');
   if (!root) return;
 
   const section = root.closest('[data-rv-scene]');
@@ -178,7 +180,7 @@ function buildFormulaAccordion(root, panels, nodes) {
 /* ---------- 05 · Before / after comparison --------------------------------- */
 
 export function initCompare() {
-  const root = document.querySelector('[data-rv-compare]');
+  const root = q('[data-rv-compare]');
   if (!root) return;
 
   const input = root.querySelector('[data-rv-compare-input]');
@@ -242,7 +244,7 @@ const MORPH_STATES = [
 ];
 
 export function initRail({ engine }) {
-  const rail = document.querySelector('[data-rv-rail]');
+  const rail = q('[data-rv-rail]');
   const scene = rail?.closest('[data-rv-scene]');
   if (!rail || !scene || !engine) return;
 
@@ -308,13 +310,13 @@ export function initRail({ engine }) {
 /* ---------- 12 · Private selection + form ---------------------------------- */
 
 export function initSelection() {
-  const root = document.querySelector('[data-rv-selection]');
+  const root = q('[data-rv-selection]');
   if (!root) return;
 
   const buttons = Array.from(root.querySelectorAll('[data-rv-profile]'));
   const panel = root.querySelector('[data-rv-private]');
   const choice = root.querySelector('[data-rv-private-choice]');
-  const field = document.querySelector('[data-rv-profile-field]');
+  const field = q('[data-rv-profile-field]');
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -328,7 +330,7 @@ export function initSelection() {
 }
 
 export function initForm() {
-  const form = document.querySelector('[data-rv-form]');
+  const form = q('[data-rv-form]');
   if (!form) return;
 
   const status = form.querySelector('[data-rv-form-status]');
@@ -419,6 +421,6 @@ export function initForm() {
 /* ---------- Footer year ----------------------------------------------------- */
 
 export function initYear() {
-  const slot = document.querySelector('[data-rv-year]');
+  const slot = q('[data-rv-year]');
   if (slot) slot.textContent = String(new Date().getFullYear());
 }

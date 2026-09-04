@@ -7,9 +7,12 @@
  */
 
 /** Burger menu with focus containment and scroll lock. */
+
+import { siteRoot, q, qa } from './root.js';
+
 export function initMenu() {
-  const burger = document.querySelector('[data-rv-burger]');
-  const menu = document.querySelector('[data-rv-menu]');
+  const burger = q('[data-rv-burger]');
+  const menu = q('[data-rv-menu]');
   if (!burger || !menu) return;
 
   let open = false;
@@ -72,8 +75,8 @@ export function initViewportUnit() {
   if (CSS.supports?.('height: 100dvh')) return;
 
   const set = () => {
-    document.documentElement.style.setProperty('--rv-vh', `${window.innerHeight * 0.01}px`);
-    document.querySelectorAll('[data-rv-stage]').forEach((stage) => {
+    siteRoot().style.setProperty('--rv-vh', `${window.innerHeight * 0.01}px`);
+    qa('[data-rv-stage]').forEach((stage) => {
       stage.style.height = `${window.innerHeight}px`;
     });
   };

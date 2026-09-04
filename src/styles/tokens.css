@@ -132,11 +132,16 @@
 }
 
 /* ==========================================================================
-   Colour chapters. scroll.js sets data-rv-ground on <html> as scenes pass;
-   every value below interpolates over --rv-dur-chapter.
+   Colour chapters. scroll.js sets data-rv-ground on #renuvol-site as scenes
+   pass; every value below interpolates over --rv-dur-chapter.
+
+   Matched on the attribute alone rather than on :root, because on a Tilda
+   page the site does not own <html>. The wrapper carries the state in both
+   contexts, and since custom properties inherit, everything inside it reads
+   the current chapter either way.
    ========================================================================== */
 
-:root[data-rv-ground='ice'] {
+[data-rv-ground='ice'] {
   --rv-bg: #e6f1f7;
   --rv-fg: var(--rv-ink);
   --rv-fg-soft: #4f6069;
@@ -148,7 +153,7 @@
   --rv-atm-3: #f4f1ea;
 }
 
-:root[data-rv-ground='pearl'] {
+[data-rv-ground='pearl'] {
   --rv-bg: #f3ece6;
   --rv-fg: #191518;
   --rv-fg-soft: #6a5f63;
@@ -160,7 +165,7 @@
   --rv-atm-3: #f7efe6;
 }
 
-:root[data-rv-ground='glass'] {
+[data-rv-ground='glass'] {
   --rv-bg: #edf2f5;
   --rv-fg: var(--rv-ink);
   --rv-fg-soft: #576169;
@@ -172,7 +177,7 @@
   --rv-atm-3: #f5e8d6;
 }
 
-:root[data-rv-ground='skin'] {
+[data-rv-ground='skin'] {
   --rv-bg: #f5ebe6;
   --rv-fg: #1b1517;
   --rv-fg-soft: #6f6062;
@@ -184,7 +189,7 @@
   --rv-atm-3: #f8efe6;
 }
 
-:root[data-rv-ground='flux'] {
+[data-rv-ground='flux'] {
   --rv-bg: #ecf1f2;
   --rv-fg: var(--rv-ink);
   --rv-fg-soft: #566065;
@@ -196,7 +201,7 @@
   --rv-atm-3: #f2ecdf;
 }
 
-:root[data-rv-ground='dark'] {
+[data-rv-ground='dark'] {
   --rv-bg: #080d18;
   --rv-fg: #eef2f6;
   --rv-fg-soft: #93a3b8;
@@ -209,7 +214,7 @@
   --rv-atm-opacity: 1;
 }
 
-:root[data-rv-ground='clinic'] {
+[data-rv-ground='clinic'] {
   --rv-bg: #eef1f4;
   --rv-fg: var(--rv-ink);
   --rv-fg-soft: #5a636b;
@@ -221,7 +226,7 @@
   --rv-atm-3: #eef1f4;
 }
 
-:root[data-rv-ground='warm'] {
+[data-rv-ground='warm'] {
   --rv-bg: #f4ede5;
   --rv-fg: #1a1613;
   --rv-fg-soft: #6d635a;
@@ -233,7 +238,7 @@
   --rv-atm-3: #f7f1e8;
 }
 
-:root[data-rv-ground='night'] {
+[data-rv-ground='night'] {
   --rv-bg: #070b14;
   --rv-fg: #eef2f6;
   --rv-fg-soft: #8b9bb0;

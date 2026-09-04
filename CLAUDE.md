@@ -28,6 +28,10 @@ are all Russian.
   portable into Tilda (`docs/tilda-integration.md`).
 - Sections live as standalone fragments in `src/sections/` and are composed
   into `src/index.html` by a small zero-dependency Vite plugin.
+- The whole page lives inside `#renuvol-site`, and page state
+  (`data-rv-ground`, `--rv-page`, `.rv-static`) is written to that wrapper,
+  not to `<html>`. The Tilda embed needs it and the standalone build uses
+  the identical structure, so both run one code path.
 
 ## Gotchas that have already bitten
 
@@ -47,14 +51,23 @@ are all Russian.
   clip`) and contain vertically with a `mask-image` fade.
 - A cue at `opacity: 0` still receives clicks. `scroll.js` toggles
   `pointer-events` so a faded cue cannot swallow the control underneath it.
+- **Do not give `#renuvol-site` `overflow`, `transform`, `filter`,
+  `perspective`, `contain` or `will-change`.** Overflow kills `position:
+  sticky` for every pinned stage below it; the others make the wrapper a
+  containing block and the fixed layers stop being viewport-fixed. The Tilda
+  export hit both.
+- A reset must never touch an **inherited** property. Declaring
+  `text-transform: none` on `span` beats the `uppercase` its ancestor sets,
+  because a direct declaration always wins over an inherited value.
 
 ## Commands
 
 ```bash
 npm install
-npm run dev      # local dev server
-npm run build    # production build to dist/
-npm run preview  # preview production build
+npm run dev          # local dev server
+npm run build        # production build to dist/
+npm run preview      # preview production build
+npm run build:tilda  # T123 embed into tilda-export/ (never writes to src/)
 ```
 
 ## Structure
@@ -66,6 +79,9 @@ npm run preview  # preview production build
   (individual page-section HTML fragments, numbered in page order).
 - `references/` — external design/UX reference material, not part of the shipped site.
 - `docs/` — planning and specification documents for this project.
+- `scripts/` — build tooling that is not part of the site itself.
+- `tilda-export/` — generated T123 embed. Never edit by hand; change `src/`
+  and re-run `npm run build:tilda`.
 
 ## External expert libraries
 

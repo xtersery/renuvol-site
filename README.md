@@ -14,6 +14,14 @@ visitor: the component is composed to read as finished without it, and the
 `content/placeholders.md` for the full list and `docs/claims-verification.md`
 for what is blocked and why.
 
+## Tilda embed
+
+`npm run build:tilda` writes a ready-to-paste T123 block into
+`tilda-export/`. The instructions for a non-developer are in
+`tilda-export/README-TILDA.md`; the files to upload are listed in
+`tilda-export/asset-map.md`. The export is generated from the same sources
+as the site and never writes back into `src/`.
+
 ## Stack
 
 - [Vite](https://vitejs.dev/) with vanilla HTML, CSS, and JavaScript.

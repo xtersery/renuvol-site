@@ -41,20 +41,22 @@ function cueOpacity(p, cue) {
   return 1;
 }
 
+import { siteRoot, q, qa } from './root.js';
+
 export function createScrollEngine({ reducedMotion = false } = {}) {
   const scenes = [];
   const subscribers = new Set();
   let running = false;
   let frame = 0;
 
-  const root = document.documentElement;
+  const root = siteRoot();
 
   // Reduced motion: pinned scenes are not given their travel height at all.
   // Holding a frozen frame for three viewports is dead scroll, so the stages
   // become ordinary sections and their content is shown in full instead.
   if (reducedMotion) root.classList.add('rv-static');
 
-  document.querySelectorAll('[data-rv-scene]').forEach((el) => {
+  qa('[data-rv-scene]').forEach((el) => {
     const span = parseFloat(el.dataset.rvSpan || '0');
     const stage = el.querySelector('[data-rv-stage]');
 
@@ -145,13 +147,20 @@ export function createScrollEngine({ reducedMotion = false } = {}) {
   let lastPage = -1;
 
   /**
-   * Global page progress, published on :root as --rv-page. The fixed
-   * atmosphere layer reads it, which is what carries the same forms through
-   * the whole document instead of restarting them per section.
+   * Progress through the site, published on the wrapper as --rv-page. The
+   * fixed atmosphere layer reads it, which is what carries the same forms
+   * through the whole document instead of restarting them per section.
+   *
+   * Measured against the wrapper's own extent, not the document's. Embedded
+   * in a Tilda page there can be blocks above and below the site, and
+   * measuring the document would hand the atmosphere a range that is mostly
+   * somebody else's content.
    */
   function publishPageProgress() {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    const p = max > 0 ? clamp01(window.scrollY / max) : 0;
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const rect = root.getBoundingClientRect();
+    const travel = Math.max(rect.height - vh, 1);
+    const p = clamp01(-rect.top / travel);
     if (Math.abs(p - lastPage) < 0.0015) return;
     lastPage = p;
     root.style.setProperty('--rv-page', p.toFixed(4));
@@ -224,7 +233,7 @@ export function createScrollEngine({ reducedMotion = false } = {}) {
 
 /** Enter-on-scroll for ordinary content. Fires once per element. */
 export function initReveals() {
-  const items = document.querySelectorAll('[data-rv-reveal]');
+  const items = qa('[data-rv-reveal]');
   if (!items.length) return;
 
   if (!('IntersectionObserver' in window)) {
@@ -254,25 +263,81 @@ export function initReveals() {
   });
 }
 
+/**
+ * In-page anchors.
+ *
+ * Handled in JS rather than by `html { scroll-behavior: smooth }` for two
+ * reasons. Embedded in Tilda the site does not own `<html>`, so the CSS
+ * property is the host's to set; and a fixed header means the browser's own
+ * anchor scrolling lands the target underneath it. Doing it here keeps the
+ * behaviour identical in both contexts and puts the target where it belongs.
+ *
+ * Only links whose target is inside the wrapper are intercepted — anything
+ * pointing at the host page is left alone.
+ */
+export function initAnchors() {
+  const root = siteRoot();
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const onClick = (event) => {
+    if (event.defaultPrevented || event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    const link = event.target.closest?.('a[href^="#"]');
+    if (!link || !root.contains(link)) return;
+
+    const id = link.getAttribute('href').slice(1);
+    if (!id) return;
+
+    let target;
+    try {
+      target = root.querySelector(`#${CSS.escape(id)}`);
+    } catch {
+      return;
+    }
+    if (!target) return;
+
+    event.preventDefault();
+
+    const header = q('[data-rv-header]');
+    const offset = header ? header.getBoundingClientRect().height : 0;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+
+    window.scrollTo({ top: Math.max(0, Math.round(top)), behavior: reduced ? 'auto' : 'smooth' });
+
+    // Keep the URL honest without letting the browser jump as well.
+    if (window.history?.replaceState) window.history.replaceState(null, '', `#${id}`);
+
+    // Move focus so the jump is not purely visual.
+    const focusable = target.hasAttribute('tabindex') ? target : null;
+    if (!focusable) target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+    if (!focusable) target.removeAttribute('tabindex');
+  };
+
+  root.addEventListener('click', onClick);
+  return () => root.removeEventListener('click', onClick);
+}
+
 /** Header: compact state after the hero, plus active-section marking. */
 export function initHeader() {
-  const header = document.querySelector('[data-rv-header]');
+  const header = q('[data-rv-header]');
   if (!header) return;
 
   const sentinel = document.createElement('div');
   sentinel.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:80vh;pointer-events:none;';
-  document.body.prepend(sentinel);
+  siteRoot().prepend(sentinel);
 
   new IntersectionObserver(
     ([entry]) => header.classList.toggle('is-stuck', !entry.isIntersecting),
     { threshold: 0 }
   ).observe(sentinel);
 
-  const links = Array.from(document.querySelectorAll('.rv-nav__link'));
+  const links = qa('.rv-nav__link');
   const targets = links
     .map((link) => {
       const id = link.getAttribute('href')?.slice(1);
-      const el = id && document.getElementById(id);
+      const el = id && siteRoot().querySelector(`#${CSS.escape(id)}`);
       return el ? { link, el } : null;
     })
     .filter(Boolean);

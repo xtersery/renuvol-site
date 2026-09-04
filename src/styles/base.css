@@ -73,16 +73,43 @@ html {
 body {
   margin: 0;
   min-height: 100%;
+  background: transparent;
+  overflow-x: hidden;
+}
+
+/* --- The scoped root ------------------------------------------------------
+   Every typographic default lives on the wrapper, not on <body>, so the
+   Tilda embed carries its own typography instead of inheriting the host
+   page's — and so the host page keeps its own.
+
+   Nothing here may create a containing block (no transform, filter,
+   perspective, contain, will-change): the ground, atmosphere, grain, header
+   and film modal inside are position:fixed and would stop being
+   viewport-fixed. `overflow` is equally off-limits — a non-visible overflow
+   on an ancestor kills position:sticky for every pinned stage below it.
+   -------------------------------------------------------------------------- */
+#renuvol-site {
+  position: relative;
   font-family: var(--rv-font-text);
   font-size: var(--rv-t-base);
   line-height: var(--rv-lh-text);
   font-weight: 400;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
   color: var(--rv-fg);
-  background: transparent;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
   transition: color var(--rv-dur-chapter) var(--rv-ease-soft);
+}
+
+/* Tilda applies its own box model, margins and list styling page-wide. This
+   is the smallest reset that keeps the design intact inside the wrapper
+   without touching anything outside it. */
+#renuvol-site *,
+#renuvol-site *::before,
+#renuvol-site *::after {
+  box-sizing: border-box;
 }
 
 /* Internal content markers must never reach a visitor. The slots stay in the
@@ -115,7 +142,7 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-:root[data-rv-ground='dark'] .rv-grain {
+[data-rv-ground='dark'] .rv-grain {
   mix-blend-mode: screen;
   opacity: 0.05;
 }
@@ -226,6 +253,11 @@ p {
   border-radius: 2px;
 }
 
+/* Hidden by clipping, not by translation. Translating it out of the top
+   works on a standalone page, where above the wrapper is off-screen — but
+   embedded in Tilda the wrapper starts partway down a real page, and
+   "above the wrapper" is the host's visible content, where the link would
+   simply appear. */
 .rv-skip {
   position: absolute;
   left: var(--rv-4);
@@ -234,12 +266,17 @@ p {
   padding: var(--rv-3) var(--rv-5);
   background: var(--rv-ink);
   color: var(--rv-ivory);
-  transform: translateY(-160%);
-  transition: transform var(--rv-dur) var(--rv-ease);
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--rv-dur) var(--rv-ease);
 }
 
+.rv-skip:focus,
 .rv-skip:focus-visible {
-  transform: translateY(0);
+  clip-path: none;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {

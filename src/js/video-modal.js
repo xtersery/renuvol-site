@@ -21,10 +21,12 @@ function pickSource(video, isTouch) {
   return mp4 || webm || '';
 }
 
+import { q, qa } from './root.js';
+
 export function initFilm() {
-  const root = document.querySelector('[data-rv-film]');
+  const root = q('[data-rv-film]');
   const video = root?.querySelector('[data-rv-film-video]');
-  const openers = document.querySelectorAll('[data-rv-video-open]');
+  const openers = qa('[data-rv-video-open]');
   if (!root || !video || !openers.length) return null;
 
   const dialog = root.querySelector('.rv-film__dialog');

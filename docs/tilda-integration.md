@@ -1,7 +1,70 @@
 # Tilda Integration
 
-Status: implemented with portability in mind. This describes how the current
-build can be moved into, or run alongside, Tilda.
+Status: exported. `npm run build:tilda` produces a ready-to-paste T123 embed
+in `tilda-export/`; the instructions a non-developer follows are in
+`tilda-export/README-TILDA.md` and the upload list in
+`tilda-export/asset-map.md`. This document is the engineering side of it —
+what the export does, why, and what it cannot fix from inside the block.
+
+## The export
+
+`scripts/build-tilda.mjs` reads the same sources the Vite build uses and
+writes `tilda-export/`. It never writes back into `src/`, so the development
+project is unaffected and the script can be re-run at will.
+
+Five steps, each for one reason Tilda cannot do it itself:
+
+1. **Expands `@include`** — Tilda has no build step.
+2. **Lifts out `#renuvol-site`** — the doctype, head and body belong to the
+   host page; only the wrapper travels.
+3. **Prefixes every selector with `#renuvol-site`** — so Tilda's rules
+   cannot reach the design, and the design cannot reach Tilda's page.
+4. **Flattens the ES modules into one IIFE** — a T123 block cannot resolve
+   `import './scroll.js'`.
+5. **Replaces asset URLs with `{{TILDA_*_URL}}` placeholders** — the files
+   are uploaded to a CDN whose addresses are not knowable from here.
+
+Ahead of the scoped stylesheet it injects a compatibility layer at
+specificity `(1,0,0)`: high enough to beat any bare element selector a host
+theme writes, low enough to lose to every rule in this stylesheet, which all
+carry at least `(1,1,0)`. It resets **only non-inherited box properties** —
+resetting an inherited one declares it directly on descendants and so beats
+the value the design sets on their ancestor.
+
+## The same wrapper runs locally
+
+`src/index.html` wraps the page in `#renuvol-site` too, and the page state —
+`data-rv-ground`, `--rv-page`, `.rv-static`, `.rv-no-js` — is written there
+rather than to `<html>`, which on a Tilda page is not ours. So the
+standalone build and the embed run one code path and one set of selectors:
+what is verified locally is what ships.
+
+## Three failures this cost, worth not repeating
+
+- **`body { overflow-x: hidden }` mapped onto the wrapper.** The scoper
+  turned `body` into `#renuvol-site`, which made the wrapper a scroll
+  container and silently disabled `position: sticky` for all four pinned
+  scenes. `html` and `body` rules are now dropped, not remapped.
+- **A host `section { padding: 20px 0 }`** pushed every pinned stage 20px
+  down inside its own section — a whole viewport-height composition shifted.
+  That is what the compatibility layer exists for.
+- **`text-transform: none` on `span`** in that layer put the manifesto's
+  uppercase headline into sentence case, because the text sits in a span
+  inside the styled `<p>` and a direct declaration beats an inherited one.
+
+## What cannot be fixed from inside the block
+
+An ancestor with a non-visible `overflow` disables sticky, and an ancestor
+with a `transform` (Tilda's block-appearance animation) makes itself the
+containing block for the fixed layers. Neither is reachable from inside the
+wrapper.
+
+For the first, `main.js` walks the ancestors at boot and, if sticky cannot
+work, switches to `.rv-static` — the same complete alternative layout the
+site already uses for `prefers-reduced-motion`. The page then reads
+correctly at 10 800px instead of holding four frozen scenes across 20 400px
+of dead scroll. For the second, the README tells the operator to turn the
+block's animation off.
 
 ## What makes it portable
 
