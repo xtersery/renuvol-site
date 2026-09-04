@@ -8,7 +8,6 @@
 
 @media (max-width: 1180px) {
   .rv-formula__body,
-  .rv-protocols__body,
   .rv-korea__grid,
   .rv-cases__grid {
     grid-template-columns: minmax(0, 1fr);
@@ -34,8 +33,13 @@
     align-items: start;
   }
 
+  /* Give the copy column a little more room before the stack breaks. */
   .rv-hero__inner {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
+  }
+
+  .rv-hero__claim {
+    font-size: clamp(1.9rem, 0.6rem + 3vw, 3.2rem);
   }
 }
 
@@ -61,6 +65,46 @@
 /* --- Mobile ---------------------------------------------------------------- */
 
 @media (max-width: 860px) {
+  /* The band keeps its full-bleed image, but the title moves below it. Set
+     inside the frame on a narrow screen the type lands squarely on the vial
+     label, where no amount of scrim makes it legible without burying the
+     photograph. */
+  .rv-formula__band {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rv-formula__bandimg {
+    position: relative;
+    inset: auto;
+    height: clamp(300px, 46vh, 440px);
+    object-position: 50% 16%;
+  }
+
+  .rv-formula__scrim {
+    bottom: auto;
+    height: clamp(300px, 46vh, 440px);
+    background:
+      linear-gradient(to bottom, var(--rv-bg) 0%, transparent 12%),
+      linear-gradient(to bottom, transparent 62%, var(--rv-bg) 100%);
+  }
+
+  .rv-formula__rules {
+    display: none;
+  }
+
+  .rv-formula__head {
+    position: relative;
+    height: auto;
+    padding-inline: var(--rv-gutter);
+    margin-top: calc(var(--rv-6) * -1);
+  }
+
+  .rv-formula__title-in {
+    margin-left: var(--rv-6);
+  }
+
   /* The orbit needs width a phone does not have: the same five components
      become a native accordion, product first. */
   .rv-orbit__web,
@@ -190,135 +234,104 @@
   .rv-accordion__inner .rv-detail__name {
     display: none;
   }
-
-  /* Protocol selector becomes an accordion stack. */
-  .rv-protocols__body {
-    gap: 0;
-  }
-
-  .rv-goal {
-    min-height: 62px;
-  }
-
-  .rv-goal[aria-selected='true'] {
-    padding-left: 0;
-  }
-
-  .rv-protocol {
-    padding: 0;
-    background: none;
-    border: 0;
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-
-  .rv-protocol__panel {
-    padding: var(--rv-5) 0 var(--rv-6);
-  }
-
-  .rv-protocol__panel .rv-btn {
-    width: 100%;
-  }
 }
 
 @media (max-width: 760px) {
-  /* Hero: the wordmark moves above the product and the composition stacks.
-     Forms scale to sit inside the viewport rather than bleeding on all
-     edges. */
+  /* Hero on a phone is not the desktop composition scaled down. The product
+     stays the dominant object and keeps the top of the screen; the copy sits
+     below it on the ground, so nothing is ever set over the vial. */
   .rv-hero__inner {
     grid-template-columns: minmax(0, 1fr);
-    /* The desktop composition pins product and copy to one shared row; the
-       phone stacks them, so the explicit row has to be released or `order`
-       has nothing to reorder. */
-    grid-template-rows: auto;
-    align-content: center;
-    row-gap: var(--rv-3);
+    grid-template-rows: auto auto;
+    align-content: start;
+    row-gap: 0;
     padding-top: var(--rv-header-h);
-  }
-
-  .rv-hero__title {
-    position: relative;
-    top: auto;
-    transform: none;
-    font-size: clamp(3rem, 18vw, 5.2rem);
-    grid-column: 1;
-    order: 1;
-  }
-
-  .rv-hero__word--lead,
-  .rv-hero__word--trail {
-    transform: none;
-    margin-left: 0;
-  }
-
-  /* Enough offset to keep the two lines staggered, not so much that VOL
-     runs under the vial. */
-  .rv-hero__word--trail {
-    margin-left: 1.05em;
   }
 
   .rv-hero__product {
     grid-column: 1;
-    grid-row: auto;
-    order: 2;
-    width: min(38vw, 152px);
-    justify-self: end;
-    margin-top: calc(var(--rv-7) * -1);
-    transform: none;
+    grid-row: 1;
+    justify-self: center;
+    width: min(76vw, 40vh);
+    margin-right: 0;
+    /* Pointer parallax is meaningless on touch; keep the scroll drift only. */
+    transform: translate3d(0, calc(var(--rv-p, 0) * -46px), 0);
+    scale: calc(1 + var(--rv-p, 0) * 0.04);
+  }
+
+  .rv-hero__vial {
+    filter: drop-shadow(0 24px 34px rgb(16 46 78 / 0.2));
+  }
+
+  .rv-hero__lens {
+    inset: -12% -16%;
   }
 
   .rv-hero__copy {
     grid-column: 1;
-    grid-row: auto;
-    order: 3;
-    position: relative;
+    grid-row: 2;
     min-height: 0;
-    padding-bottom: 0;
     align-self: start;
+    /* Pulled up into the artwork's dissolved lower edge only. Below the
+       vial's base there is nothing but ribbon, already faded by the mask, so
+       this buys room without ever setting type over the product — the base
+       sits ~15px clear of the first line at every phone width checked. */
+    margin-top: clamp(-46px, -3.5vh, -22px);
   }
 
   .rv-hero__cue {
     position: static;
+    translate: none;
   }
 
   .rv-hero__cue--trail {
     display: none;
   }
 
-  .rv-hero__statement {
-    font-size: clamp(1.4rem, 6vw, 1.9rem);
-    max-width: 18ch;
+  .rv-hero__claim {
+    font-size: clamp(1.5rem, 6.6vw, 2.1rem);
+    max-width: 16ch;
+  }
+
+  .rv-hero__brand {
+    letter-spacing: 0.32em;
+  }
+
+  .rv-hero__support {
+    margin-top: var(--rv-3);
   }
 
   .rv-hero__actions {
+    margin-top: var(--rv-4);
     flex-direction: column;
     align-items: stretch;
+    gap: var(--rv-2);
   }
 
   .rv-hero__actions .rv-btn {
     width: 100%;
+    min-height: 48px;
+  }
+
+  .rv-filmlink {
+    margin-top: var(--rv-4);
+    min-height: 44px;
   }
 
   .rv-hero__scroll {
     display: none;
   }
 
-  .rv-hero__orb--major {
-    width: 78vw;
-    right: -26vw;
-    top: -6vh;
+  .rv-hero__halo {
+    width: 130vw;
+    height: 130vw;
+    right: -30vw;
+    top: 34%;
   }
 
-  .rv-hero__orb--minor {
-    width: 26vw;
-    left: -6vw;
-    bottom: 6vh;
-  }
-
-  .rv-hero__arc {
-    width: 120vw;
-    right: -34vw;
+  /* The rule reads as noise in a narrow column. */
+  .rv-hero__rules {
+    display: none;
   }
 
   /* Manifesto: phrases stack; sized by the longest word. */
@@ -524,9 +537,7 @@
 /* Fewer simultaneously animating layers on touch: the atmosphere and the
    large orbs stay, the finer decoration goes. */
 @media (hover: none) {
-  .rv-hero__blob,
   .rv-formula__arc,
-  .rv-protocols__arc,
   .rv-cases__arc {
     display: none;
   }

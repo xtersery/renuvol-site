@@ -264,6 +264,58 @@
   border-color: color-mix(in srgb, var(--rv-accent) 26%, transparent);
 }
 
+/* --- rv-rules --------------------------------------------------------------
+   An editorial measuring rule: one vertical line at the gutter, one
+   horizontal line low in the frame, with small diamond nodes where they
+   meet the edges. Borrowed as a *principle* from the reference set — the
+   sense that the page is drawn on a plate — not as artwork. Deliberately
+   near-invisible: it should register as craft, not as a grid overlay. */
+
+.rv-rules {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  color: color-mix(in srgb, var(--rv-fg) 16%, transparent);
+}
+
+.rv-rules__v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--rv-rules-x, var(--rv-gutter));
+  width: 1px;
+  background: currentcolor;
+}
+
+.rv-rules__h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--rv-rules-y, 76%);
+  height: 1px;
+  background: currentcolor;
+}
+
+/* The nodes sit on the horizontal rule, at the vertical rule and at the
+   mirrored position on the right. */
+.rv-rules__node {
+  position: absolute;
+  top: 50%;
+  left: var(--rv-rules-x, var(--rv-gutter));
+  width: 7px;
+  height: 7px;
+  translate: -50% -50%;
+  rotate: 45deg;
+  background: color-mix(in srgb, var(--rv-fg) 38%, transparent);
+}
+
+.rv-rules__node--end {
+  left: auto;
+  right: var(--rv-rules-x, var(--rv-gutter));
+  translate: 50% -50%;
+}
+
 /* --- rv-iris ---------------------------------------------------------------
    Low-opacity conic iridescence, laid over glass surfaces to keep them from
    reading as flat plastic. */

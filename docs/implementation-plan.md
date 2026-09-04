@@ -27,7 +27,7 @@ Full detail in `docs/asset-audit.md`; summary here, updated after wireframes,
 a headline video, product renders, and the brand logo were supplied:
 
 - **Supplied**: three wireframes in `public/references/wireframe/`, covering
-  all 13 sections' layout and interaction (but not verified copy — see the
+  every section's layout and interaction (but not verified copy — see the
   caveat in `docs/asset-audit.md`).
 - **Supplied**: a headline video, `public/video/renuvol-intro.mp4` (placement
   not yet decided); 5 product renders in `public/images/product/`
@@ -79,7 +79,7 @@ one until this phase runs.
 
 ## Phase 2 — Section-by-section content mapping
 
-Blocked on Phase 0's copy and asset delivery. For each of the 13 sections in
+Blocked on Phase 0's copy and asset delivery. For each of the sections in
 `src/sections/`, confirm the content/assets listed in `docs/asset-audit.md`'s
 dependency map are in hand before drafting that section's markup. Sections
 should be built in an order that respects real dependencies rather than
@@ -95,9 +95,11 @@ strictly the numeric order, e.g.:
    `[CONTENT REQUIRED]` per ingredient, but the structure is now decided.
 4. `05-transformation.html`, `06-skin-changes.html`, `07-biotech.html` —
    image/video-heavy sections, blocked on `images/skin/` and video assets.
-5. `08-protocol-selector.html` — needs `protocols.md` and
-   `documents/protocols/` to be meaningful; likely the most interactive
-   section (a selector implies state, handled in `src/js/interactions.js`).
+5. **Removed.** `08-protocol-selector.html` was a standalone Protocols
+   section whose five panels all resolved to the same sentence and the same
+   CTA. It was cut in the client-ready pass: protocol content that carries
+   weight lives in `09-cosmetologists.html` (materials on request) and in
+   `12-private-selection.html` (the patient-profile selector).
 6. `09-cosmetologists.html`, `10-korea-science.html`, `11-cases.html`,
    `12-private-selection.html` — each blocked on its own specific content per
    the dependency map. `10-korea-science` and `11-cases` now have an
@@ -164,7 +166,7 @@ verification approach (methodology only, not their tooling — see
 
 ## Current status — homepage built
 
-All 13 sections are implemented in `src/`, in the approved wireframe order,
+The sections are implemented in `src/`, in the approved wireframe order,
 with Section 04 corrected to five components. Phases 1–5 have been carried
 out against the assets that exist:
 

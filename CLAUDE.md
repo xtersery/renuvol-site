@@ -5,7 +5,7 @@ Guidance for Claude Code when working in this repository.
 ## Project
 
 RENUVOL marketing website (product of LA BEAUTEX). The homepage is
-implemented: 13 sections, Russian-language, art-directed as one continuous
+implemented: 12 sections, Russian-language, art-directed as one continuous
 artwork — nine colour chapters, a fixed atmosphere layer and a CSS material
 system (see `docs/art-direction.md`). The film is an optional modal behind a
 CTA, not the hero; the page is complete without it.

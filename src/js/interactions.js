@@ -305,43 +305,6 @@ export function initRail({ engine }) {
   );
 }
 
-/* ---------- 08 · Protocol selector ----------------------------------------- */
-
-export function initProtocolSelector() {
-  const root = document.querySelector('[data-rv-selector]');
-  if (!root) return;
-
-  const tabs = Array.from(root.querySelectorAll('[data-rv-goal]'));
-  const panels = Array.from(root.querySelectorAll('[data-rv-protocol]'));
-  if (!tabs.length || !panels.length) return;
-
-  const select = (key, { focus = false } = {}) => {
-    tabs.forEach((tab) => {
-      const on = tab.dataset.rvGoal === key;
-      tab.setAttribute('aria-selected', String(on));
-      tab.tabIndex = on ? 0 : -1;
-      if (on && focus) tab.focus();
-    });
-    panels.forEach((panel) => {
-      panel.hidden = panel.dataset.rvProtocol !== key;
-    });
-  };
-
-  tabs.forEach((tab) => tab.addEventListener('click', () => select(tab.dataset.rvGoal)));
-
-  // Roving focus, as expected of a tablist.
-  root.addEventListener('keydown', (event) => {
-    const index = tabs.indexOf(document.activeElement);
-    if (index === -1) return;
-    let next = null;
-    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-    if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
-    if (next === null) return;
-    event.preventDefault();
-    select(tabs[next].dataset.rvGoal, { focus: true });
-  });
-}
-
 /* ---------- 12 · Private selection + form ---------------------------------- */
 
 export function initSelection() {

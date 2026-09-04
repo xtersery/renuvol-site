@@ -338,6 +338,9 @@ review before use.
 
 | Asset | Status | Used on the site? | Note |
 |---|---|---|---|
+| `public/images/hero/renuvol-main-transparent.png` | FINAL-CANDIDATE (owner-supplied, owner-approved) | **Yes** — the hero, and the page's LCP element | Approved directly by the project owner for Section 02. Transparent background, 928×1152. Carries `PREMIUM PDO TECHNOLOGY` as label text, which is a product-attribute statement, not a claim needing verification |
+| `public/images/hero/renuvol-main-transparent.webp` | FINAL-CANDIDATE (derived) | **Yes** — served in preference to the PNG | Same artwork and alpha at 149KB instead of 1.23MB. `ffmpeg -c:v libwebp -quality 82 -compression_level 6`. The PNG stays as the `<picture>` fallback |
+| `public/images/sections/renuvol-premium-pdo-vial.webp` | FINAL-CANDIDATE (owner-supplied) | **Yes** — the Formula section's opening band | The same shot with its background. Used as a full-bleed editorial band, cropped hard to the cap and neck |
 | `public/favicon.svg` | FINAL-CANDIDATE (authored here) | **Yes** — browser tab icon | Drawn in this repo from the site's own glass-orb material. No third-party artwork, nothing to clear |
 | `public/images/brand/la-beautex-logo.png` | FINAL-CANDIDATE | **Yes** — header and footer | Supplied directly by the project owner. Low resolution (382×256px); a vector/higher-res source is still worth requesting, and the black artwork is inverted by CSS on the dark scenes |
 | `public/video/renuvol-intro.mp4` | FINAL-CANDIDATE (owner-supplied, owner-directed) | **Yes** — source for the film modal | Reviewed frame by frame against the claims policy: it carries no blocked claim as on-screen text. It does end on a **METABIOMED end-card** — a third-party manufacturer mark is not something to surface without a rights decision. The film modal stops playback at `data-rv-end="39.4"` of 43.7s, before the card. Drop the attribute once a trimmed master exists or the rights are cleared |
@@ -396,7 +399,7 @@ case data — they stay blocked until real, confirmed content is supplied.
 
 ## Summary
 
-Layout and interaction structure for all 13 sections is now supplied via the
+Layout and interaction structure for the wireframed sections is supplied via the
 three wireframes, and product renders, a headline video, and the brand logo
 give the design and motion phases real material to start from. This
 unblocks `docs/implementation-plan.md` Phase 1 (Design DNA extraction). It

@@ -1,12 +1,10 @@
 /**
  * Mobile behaviour.
  *
- * Not a scaled-down desktop: the menu, the protocol accordion and the
- * swipeable carousel are separate interactions that replace their desktop
- * counterparts below the breakpoint. See docs/mobile-spec.md.
+ * Not a scaled-down desktop: the menu and the swipeable carousel are
+ * separate interactions that replace their desktop counterparts below the
+ * breakpoint. See docs/mobile-spec.md.
  */
-
-const MOBILE = '(max-width: 760px)';
 
 /** Burger menu with focus containment and scroll lock. */
 export function initMenu() {
@@ -64,44 +62,6 @@ export function initMenu() {
   window.matchMedia('(min-width: 1025px)').addEventListener('change', (event) => {
     if (event.matches && open) setOpen(false);
   });
-}
-
-/**
- * Protocol selector on touch: move each panel directly under its trigger so
- * the list reads as a native accordion instead of a pair of distant columns.
- */
-export function initProtocolAccordion() {
-  const root = document.querySelector('[data-rv-selector]');
-  if (!root) return;
-
-  const list = root.querySelector('.rv-goals');
-  const host = root.querySelector('[data-rv-protocol-host]');
-  if (!list || !host) return;
-
-  const mq = window.matchMedia(MOBILE);
-  let applied = false;
-
-  const toAccordion = () => {
-    if (applied) return;
-    applied = true;
-
-    list.querySelectorAll('[data-rv-goal]').forEach((tab) => {
-      const key = tab.dataset.rvGoal;
-      const panel = host.querySelector(`[data-rv-protocol="${key}"]`);
-      if (panel) tab.parentElement.append(panel);
-    });
-  };
-
-  const toColumns = () => {
-    if (!applied) return;
-    applied = false;
-
-    list.querySelectorAll('[data-rv-protocol]').forEach((panel) => host.append(panel));
-  };
-
-  const apply = () => (mq.matches ? toAccordion() : toColumns());
-  apply();
-  mq.addEventListener('change', apply);
 }
 
 /**

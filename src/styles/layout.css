@@ -106,30 +106,32 @@
   transform: none;
 }
 
-/* Hero: the three scroll beats become one stacked opening statement. */
+/* Hero: the two scroll beats stand together, and the product holds its
+   scale without drift or parallax. */
 .rv-static .rv-hero__stage {
-  min-height: 90vh;
+  min-height: 92vh;
+  height: auto;
 }
 
+/* The copy column is a flex row in the scrolled composition, where only one
+   beat is ever visible; standing both beats up side by side overflows the
+   column, so it becomes a stack here. */
 .rv-static .rv-hero__copy {
   min-height: 0;
-  align-items: stretch;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .rv-static .rv-hero__cue {
   position: static;
+  translate: none;
   margin-top: var(--rv-6);
 }
 
-.rv-static .rv-hero__title {
-  position: static;
-  opacity: 1;
-  padding-bottom: var(--rv-7);
-}
-
-.rv-static .rv-hero__word--lead,
-.rv-static .rv-hero__word--trail {
+.rv-static .rv-hero__product,
+.rv-static .rv-hero__halo {
   transform: none;
+  scale: 1;
 }
 
 .rv-static .rv-hero__scroll,

@@ -14,12 +14,11 @@ import {
   initFormula,
   initCompare,
   initRail,
-  initProtocolSelector,
   initSelection,
   initForm,
   initYear,
 } from './interactions.js';
-import { initMenu, initProtocolAccordion, initViewportUnit } from './mobile.js';
+import { initMenu, initViewportUnit } from './mobile.js';
 
 function boot() {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -39,8 +38,6 @@ function boot() {
   initFormula();
   initCompare();
   initRail({ engine });
-  initProtocolSelector();
-  initProtocolAccordion();
 
   initSelection();
   initForm();

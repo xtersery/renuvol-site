@@ -26,11 +26,20 @@ An honest diagnosis of the build this replaces:
 
 ## What was taken from the reference
 
-pear.no could not be reached from this environment (the egress proxy blocks
-it), so it was not analysed first-hand. The direction below is built from the
-principles the brief itself enumerates, plus published descriptions of the
-site (bold typography, illustration-led composition, animation as a
-first-class element, confident colour, collage energy).
+pear.no is blocked by this environment's egress proxy, so the first pass was
+built from the principles the brief enumerates rather than from the site
+itself. Screenshots were later supplied to `references/pear/` and the
+client-ready pass is built on those. What they actually show:
+
+- One dominant object, right of frame, at a scale nothing else competes with.
+- A confident, saturated ground. Not a wash of pale gradients.
+- Serif headline left, small support paragraph placed low and in a different
+  column — asymmetric text placement rather than a centred stack.
+- A thin editorial rule — one vertical, one horizontal, diamond nodes at the
+  ends — drawn over everything, imagery included.
+- Tiny mono-caps section labels (`— THE MODEL`) and black pill CTAs.
+- Full-bleed image bands cropped hard (a branch, two hands, a cap) with type
+  set inside the image on its calm region.
 
 Translated to RENUVOL — reinterpreted, not copied:
 
@@ -86,6 +95,10 @@ as decoration:
   wrapper, and the collision absolutely-positioned every form label on top of
   the next.)
 - **`rv-arc`** — oversized circle that deliberately leaves the viewport.
+- **`rv-rules`** — the editorial measuring rule: one vertical line on the
+  shell's content edge, one horizontal line low in the frame, diamond nodes
+  at the ends. Used on the hero, the manifesto and the formula band; it is
+  what makes three very different compositions read as one plate.
 - **`rv-iris`** — low-opacity conic iridescence laid over glass surfaces.
 
 All are CSS: gradients, radii, masks and transforms. No images, no canvas, no
@@ -113,12 +126,24 @@ colour dies out gradually into its neighbour.
 
 ## Per-section changes
 
-- **Hero** — no longer video-driven. Massive `RENUVOL` set across two lines
-  running off the left edge; the product sits right of centre inside a
-  soft-edged lens with a colour wash; a large iridescent orb enters from the
-  right and bleeds off-viewport; a second orb drifts behind the type. Motion
-  is scroll drift plus a subtle pointer parallax on fine pointers. The film
-  became an optional CTA.
+- **Hero** — product-led, and rebuilt in the client-ready pass around the
+  approved transparent render (`images/hero/renuvol-main-transparent.png`).
+  The vial runs from above the top edge to below the bottom on the right at
+  roughly half the viewport width, cropped by the frame rather than by a
+  mask, and its own liquid ribbon supplies the diagonal. A deep ice→cobalt
+  ground gives the cut-out somewhere to sit; one soft lens light sits behind
+  it. The four decorative forms the previous hero stacked here (major orb,
+  minor orb, blob, arc) were removed — against a render this rich they read
+  as clutter. The oversized `RENU/VOL` wordmark went with them: it competed
+  with the photograph and at some widths covered it, so the brand is now a
+  tracked eyebrow and the message carries the display weight. Motion is
+  scroll drift and scale plus pointer parallax on fine pointers, composed
+  into a single transform. The film remains an optional CTA.
+- **Formula** — opens on a full-bleed image band: a macro crop of the vial's
+  cap and neck, with the section title set inside the image over its calm
+  upper-left. This is the hand-off out of the manifesto — the page changes
+  register rather than printing another heading on another empty ground. On
+  a phone the type moves below the image, where it is legible.
 - **Manifesto** — `НЕ ЗАПОЛНЯТЬ.` sits inside a large translucent blob; as
   scroll continues the blob expands past the viewport and the ground warms,
   and `ВОССТАНАВЛИВАТЬ.` emerges at a larger scale through a clip-path mask.
@@ -183,3 +208,28 @@ at six widths. What the review caught, and what was done:
 | The before/after plate read as a flat grey slab | Both halves rebuilt from the same irregular soft masses, so the drag reads as one surface changing state; labels moved to their own sides |
 | The orbit's ingredient wash and `ТРАНСФОРМАЦИЯ` pushed the page sideways on a 360px screen | Wash clipped on the horizontal axis only; the title got its own type ramp |
 | No favicon (a 404 on every load) | An SVG mark drawn from the site's own glass orb |
+
+## The client-ready pass
+
+A focused refinement for a client presentation. Three goals, no rebuild:
+
+1. **The approved hero render replaces the old opening.** See *Hero* above.
+   The artwork's own edges are dissolved with a narrow mask (10%/7% on the
+   sides, 5%/6% top and bottom) because the liquid ribbon runs to the frame
+   and otherwise terminates in four straight lines — the transparent render
+   reads as a rectangular image block. The fades sit outside the vial's
+   extremities, so the product itself is never cropped.
+2. **The reference was applied to the first sections only** — hero,
+   manifesto, formula, and the transition between them. Everything after
+   `05-transformation` was left alone.
+3. **The standalone Protocols section was removed.** Its five panels all
+   resolved to the same sentence and the same CTA, and protocol content that
+   carries weight already lives in *Для косметолога* (materials on request)
+   and in the patient-profile selector in *Private selection*. Removed with
+   it: the `Протоколы` items in the desktop nav, the mobile menu and the
+   footer, the `initProtocolSelector` / `initProtocolAccordion` modules, and
+   the `.rv-protocols` / `.rv-goal` / `.rv-protocol` rules.
+
+Deliberately not taken from the reference: the neoclassical collage, the
+halftone treatment, the glitch and sparkle overlays. That is Pear's own
+identity and would be wrong on a medical-aesthetics product.

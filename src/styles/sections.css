@@ -2,7 +2,11 @@
    Sections 01–14. Compositions, not containers.
    ========================================================================== */
 
-/* ---------- 02 · Hero ------------------------------------------------------ */
+/* ---------- 02 · Hero ------------------------------------------------------
+   Product-led. The approved transparent vial is the subject; the ground,
+   the lens and the rule exist to seat it. Nothing is layered on top of the
+   photograph, and no copy crosses it at any width.
+   -------------------------------------------------------------------------- */
 
 .rv-hero__stage {
   justify-content: center;
@@ -12,39 +16,46 @@
   inset: 0;
 }
 
-.rv-hero__field {
-  width: 120vw;
-  height: 90vh;
-  left: -20vw;
-  top: -18vh;
-  --rv-wash-tint: var(--rv-atm-1);
+/* A ground with real depth instead of a pale wash: the vial is a cut-out
+   with transparent background, and it only reads as *in* the page if the
+   page has somewhere for it to sit. Anchored bottom-right, under the
+   product, within the ice chapter's own hue family. */
+.rv-hero__ground {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      68% 78% at 78% 84%,
+      color-mix(in srgb, var(--rv-cobalt) 26%, transparent) 0%,
+      transparent 68%
+    ),
+    radial-gradient(
+      52% 60% at 96% 8%,
+      color-mix(in srgb, #7fc4e6 34%, transparent) 0%,
+      transparent 72%
+    ),
+    linear-gradient(168deg, #f6fbfd 0%, #d9ecf7 44%, #aed0ea 100%);
 }
 
-/* The major orb enters from the right and deliberately leaves the frame. */
-.rv-hero__orb--major {
-  width: clamp(340px, 46vw, 760px);
-  right: -14vw;
-  top: -12vh;
-}
-
-.rv-hero__orb--minor {
-  width: clamp(90px, 11vw, 190px);
-  left: 8vw;
-  bottom: 12vh;
-}
-
-.rv-hero__arc {
-  width: clamp(520px, 62vw, 1080px);
+/* One soft light behind the product. This replaces the four decorative
+   forms the previous hero stacked here — with a photograph this rich they
+   read as clutter, not as depth. */
+.rv-hero__halo {
+  width: clamp(420px, 54vw, 1020px);
+  height: clamp(420px, 54vw, 1020px);
   right: -6vw;
-  top: 2vh;
-  border-color: color-mix(in srgb, var(--rv-cobalt) 18%, transparent);
+  top: 50%;
+  translate: 0 -50%;
+  opacity: 0.55;
+  transform: translate3d(0, calc(var(--rv-p, 0) * -60px), 0);
 }
 
-.rv-hero__blob {
-  width: clamp(300px, 40vw, 640px);
-  height: clamp(300px, 40vw, 640px);
-  left: -12vw;
-  bottom: -18vh;
+/* The vertical rule sits on the shell's own content edge, so the copy
+   starts on it rather than beside it. */
+.rv-hero__rules {
+  --rv-rules-x: max(var(--rv-gutter), calc((100vw - var(--rv-shell)) / 2 + var(--rv-gutter)));
+  --rv-rules-y: 78%;
+  z-index: 1;
 }
 
 .rv-hero__inner {
@@ -55,130 +66,131 @@
   padding-inline: var(--rv-gutter);
   height: 100%;
   display: grid;
-  /* One row, two columns: copy occupies the left, the product the right, and
-     the wordmark sits above both in its own band. Without the explicit row
-     the product and copy auto-place onto separate rows and the composition
-     falls apart. */
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
   grid-template-rows: 1fr;
   align-items: center;
   column-gap: var(--rv-6);
 }
 
-/* Oversized wordmark, cropped by the left edge. Width is capped so the
-   second line never runs under the product — the two occupy different
-   columns of the composition. */
-.rv-hero__title {
-  position: absolute;
-  left: 0;
-  top: clamp(64px, 13vh, 150px);
-  width: 62%;
-  margin: 0;
-  font-family: var(--rv-font-display);
-  font-weight: 400;
-  font-size: clamp(3.6rem, 12vw, 11.5rem);
-  line-height: 0.84;
-  letter-spacing: -0.055em;
-  color: color-mix(in srgb, var(--rv-ink) 90%, transparent);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.rv-hero__word {
-  display: block;
-  will-change: transform;
-}
-
-.rv-hero__word--lead {
-  /* Runs off the left edge — the composition continues past the frame. */
-  margin-left: -0.09em;
-  transform: translate3d(calc(min(var(--rv-p, 0), 1) * -6vw), 0, 0);
-}
-
-.rv-hero__word--trail {
-  margin-left: 1.55em;
-  color: color-mix(in srgb, var(--rv-cobalt) 62%, var(--rv-ink));
-  transform: translate3d(calc(min(var(--rv-p, 0), 1) * 7vw), 0, 0);
-}
-
-/* The product as a sculptural object, right of centre and above the type. */
+/* The product runs past the top and bottom edges of the stage and is cropped
+   by the viewport, not by a mask — the composition continues beyond the
+   frame. Sized from the stage height so it stays the dominant object on a
+   short laptop screen as well as a tall one. */
 .rv-hero__product {
   position: relative;
   grid-column: 2;
   grid-row: 1;
-  justify-self: center;
-  width: clamp(150px, 17vw, 262px);
-  aspect-ratio: 0.52;
+  justify-self: end;
+  align-self: center;
+  width: min(48vw, 132vh, 760px);
   margin: 0;
-  z-index: 3;
-  transform: translate3d(0, calc(var(--rv-p, 0) * -60px), 0);
-}
-
-.rv-hero__lens {
-  position: absolute;
-  inset: -34% -58%;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgb(255 255 255 / 0.85) 0%,
-    color-mix(in srgb, var(--rv-ice) 62%, transparent) 42%,
-    transparent 72%
+  margin-right: calc(var(--rv-gutter) * -0.9);
+  z-index: 2;
+  /* Scroll drift and pointer parallax are composed into one transform:
+     .rv-drift and .rv-pointer both write `transform`, so stacking the two
+     helper classes silently drops the drift on a fine pointer. */
+  transform: translate3d(
+    calc(var(--rv-mx, 0) * -20px),
+    calc(var(--rv-p, 0) * -90px + var(--rv-my, 0) * -14px),
+    0
   );
+  scale: calc(1 + var(--rv-p, 0) * 0.06);
+  transition: transform 900ms var(--rv-ease-soft);
+  will-change: transform;
 }
 
 .rv-hero__vial {
   position: relative;
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 44%;
-  -webkit-mask-image: radial-gradient(ellipse 62% 58% at 50% 50%, #000 46%, transparent 96%);
-  mask-image: radial-gradient(ellipse 62% 58% at 50% 50%, #000 46%, transparent 96%);
+  height: auto;
+  z-index: 1;
+  /* The render carries its own light; a soft drop shadow gives it contact
+     with the ground so it does not read as a pasted cut-out. */
+  filter: drop-shadow(0 42px 60px rgb(16 46 78 / 0.22));
+  /* The liquid ribbon runs to the artwork's own edges, so without this it
+     terminates in four straight lines and the transparent render reads as a
+     rectangular image block. The fades are narrow and outside the vial's
+     extremities (cap ~13%, base ~88%, label 27–74%), so the product itself
+     is never cropped — only the ribbon dissolves. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 10%, #000 93%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 5%, #000 94%, transparent 100%);
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 10%, #000 93%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 5%, #000 94%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
-.rv-hero__wash {
-  inset: -10%;
+.rv-hero__lens {
+  position: absolute;
+  inset: -18% -22%;
   border-radius: 50%;
-  opacity: 0.4;
+  background: radial-gradient(
+    ellipse at 54% 46%,
+    rgb(255 255 255 / 0.72) 0%,
+    rgb(255 255 255 / 0.28) 38%,
+    transparent 70%
+  );
 }
 
 .rv-hero__copy {
   position: relative;
   grid-column: 1;
   grid-row: 1;
-  align-self: end;
-  padding-bottom: clamp(var(--rv-8), 12vh, var(--rv-10));
+  align-self: center;
   z-index: 4;
-  min-height: 46vh;
+  min-height: 52vh;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .rv-hero__cue {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: clamp(var(--rv-8), 14vh, var(--rv-10));
+  top: 50%;
+  translate: 0 -50%;
 }
 
-.rv-hero__statement {
+/* The brand reads as an eyebrow; the message carries the display weight. */
+.rv-hero__title {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--rv-4), 2.4vh, var(--rv-6));
+}
+
+.rv-hero__brand {
+  font-family: var(--rv-font-text);
+  font-size: var(--rv-t-sm);
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--rv-fg-soft);
+}
+
+.rv-hero__claim {
   font-family: var(--rv-font-display);
-  font-size: clamp(1.5rem, 0.9rem + 2vw, 2.9rem);
-  line-height: 1.06;
-  letter-spacing: -0.025em;
-  max-width: 17ch;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 0.7rem + 3.4vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--rv-ink);
+  text-wrap: balance;
 }
 
 .rv-hero__support {
-  margin-top: var(--rv-4);
-  max-width: 40ch;
+  margin-top: clamp(var(--rv-5), 3vh, var(--rv-7));
+  max-width: 38ch;
   color: var(--rv-fg-soft);
   font-size: var(--rv-t-sm);
   line-height: 1.62;
 }
 
 .rv-hero__actions {
-  margin-top: var(--rv-6);
+  margin-top: clamp(var(--rv-5), 3.4vh, var(--rv-7));
   display: flex;
   flex-wrap: wrap;
   gap: var(--rv-3);
@@ -202,14 +214,14 @@
 
 .rv-hero__scroll {
   position: absolute;
-  left: 50%;
+  left: calc(
+    max(var(--rv-gutter), (100vw - var(--rv-shell)) / 2 + var(--rv-gutter)) + var(--rv-4)
+  );
   bottom: var(--rv-6);
-  transform: translateX(-50%);
   z-index: 5;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: var(--rv-3);
+  gap: var(--rv-4);
 }
 
 .rv-hero__scroll-label {
@@ -219,10 +231,12 @@
   color: var(--rv-fg-soft);
 }
 
+/* Horizontal now: it sits on the editorial rule rather than cutting across
+   the product, which a centred vertical tick did. */
 .rv-hero__scroll-line {
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(to bottom, var(--rv-fg-soft), transparent);
+  width: clamp(40px, 6vw, 96px);
+  height: 1px;
+  background: linear-gradient(to right, var(--rv-fg-soft), transparent);
 }
 
 /* ---------- 03 · Manifesto ------------------------------------------------- */
@@ -266,6 +280,14 @@
   border-color: color-mix(in srgb, var(--rv-accent) 22%, transparent);
 }
 
+/* The same measuring rule as the hero and the formula band — it is what
+   makes three very different compositions read as one plate. */
+.rv-manifesto__rules {
+  --rv-rules-x: max(var(--rv-gutter), calc((100vw - var(--rv-shell)) / 2 + var(--rv-gutter)));
+  --rv-rules-y: 82%;
+  color: color-mix(in srgb, var(--rv-fg) 11%, transparent);
+}
+
 .rv-manifesto__type {
   position: relative;
   display: grid;
@@ -281,14 +303,14 @@
 }
 
 .rv-manifesto__phrase--a {
-  font-size: clamp(2rem, 0.5rem + 5.6vw, 5.6rem);
+  font-size: clamp(2.1rem, 0.5rem + 6.2vw, 6.2rem);
   color: color-mix(in srgb, var(--rv-fg) 54%, transparent);
   transform: scale(calc(1 - var(--rv-p, 0) * 0.12));
 }
 
 /* The promise emerges larger, through a mask that opens from the baseline. */
 .rv-manifesto__phrase--b {
-  font-size: clamp(2.4rem, 0.5rem + 7vw, 7.2rem);
+  font-size: clamp(2.6rem, 0.5rem + 7.8vw, 8rem);
   color: var(--rv-fg);
 }
 
@@ -335,22 +357,79 @@
   top: 8vh;
 }
 
+/* A full-bleed band that breaks out of the section's own padding. The
+   manifesto ends on flat colour, so opening the next block on an image at
+   full width is the hand-off — the page changes register rather than
+   printing another heading on another empty ground. */
+.rv-formula__band {
+  position: relative;
+  width: 100vw;
+  margin-left: 50%;
+  translate: -50% 0;
+  height: clamp(460px, 74vh, 880px);
+  margin-bottom: clamp(var(--rv-7), 7vw, var(--rv-10));
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.rv-formula__bandimg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* A macro crop of the cap and neck rather than the whole bottle: the vial
+     is shown in full three times elsewhere on the page, so here it earns its
+     scale by being cropped. The left third stays calm for the title. */
+  object-position: 50% 8%;
+}
+
+/* Enough scrim to guarantee contrast for the title, and no more — the image
+   has to stay the subject. */
+.rv-formula__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      100deg,
+      color-mix(in srgb, #eef6fb 92%, transparent) 0%,
+      color-mix(in srgb, #eef6fb 58%, transparent) 30%,
+      transparent 58%
+    ),
+    /* Both edges dissolve into the page ground: a hard line top and bottom
+       would reinstate exactly the section seam the art direction removes. */
+    linear-gradient(to bottom, var(--rv-bg) 0%, transparent 9%),
+    linear-gradient(to bottom, transparent 68%, var(--rv-bg) 100%);
+}
+
+.rv-formula__rules {
+  --rv-rules-x: max(var(--rv-gutter), calc((100vw - var(--rv-shell)) / 2 + var(--rv-gutter)));
+  --rv-rules-y: 82%;
+  color: color-mix(in srgb, var(--rv-ink) 20%, transparent);
+}
+
 .rv-formula__head {
+  position: relative;
+  z-index: 2;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   gap: var(--rv-4);
-  margin-bottom: clamp(var(--rv-6), 5vw, var(--rv-9));
 }
 
 .rv-formula__title {
   text-transform: uppercase;
-  font-size: clamp(2.4rem, 1rem + 5vw, 6.4rem);
+  font-size: clamp(2.2rem, 0.9rem + 4.6vw, 5.8rem);
+  max-width: 11ch;
 }
 
-/* Second line indents — the heading itself has a rhythm. */
+/* Second line indents — the heading itself has a rhythm. Shorter inside the
+   band so the line ends before the glass. */
 .rv-formula__title-in {
   display: inline-block;
-  margin-left: clamp(var(--rv-6), 8vw, var(--rv-11));
+  margin-left: clamp(var(--rv-5), 4vw, var(--rv-8));
   color: color-mix(in srgb, var(--rv-active) 48%, var(--rv-fg));
   transition: color var(--rv-dur-slow) var(--rv-ease-soft);
 }
@@ -1087,127 +1166,6 @@
 .rv-biotech__support {
   color: #a9bcd0;
   max-width: 40ch;
-}
-
-/* ---------- 08 · Protocol selector ------------------------------------------ */
-
-.rv-protocols__scene {
-  inset: -12% 0;
-}
-
-.rv-protocols__wash {
-  width: 80vw;
-  height: 80vh;
-  left: -10vw;
-  top: 6vh;
-  opacity: 0.55;
-}
-
-.rv-protocols__arc {
-  width: clamp(420px, 56vw, 940px);
-  right: -14vw;
-  bottom: -10vh;
-}
-
-.rv-protocols__title {
-  text-transform: uppercase;
-  margin-bottom: clamp(var(--rv-6), 5vw, var(--rv-9));
-  font-size: clamp(2.2rem, 1rem + 4.4vw, 5.4rem);
-}
-
-.rv-protocols__body {
-  display: grid;
-  grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
-  gap: clamp(var(--rv-6), 5vw, var(--rv-9));
-  align-items: start;
-}
-
-.rv-goals {
-  border-top: 1px solid var(--rv-line);
-}
-
-.rv-goal {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: var(--rv-4);
-  padding: var(--rv-5) 0;
-  border-bottom: 1px solid var(--rv-line-soft);
-  text-align: left;
-  color: var(--rv-fg-soft);
-  transition: color var(--rv-dur) var(--rv-ease), padding-left var(--rv-dur) var(--rv-ease);
-}
-
-.rv-goal__index {
-  font-size: var(--rv-t-xs);
-  letter-spacing: 0.18em;
-}
-
-.rv-goal__name {
-  font-family: var(--rv-font-display);
-  font-size: clamp(1.1rem, 0.9rem + 0.7vw, 1.55rem);
-  line-height: 1.15;
-  margin-right: auto;
-}
-
-.rv-goal__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: transparent;
-  border: 1px solid var(--rv-line);
-  transition: background var(--rv-dur) var(--rv-ease), transform var(--rv-dur) var(--rv-ease);
-}
-
-.rv-goal[aria-selected='true'] {
-  color: var(--rv-fg);
-  padding-left: var(--rv-3);
-}
-
-.rv-goal[aria-selected='true'] .rv-goal__dot {
-  background: var(--rv-accent);
-  border-color: var(--rv-accent);
-  transform: scale(1.4);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .rv-goal:hover {
-    color: var(--rv-fg);
-  }
-}
-
-.rv-protocol {
-  position: relative;
-  padding: clamp(var(--rv-6), 4vw, var(--rv-9));
-  overflow: hidden;
-}
-
-.rv-protocol__panel {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--rv-4);
-  align-items: flex-start;
-  animation: rv-panel-in var(--rv-dur-slow) var(--rv-ease) both;
-}
-
-.rv-protocol__panel[hidden] {
-  display: none;
-}
-
-.rv-protocol__name {
-  font-family: var(--rv-font-display);
-  font-size: clamp(1.7rem, 1rem + 2.2vw, 3rem);
-  font-weight: 400;
-  line-height: 1.04;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-}
-
-.rv-protocol__lead {
-  max-width: 40ch;
-  color: var(--rv-fg-soft);
 }
 
 /* ---------- 09 · For cosmetologists ----------------------------------------- */

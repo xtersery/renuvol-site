@@ -4,7 +4,7 @@ Marketing website for RENUVOL.
 
 ## Status
 
-Homepage implemented: all 13 sections, Russian-language, art-directed as one
+Homepage implemented: 12 sections, Russian-language, art-directed as one
 continuous artwork (`docs/art-direction.md`). The product film is an optional
 modal behind a CTA — the page carries itself without it.
 

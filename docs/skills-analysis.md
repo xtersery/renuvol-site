@@ -182,7 +182,7 @@ packaged as a Claude Code plugin with its own JS/CSS engine
   instead of the GSAP-based engine.
 - The **variety rule**: at least four distinct device families across the
   page, never the same device twice in a row — directly applicable to
-  RENUVOL's 13 sections.
+  RENUVOL's sections.
 - The **taste floor** (`references/taste.md`): the 4px spacing scale with
   more space above a heading than below it, two-typeface maximum, 45–75ch
   body measure, six-color-role palette with one locked accent, the "premium
@@ -197,7 +197,7 @@ packaged as a Claude Code plugin with its own JS/CSS engine
   section plus what on screen causes it, before assigning any motion device,
   and identify a single engineered "peak" section that gets the most scroll
   room. Directly usable once real content exists to decide what RENUVOL's
-  13 sections are actually meant to make a visitor feel.
+  sections are actually meant to make a visitor feel.
 - The **clip-time-is-not-cue-time** and **pinned-span** lessons (minimum
   useful pin span, measuring rail overflow before relying on it, greet-form
   cues for hero content) — implementation pitfalls worth encoding directly
