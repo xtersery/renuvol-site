@@ -1,1 +1,101 @@
-<!-- Hero section — not yet implemented. -->
+<!--
+  02 — Hero.
+
+  Product-led, not type-led. The approved transparent vial is the subject;
+  everything else exists to seat it in the page.
+
+  Composition: a deep ice→cobalt ground occupies the frame; the vial runs
+  from above the top edge to below the bottom on the right, cropped by the
+  viewport rather than by a mask, and its own liquid ribbon supplies the
+  diagonal. Copy sits in the left column and never crosses the product. A
+  thin editorial rule with node markers measures the frame.
+
+  The wordmark is deliberately small. An oversized RENUVOL competed with the
+  photograph and, at some widths, covered it; the message carries the
+  headline instead and the brand reads as an eyebrow.
+
+  Almost no CSS decoration here on purpose: the photograph already carries
+  the richness, and stacking orbs and blobs behind it only muddied it.
+
+  The film is an optional secondary experience behind a CTA (see
+  14-video-modal.html); nothing here depends on it loading.
+-->
+<section
+  class="rv-hero"
+  id="rv-top"
+  data-rv-scene="hero"
+  data-rv-ground="ice"
+  data-rv-span="2.4"
+>
+  <div class="rv-hero__stage" data-rv-stage>
+    <!-- Plane 1 — ground -->
+    <div class="rv-scene rv-hero__scene">
+      <span class="rv-hero__ground" aria-hidden="true"></span>
+      <span class="rv-wash rv-hero__halo" style="--rv-wash-tint: #b9dcf2"></span>
+    </div>
+
+    <!-- Plane 2 — the editorial rule that measures the frame -->
+    <div class="rv-rules rv-hero__rules" aria-hidden="true">
+      <span class="rv-rules__v"></span>
+      <span class="rv-rules__h">
+        <i class="rv-rules__node"></i>
+        <i class="rv-rules__node rv-rules__node--end"></i>
+      </span>
+    </div>
+
+    <div class="rv-hero__inner rv-above">
+      <!-- Plane 3 — the product, cropped by the viewport -->
+      <figure class="rv-hero__product">
+        <span class="rv-hero__lens" aria-hidden="true"></span>
+        <picture>
+          <source srcset="/images/hero/renuvol-main-transparent.webp" type="image/webp" />
+          <img
+            class="rv-hero__vial"
+            src="/images/hero/renuvol-main-transparent.png"
+            alt="Флакон RENUVOL — premium PDO technology"
+            width="928"
+            height="1152"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
+      </figure>
+
+      <!-- Plane 4 — copy, left column, clear of the product -->
+      <div class="rv-hero__copy">
+        <div class="rv-hero__cue rv-hero__cue--lead" data-rv-cue="0 0.46 0">
+          <h1 class="rv-hero__title">
+            <span class="rv-hero__brand">RENUVOL</span>
+            <span class="rv-hero__claim">Кожа, которая снова<br />умеет восстанавливаться.</span>
+          </h1>
+
+          <p class="rv-hero__support">
+            Инновационный препарат для работы с качеством кожи.<br />
+            Южная Корея<span class="rv-slash">/</span>профессиональная эстетическая медицина.
+          </p>
+
+          <div class="rv-hero__actions">
+            <a class="rv-btn rv-btn--solid" href="#rv-formula">Узнать о препарате</a>
+            <a class="rv-btn rv-btn--ghost" href="#rv-selection">Запросить условия сотрудничества</a>
+          </div>
+
+          <button class="rv-filmlink" type="button" data-rv-video-open>
+            <span class="rv-filmlink__icon" aria-hidden="true"></span>
+            Смотреть фильм о RENUVOL
+          </button>
+        </div>
+
+        <div class="rv-hero__cue rv-hero__cue--trail" data-rv-cue="0.62 1 0.14 0">
+          <p class="rv-hero__line">
+            5 компонентов<span class="rv-hero__dash">—</span>одна система
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rv-hero__scroll" data-rv-cue="0 0.08 0">
+      <span class="rv-hero__scroll-label">Scroll to discover</span>
+      <span class="rv-hero__scroll-line" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>

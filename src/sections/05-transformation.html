@@ -1,1 +1,79 @@
-<!-- Transformation section — not yet implemented. -->
+<!--
+  05 — Skin transformation.
+
+  The two empty rectangles are gone. Before and after are art-directed macro
+  surfaces built entirely in CSS: the "before" is matte, cool and flat, the
+  "after" is luminous, plump and faintly iridescent. The drag mask reveals
+  one through the other, so the section is complete and sensual without
+  clinical photography.
+
+  These surfaces are explicitly abstract material studies, not depictions of
+  a patient result, and carry no measured claim. Real approved before/after
+  imagery replaces them when it exists.
+  [CONTENT REQUIRED: approved before/after cases]
+  [CONTENT REQUIRED: verified clinical data]
+-->
+<section
+  class="rv-transform"
+  id="rv-transform"
+  data-rv-scene="transform"
+  data-rv-ground="skin"
+>
+  <div class="rv-scene rv-transform__scene">
+    <span class="rv-wash rv-transform__glow" style="--rv-wash-tint: #f0cfc8"></span>
+    <span class="rv-orb rv-transform__orb" style="--rv-orb-tint: #e3a9a4"></span>
+  </div>
+
+  <div class="rv-shell rv-transform__head rv-above">
+    <h2 class="rv-display rv-transform__title" data-rv-reveal>Трансформация<br />кожи</h2>
+    <p class="rv-transform__lead" data-rv-reveal>
+      Качество поверхности<span class="rv-slash">/</span>плотность<span class="rv-slash">/</span>сияние
+    </p>
+  </div>
+
+  <div class="rv-shell rv-above">
+    <div
+      class="rv-compare"
+      data-rv-compare
+      role="group"
+      aria-label="Сравнение состояния кожи"
+    >
+      <div class="rv-compare__surface rv-compare__surface--after">
+        <span class="rv-compare__grain" aria-hidden="true"></span>
+        <span class="rv-iris rv-compare__sheen" aria-hidden="true"></span>
+        <span class="rv-compare__tag rv-compare__tag--after">After RENUVOL</span>
+      </div>
+
+      <div class="rv-compare__surface rv-compare__surface--before" data-rv-compare-clip>
+        <span class="rv-compare__grain" aria-hidden="true"></span>
+        <span class="rv-compare__tag rv-compare__tag--before">Before</span>
+      </div>
+
+      <div class="rv-compare__handle" data-rv-compare-handle>
+        <span class="rv-compare__line" aria-hidden="true"></span>
+        <span class="rv-compare__grip" aria-hidden="true"></span>
+      </div>
+
+      <input
+        class="rv-compare__input"
+        type="range"
+        min="0"
+        max="100"
+        value="52"
+        step="0.1"
+        aria-label="Положение линии сравнения"
+        data-rv-compare-input
+      />
+    </div>
+
+    <div class="rv-transform__foot">
+      <ul class="rv-params" role="list">
+        <li>Увлажнение</li>
+        <li>Плотность</li>
+        <li>Эластичность</li>
+        <li>Сияние</li>
+      </ul>
+      <a class="rv-btn rv-btn--line" href="#rv-selection">Смотреть результаты</a>
+    </div>
+  </div>
+</section>

@@ -1,1 +1,260 @@
-/* Design tokens (colors, type scale, spacing, etc.) — not yet defined. */
+/* ==========================================================================
+   RENUVOL — design tokens
+   Namespaced --rv-* so the stylesheet can coexist with a Tilda page.
+   Reasoning: docs/design-system.md and docs/art-direction.md.
+   ========================================================================== */
+
+/* Atmosphere colours are registered so they interpolate between colour
+   chapters instead of jumping. Without @property support the switch is
+   instant, which degrades gracefully. */
+@property --rv-atm-1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #cfe3ef;
+}
+@property --rv-atm-2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #e7dcef;
+}
+@property --rv-atm-3 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f0e7dd;
+}
+@property --rv-bg {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #eef3f6;
+}
+@property --rv-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #2a5ea8;
+}
+
+:root {
+  /* --- Core palette ----------------------------------------------------- */
+  --rv-pearl: #f2efea;
+  --rv-ivory: #faf8f5;
+  --rv-ice: #e4eff5;
+  --rv-ice-deep: #cfe1ec;
+  --rv-mineral: #c3c6c8;
+
+  --rv-ink: #14171a;
+  --rv-graphite: #1d2226;
+  --rv-navy: #080d18;
+  --rv-navy-soft: #101a2e;
+
+  --rv-cobalt: #2a5ea8;
+  --rv-cobalt-bright: #4d8ada;
+  --rv-electric: #5ea9ff;
+
+  /* Ingredient identities — used in Section 04 and the chapter rail. */
+  --rv-a-pdo: #b9a48a; /* warm silver-gold */
+  --rv-a-pn: #4fb3c4; /* aqua / turquoise */
+  --rv-a-vitc: #d99235; /* amber */
+  --rv-a-gsh: #9b8fd0; /* opalescent violet */
+  --rv-a-ha: #3f7fd0; /* deep clear blue */
+
+  /* --- Semantic (re-pointed per colour chapter) ------------------------- */
+  --rv-bg: var(--rv-ice);
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #5c6167;
+  --rv-line: rgb(20 23 26 / 0.14);
+  --rv-line-soft: rgb(20 23 26 / 0.07);
+  --rv-accent: var(--rv-cobalt);
+
+  /* Atmosphere masses behind everything. */
+  --rv-atm-1: #bcdcee;
+  --rv-atm-2: #dfe4f4;
+  --rv-atm-3: #f2ece4;
+  --rv-atm-opacity: 0.6;
+
+  /* --- Type ------------------------------------------------------------- */
+  --rv-font-display: 'Prata', 'Georgia', 'Times New Roman', serif;
+  --rv-font-text: 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+  --rv-t-xs: 0.75rem;
+  --rv-t-sm: 0.8125rem;
+  --rv-t-base: clamp(0.95rem, 0.9rem + 0.2vw, 1.0625rem);
+  --rv-t-lead: clamp(1.05rem, 0.95rem + 0.5vw, 1.375rem);
+  --rv-t-h3: clamp(1.35rem, 1.1rem + 1vw, 1.9rem);
+  --rv-t-h2: clamp(2.1rem, 1.3rem + 3.4vw, 4.6rem);
+  --rv-t-h1: clamp(3.2rem, 1.2rem + 8.6vw, 11rem);
+
+  --rv-lh-display: 0.96;
+  --rv-lh-text: 1.62;
+  --rv-track-tight: -0.03em;
+  --rv-track-wide: 0.16em;
+  --rv-measure: 42ch;
+
+  /* --- Space (4px base) ------------------------------------------------- */
+  --rv-1: 4px;
+  --rv-2: 8px;
+  --rv-3: 12px;
+  --rv-4: 16px;
+  --rv-5: 24px;
+  --rv-6: 32px;
+  --rv-7: 48px;
+  --rv-8: 64px;
+  --rv-9: 96px;
+  --rv-10: 128px;
+  --rv-11: 176px;
+
+  --rv-gutter: clamp(20px, 5vw, 72px);
+  --rv-shell: 1420px;
+  --rv-section-y: clamp(96px, 12vh, 190px);
+
+  /* --- Motion ----------------------------------------------------------- */
+  --rv-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --rv-ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --rv-dur-fast: 140ms;
+  --rv-dur: 240ms;
+  --rv-dur-slow: 620ms;
+  --rv-dur-chapter: 900ms; /* colour-chapter interpolation */
+
+  /* --- Depth ------------------------------------------------------------ */
+  --rv-e1: 0 1px 2px rgb(20 23 26 / 0.05), 0 8px 24px -12px rgb(20 23 26 / 0.14);
+  --rv-e2: 0 2px 6px rgb(20 23 26 / 0.06), 0 22px 48px -24px rgb(20 23 26 / 0.2);
+  --rv-edge: inset 0 1px 0 rgb(255 255 255 / 0.6);
+
+  /* --- Layers ----------------------------------------------------------- */
+  --rv-z-ground: 0;
+  --rv-z-atmos: 1;
+  --rv-z-content: 2;
+  --rv-z-header: 60;
+  --rv-z-menu: 70;
+  --rv-z-modal: 90;
+  --rv-z-grain: 80;
+
+  --rv-header-h: 76px;
+}
+
+/* ==========================================================================
+   Colour chapters. scroll.js sets data-rv-ground on #renuvol-site as scenes
+   pass; every value below interpolates over --rv-dur-chapter.
+
+   Matched on the attribute alone rather than on :root, because on a Tilda
+   page the site does not own <html>. The wrapper carries the state in both
+   contexts, and since custom properties inherit, everything inside it reads
+   the current chapter either way.
+   ========================================================================== */
+
+[data-rv-ground='ice'] {
+  --rv-bg: #e6f1f7;
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #4f6069;
+  --rv-line: rgb(16 42 58 / 0.16);
+  --rv-line-soft: rgb(16 42 58 / 0.07);
+  --rv-accent: var(--rv-cobalt);
+  --rv-atm-1: #9ecfe8;
+  --rv-atm-2: #cfe0f5;
+  --rv-atm-3: #f4f1ea;
+}
+
+[data-rv-ground='pearl'] {
+  --rv-bg: #f3ece6;
+  --rv-fg: #191518;
+  --rv-fg-soft: #6a5f63;
+  --rv-line: rgb(40 26 32 / 0.15);
+  --rv-line-soft: rgb(40 26 32 / 0.07);
+  --rv-accent: #8f6fa8;
+  --rv-atm-1: #e8d2dd;
+  --rv-atm-2: #d9cdea;
+  --rv-atm-3: #f7efe6;
+}
+
+[data-rv-ground='glass'] {
+  --rv-bg: #edf2f5;
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #576169;
+  --rv-line: rgb(20 34 46 / 0.15);
+  --rv-line-soft: rgb(20 34 46 / 0.07);
+  --rv-accent: var(--rv-cobalt);
+  --rv-atm-1: #b9e0e6;
+  --rv-atm-2: #ded3ef;
+  --rv-atm-3: #f5e8d6;
+}
+
+[data-rv-ground='skin'] {
+  --rv-bg: #f5ebe6;
+  --rv-fg: #1b1517;
+  --rv-fg-soft: #6f6062;
+  --rv-line: rgb(48 28 30 / 0.14);
+  --rv-line-soft: rgb(48 28 30 / 0.06);
+  --rv-accent: #b3697a;
+  --rv-atm-1: #f0d2cd;
+  --rv-atm-2: #d9e6ef;
+  --rv-atm-3: #f8efe6;
+}
+
+[data-rv-ground='flux'] {
+  --rv-bg: #ecf1f2;
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #566065;
+  --rv-line: rgb(20 34 40 / 0.14);
+  --rv-line-soft: rgb(20 34 40 / 0.06);
+  --rv-accent: #2f7f92;
+  --rv-atm-1: #a8dbdf;
+  --rv-atm-2: #edd6cd;
+  --rv-atm-3: #f2ecdf;
+}
+
+[data-rv-ground='dark'] {
+  --rv-bg: #080d18;
+  --rv-fg: #eef2f6;
+  --rv-fg-soft: #93a3b8;
+  --rv-line: rgb(238 242 246 / 0.2);
+  --rv-line-soft: rgb(238 242 246 / 0.1);
+  --rv-accent: var(--rv-electric);
+  --rv-atm-1: #14356b;
+  --rv-atm-2: #3a2a70;
+  --rv-atm-3: #071021;
+  --rv-atm-opacity: 1;
+}
+
+[data-rv-ground='clinic'] {
+  --rv-bg: #eef1f4;
+  --rv-fg: var(--rv-ink);
+  --rv-fg-soft: #5a636b;
+  --rv-line: rgb(20 30 44 / 0.15);
+  --rv-line-soft: rgb(20 30 44 / 0.07);
+  --rv-accent: #21518f;
+  --rv-atm-1: #c6d6e8;
+  --rv-atm-2: #dfe6ee;
+  --rv-atm-3: #eef1f4;
+}
+
+[data-rv-ground='warm'] {
+  --rv-bg: #f4ede5;
+  --rv-fg: #1a1613;
+  --rv-fg-soft: #6d635a;
+  --rv-line: rgb(44 32 20 / 0.15);
+  --rv-line-soft: rgb(44 32 20 / 0.07);
+  --rv-accent: #a8763a;
+  --rv-atm-1: #f0dcc5;
+  --rv-atm-2: #e2d5e6;
+  --rv-atm-3: #f7f1e8;
+}
+
+[data-rv-ground='night'] {
+  --rv-bg: #070b14;
+  --rv-fg: #eef2f6;
+  --rv-fg-soft: #8b9bb0;
+  --rv-line: rgb(238 242 246 / 0.18);
+  --rv-line-soft: rgb(238 242 246 / 0.09);
+  --rv-accent: var(--rv-electric);
+  --rv-atm-1: #101f42;
+  --rv-atm-2: #2a2258;
+  --rv-atm-3: #06090f;
+  --rv-atm-opacity: 1;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --rv-header-h: 62px;
+    --rv-measure: 34ch;
+    --rv-section-y: clamp(72px, 9vh, 120px);
+  }
+}

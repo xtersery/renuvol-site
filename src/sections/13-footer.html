@@ -1,1 +1,74 @@
-<!-- Footer section — not yet implemented. -->
+<!--
+  13 — Final CTA + footer.
+
+  Returns to the biotech world so the page closes where it peaked. Contact
+  and legal details are not supplied; those rows are omitted entirely rather
+  than shown as empty slots, and the footer is composed to read as finished
+  without them.
+  [CONTENT REQUIRED: телефон, e-mail, адрес, режим работы,
+   политика конфиденциальности, пользовательское соглашение]
+-->
+<footer class="rv-end" id="rv-contacts" data-rv-scene="end" data-rv-ground="night">
+  <div class="rv-scene rv-end__scene">
+    <span class="rv-wash rv-end__glow" style="--rv-wash-tint: #1b3a72"></span>
+    <span class="rv-orb rv-orb--dark rv-end__orb" style="--rv-orb-tint: #3f7fd0"></span>
+    <span class="rv-arc rv-end__arc"></span>
+  </div>
+
+  <div class="rv-shell rv-end__cta rv-above">
+    <h2 class="rv-display rv-display--en rv-end__title" data-rv-reveal>
+      Ready to discover<br />RENUVOL?
+    </h2>
+    <p class="rv-end__lead" data-rv-reveal>
+      Выведите эффективность вашей практики на новый уровень.
+    </p>
+    <div class="rv-end__actions" data-rv-reveal>
+      <a class="rv-btn rv-btn--solid rv-btn--onDark" href="#rv-selection">Стать партнёром</a>
+      <a class="rv-btn rv-btn--ghost rv-btn--onDark" href="#rv-selection">Получить протоколы</a>
+    </div>
+  </div>
+
+  <div class="rv-shell rv-end__grid rv-above">
+    <div class="rv-end__brand">
+      <img
+        class="rv-end__logo"
+        src="/images/brand/la-beautex-logo.png"
+        alt="LA BEAUTEX"
+        width="382"
+        height="256"
+        loading="lazy"
+      />
+      <p class="rv-end__product">RENUVOL</p>
+      <p class="rv-end__descr">Профессиональная линия для эстетической медицины.</p>
+    </div>
+
+    <nav class="rv-end__col" aria-label="Навигация в подвале">
+      <p class="rv-label">Навигация</p>
+      <a href="#rv-formula">О препарате</a>
+      <a href="#rv-changes">Эффект</a>
+      <a href="#rv-cases">Кейсы</a>
+      <a href="#rv-pro">Для косметолога</a>
+    </nav>
+
+    <div class="rv-end__col">
+      <p class="rv-label">Партнёрам</p>
+      <a href="#rv-selection">Условия сотрудничества</a>
+      <a href="#rv-selection">Обучение</a>
+      <a href="#rv-selection">Маркетинговые материалы</a>
+      <a href="#rv-pro">Протоколы применения</a>
+    </div>
+
+    <div class="rv-end__col rv-end__col--contact">
+      <p class="rv-label">Связаться</p>
+      <p class="rv-end__contactText">
+        Оставьте контакты в форме — ответим и передадим материалы.
+      </p>
+      <a class="rv-btn rv-btn--line rv-btn--onDark" href="#rv-selection">Написать нам</a>
+    </div>
+  </div>
+
+  <div class="rv-shell rv-end__legal rv-above">
+    <p>© <span data-rv-year>2026</span> RENUVOL · LA BEAUTEX</p>
+    <p>Информация предназначена для специалистов эстетической медицины.</p>
+  </div>
+</footer>

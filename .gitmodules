@@ -1,0 +1,12 @@
+[submodule "references/design-dna"]
+	path = references/design-dna
+	url = https://github.com/zanwei/design-dna
+[submodule "references/anthropics-skills"]
+	path = references/anthropics-skills
+	url = https://github.com/anthropics/skills
+[submodule "references/taste-skill"]
+	path = references/taste-skill
+	url = https://github.com/Leonxlnx/taste-skill
+[submodule "references/scroll-craft"]
+	path = references/scroll-craft
+	url = https://github.com/nateherkai/scroll-craft

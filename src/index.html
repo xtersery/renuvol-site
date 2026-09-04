@@ -1,19 +1,93 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RENUVOL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>RENUVOL — препарат для работы с качеством кожи | LA BEAUTEX</title>
+    <meta
+      name="description"
+      content="RENUVOL — препарат для работы с качеством кожи. Южная Корея, профессиональная эстетическая медицина. Протоколы и условия сотрудничества для косметологов."
+    />
+    <meta name="theme-color" content="#e6f1f7" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fonts are self-hosted: no third-party runtime dependency, no render
+         block on an external CDN. See docs/design-system.md. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/onest-cyrillic.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/prata-cyrillic.woff2" crossorigin />
+    <!-- The hero render is the LCP element. WebP with a PNG fallback: the
+         PNG is 1.2MB, the WebP 149KB, and both carry the same alpha. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/hero/renuvol-main-transparent.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+
     <link rel="stylesheet" href="./styles/tokens.css" />
     <link rel="stylesheet" href="./styles/base.css" />
     <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/art.css" />
     <link rel="stylesheet" href="./styles/components.css" />
     <link rel="stylesheet" href="./styles/sections.css" />
     <link rel="stylesheet" href="./styles/responsive.css" />
   </head>
-  <body>
-    <!-- Scaffolding only. Sections will be assembled here once design work begins. -->
-    <main id="app"></main>
+  <body class="rv-body">
+    <!--
+      Everything the site owns lives inside #renuvol-site.
+
+      This is the same wrapper the Tilda embed uses (tilda-export/). Keeping
+      it here means the standalone build and the embed run one code path and
+      one set of selectors, so what is verified locally is what ships into a
+      T123 block. The wrapper also carries the page state — data-rv-ground,
+      --rv-page, .rv-static — which on a Tilda page we do not own <html> to
+      write to.
+
+      Do not give this element transform, filter, perspective, contain or
+      will-change: any of them makes it a containing block for the fixed
+      layers inside it (ground, atmosphere, grain, header, film modal) and
+      they stop being viewport-fixed.
+    -->
+    <div id="renuvol-site">
+      <a class="rv-skip" href="#rv-main">Перейти к содержанию</a>
+
+      <!-- Page ground: a single fixed layer whose colour drifts between colour
+           chapters, so sections read as one continuous journey. -->
+      <div class="rv-ground" aria-hidden="true"></div>
+
+      <!-- Atmosphere: three large colour masses that travel the whole document,
+           driven by global page progress. See docs/art-direction.md. -->
+      <div class="rv-atmos" aria-hidden="true">
+        <span class="rv-atmos__mass rv-atmos__mass--a"></span>
+        <span class="rv-atmos__mass rv-atmos__mass--b"></span>
+        <span class="rv-atmos__mass rv-atmos__mass--c"></span>
+      </div>
+
+      <div class="rv-grain" aria-hidden="true"></div>
+
+      <!-- @include sections/01-header.html -->
+
+      <main id="rv-main" class="rv-main">
+        <!-- @include sections/02-hero.html -->
+        <!-- @include sections/03-manifesto.html -->
+        <!-- @include sections/04-formula.html -->
+        <!-- @include sections/05-transformation.html -->
+        <!-- @include sections/06-skin-changes.html -->
+        <!-- @include sections/07-biotech.html -->
+        <!-- @include sections/09-cosmetologists.html -->
+        <!-- @include sections/10-korea-science.html -->
+        <!-- @include sections/11-cases.html -->
+        <!-- @include sections/12-private-selection.html -->
+      </main>
+
+      <!-- @include sections/13-footer.html -->
+
+      <!-- Optional media experience; not part of first paint. -->
+      <!-- @include sections/14-video-modal.html -->
+    </div>
+
     <script type="module" src="./js/main.js"></script>
   </body>
 </html>

@@ -1,1 +1,49 @@
-<!-- Header section — not yet implemented. -->
+<!-- 01 — Fixed header. Lightweight over the hero, compacts after scroll. -->
+<header class="rv-header" data-rv-header>
+  <div class="rv-header__inner">
+    <a class="rv-brand" href="#rv-top" aria-label="LA BEAUTEX RENUVOL, в начало страницы">
+      <img
+        class="rv-brand__mark"
+        src="/images/brand/la-beautex-logo.png"
+        alt="LA BEAUTEX"
+        width="382"
+        height="256"
+      />
+      <span class="rv-brand__product">RENUVOL</span>
+    </a>
+
+    <nav class="rv-nav" aria-label="Основная навигация">
+      <a class="rv-nav__link" href="#rv-formula">О препарате</a>
+      <a class="rv-nav__link" href="#rv-changes">Эффект</a>
+      <a class="rv-nav__link" href="#rv-cases">Кейсы</a>
+      <a class="rv-nav__link" href="#rv-pro">Для косметолога</a>
+      <a class="rv-nav__link" href="#rv-contacts">Контакты</a>
+    </nav>
+
+    <a class="rv-btn rv-btn--solid rv-header__cta" href="#rv-selection">Получить презентацию</a>
+
+    <button
+      class="rv-burger"
+      type="button"
+      aria-expanded="false"
+      aria-controls="rv-menu"
+      aria-label="Открыть меню"
+      data-rv-burger
+    >
+      <span class="rv-burger__bar"></span>
+      <span class="rv-burger__bar"></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile menu: same navigation, touch-native presentation. -->
+<div class="rv-menu" id="rv-menu" data-rv-menu hidden>
+  <nav class="rv-menu__nav" aria-label="Мобильная навигация">
+    <a class="rv-menu__link" href="#rv-formula"><span>01</span>О препарате</a>
+    <a class="rv-menu__link" href="#rv-changes"><span>02</span>Эффект</a>
+    <a class="rv-menu__link" href="#rv-cases"><span>03</span>Кейсы</a>
+    <a class="rv-menu__link" href="#rv-pro"><span>04</span>Для косметолога</a>
+    <a class="rv-menu__link" href="#rv-contacts"><span>05</span>Контакты</a>
+  </nav>
+  <a class="rv-btn rv-btn--solid rv-menu__cta" href="#rv-selection">Получить презентацию</a>
+</div>

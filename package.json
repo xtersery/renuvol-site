@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:tilda": "node scripts/build-tilda.mjs"
   },
   "devDependencies": {
     "vite": "^8.2.2"

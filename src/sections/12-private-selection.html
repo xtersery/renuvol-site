@@ -1,1 +1,118 @@
-<!-- Private selection section — not yet implemented. -->
+<!--
+  12 — Private selection.
+
+  Unchanged in function: choose the patient profile you work with most, then
+  a personalised block and the lead form. Recomposed as a warmer, more
+  sensual close — the profiles are expressive chips on a glass membrane
+  rather than a plain list.
+
+  The form still posts through one configurable endpoint (data-rv-endpoint),
+  so it can be pointed at a Tilda handler, webhook or CRM without touching
+  the markup. See docs/tilda-integration.md.
+  [CONTENT REQUIRED: verified recommendation copy; form endpoint]
+-->
+<section
+  class="rv-selection"
+  id="rv-selection"
+  data-rv-scene="selection"
+  data-rv-ground="warm"
+>
+  <div class="rv-scene rv-selection__scene">
+    <span class="rv-wash rv-selection__wash" style="--rv-wash-tint: #eed9bd"></span>
+    <span class="rv-orb rv-selection__orb" style="--rv-orb-tint: #d8b48a"></span>
+  </div>
+
+  <div class="rv-shell rv-above">
+    <p class="rv-eyebrow" data-rv-reveal>Подбор для ваших пациентов</p>
+    <h2 class="rv-display rv-selection__title" data-rv-reveal>
+      С какими пациентами<br />вы работаете чаще всего?
+    </h2>
+
+    <div class="rv-selection__body" data-rv-selection>
+      <ul class="rv-profiles" role="list">
+        <li>
+          <button class="rv-profile" type="button" data-rv-profile="Качество кожи / anti-age" aria-pressed="false">
+            <span class="rv-profile__index">01</span>
+            <span class="rv-profile__name">Качество кожи<span class="rv-slash">/</span>anti-age</span>
+          </button>
+        </li>
+        <li>
+          <button class="rv-profile" type="button" data-rv-profile="Увлажнение / glow" aria-pressed="false">
+            <span class="rv-profile__index">02</span>
+            <span class="rv-profile__name">Увлажнение<span class="rv-slash">/</span>glow</span>
+          </button>
+        </li>
+        <li>
+          <button class="rv-profile" type="button" data-rv-profile="Лифтинг" aria-pressed="false">
+            <span class="rv-profile__index">03</span>
+            <span class="rv-profile__name">Лифтинг</span>
+          </button>
+        </li>
+        <li>
+          <button class="rv-profile" type="button" data-rv-profile="Пигментация" aria-pressed="false">
+            <span class="rv-profile__index">04</span>
+            <span class="rv-profile__name">Пигментация</span>
+          </button>
+        </li>
+        <li>
+          <button class="rv-profile" type="button" data-rv-profile="Контур / объёмы" aria-pressed="false">
+            <span class="rv-profile__index">05</span>
+            <span class="rv-profile__name">Контур<span class="rv-slash">/</span>объёмы</span>
+          </button>
+        </li>
+      </ul>
+
+      <div class="rv-private rv-membrane" data-rv-private hidden>
+        <span class="rv-iris" aria-hidden="true"></span>
+        <p class="rv-private__label">Your private selection</p>
+        <p class="rv-private__choice" data-rv-private-choice></p>
+        <p class="rv-private__text">
+          Подготовим подборку протоколов и материалов под этот профиль
+          и отправим на указанные контакты.
+        </p>
+      </div>
+    </div>
+
+    <form class="rv-form" data-rv-form data-rv-endpoint="" novalidate>
+      <div class="rv-form__grid">
+        <label class="rv-field">
+          <span class="rv-field__label">Имя</span>
+          <input class="rv-field__input" type="text" name="name" autocomplete="name" required />
+          <span class="rv-field__error" data-rv-error></span>
+        </label>
+
+        <label class="rv-field">
+          <span class="rv-field__label">Телефон / Telegram</span>
+          <input class="rv-field__input" type="text" name="contact" autocomplete="tel" required />
+          <span class="rv-field__error" data-rv-error></span>
+        </label>
+
+        <label class="rv-field">
+          <span class="rv-field__label">E-mail</span>
+          <input class="rv-field__input" type="email" name="email" autocomplete="email" required />
+          <span class="rv-field__error" data-rv-error></span>
+        </label>
+
+        <label class="rv-field rv-field--wide">
+          <span class="rv-field__label">Комментарий</span>
+          <textarea class="rv-field__input rv-field__input--area" name="comment" rows="3"></textarea>
+          <span class="rv-field__error" data-rv-error></span>
+        </label>
+      </div>
+
+      <input type="hidden" name="profile" data-rv-profile-field value="" />
+
+      <label class="rv-consent">
+        <input class="rv-consent__box" type="checkbox" name="consent" required />
+        <span>Я согласен(на) на обработку персональных данных</span>
+        <span class="rv-field__error" data-rv-error></span>
+      </label>
+
+      <button class="rv-btn rv-btn--solid rv-form__submit" type="submit">
+        Получить персональную подборку
+      </button>
+
+      <p class="rv-form__status" data-rv-form-status role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
