@@ -1,1 +1,170 @@
-/* Page layout / grid styles — not yet defined. */
+/* ==========================================================================
+   Layout — shell, scene scaffolding, pinned stages, reveals.
+   ========================================================================== */
+
+.rv-main {
+  position: relative;
+  z-index: var(--rv-z-content);
+}
+
+.rv-shell {
+  width: 100%;
+  max-width: var(--rv-shell);
+  margin-inline: auto;
+  padding-inline: var(--rv-gutter);
+}
+
+/* Every section is a scene. Non-pinned scenes get vertical breathing room;
+   pinned scenes are sized by their data-rv-span (set inline by scroll.js). */
+[data-rv-scene] {
+  position: relative;
+  z-index: var(--rv-z-content);
+}
+
+[data-rv-scene]:not([data-rv-span]) {
+  padding-block: var(--rv-section-y);
+}
+
+/* Pinned stage: the section is tall, the stage inside holds the viewport. */
+[data-rv-stage] {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Clip sideways only. Clipping vertically cuts the stage's own scene at
+     the stage edge and leaves a visible seam where the next section starts;
+     the scene masks its own top and bottom instead. */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* Cue elements are driven by --rv-o (opacity 0..1), written per frame by
+   scroll.js. Transform is derived from the same value so a cue arrives and
+   leaves with a small vertical settle rather than a flat fade. */
+[data-rv-cue] {
+  opacity: var(--rv-o, 0);
+  transform: translate3d(0, calc((1 - var(--rv-o, 0)) * 14px), 0);
+  will-change: opacity, transform;
+}
+
+/* Before JS runs, cue content must not be invisible to a reader without
+   scripting — reveal everything if the page never boots. */
+.rv-no-js [data-rv-cue],
+.rv-no-js [data-rv-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Enter-on-scroll for ordinary (non-pinned) content. */
+[data-rv-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity var(--rv-dur-slow) var(--rv-ease),
+    transform var(--rv-dur-slow) var(--rv-ease);
+  transition-delay: var(--rv-delay, 0ms);
+}
+
+[data-rv-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-rv-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-rv-cue] {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Reduced-motion layout (.rv-static, set by scroll.js).
+
+   Pinned stages become ordinary sections and every cue is shown at once, so
+   nothing is hidden behind scroll travel that no longer exists. Content is
+   preserved rather than removed — the choreography is what is dropped.
+   ========================================================================== */
+
+.rv-static [data-rv-stage] {
+  position: static;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  padding-block: var(--rv-section-y);
+}
+
+.rv-static [data-rv-cue] {
+  --rv-o: 1;
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero: the two scroll beats stand together, and the product holds its
+   scale without drift or parallax. */
+.rv-static .rv-hero__stage {
+  min-height: 92vh;
+  height: auto;
+}
+
+/* The copy column is a flex row in the scrolled composition, where only one
+   beat is ever visible; standing both beats up side by side overflows the
+   column, so it becomes a stack here. */
+.rv-static .rv-hero__copy {
+  min-height: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.rv-static .rv-hero__cue {
+  position: static;
+  translate: none;
+  margin-top: var(--rv-6);
+}
+
+.rv-static .rv-hero__product,
+.rv-static .rv-hero__halo {
+  transform: none;
+  scale: 1;
+}
+
+.rv-static .rv-hero__scroll,
+.rv-static .rv-hero__progress {
+  display: none;
+}
+
+/* Manifesto: both phrases stand together instead of trading places. */
+.rv-static .rv-manifesto__phrase,
+.rv-static .rv-manifesto__support,
+.rv-static .rv-manifesto__rule {
+  position: static;
+  transform: none;
+}
+
+.rv-static .rv-manifesto__rule {
+  margin: var(--rv-6) auto;
+}
+
+/* Chapter rail: a horizontal scroll region the reader drives themselves. */
+.rv-static .rv-rail {
+  transform: none;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+}
+
+.rv-static .rv-chapter {
+  scroll-snap-align: start;
+}
+
+.rv-static .rv-biotech__orb,
+.rv-static .rv-biotech__orb--b,
+.rv-static .rv-biotech__glow,
+.rv-static .rv-biotech__lattice {
+  transform: translate(-50%, -50%);
+}
