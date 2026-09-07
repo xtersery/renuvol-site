@@ -25,6 +25,7 @@ import {
   initParallaxDecor,
   initDocView,
   initFormAlert,
+  initProofPreview,
 } from './enhancements.js';
 
 function boot() {
@@ -56,6 +57,7 @@ function boot() {
   initParallaxDecor();
   initDocView();
   initFormAlert();
+  initProofPreview();
 
   // The film is optional and loads nothing until it is opened.
   const film = initFilm();
