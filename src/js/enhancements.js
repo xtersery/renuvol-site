@@ -283,6 +283,7 @@ export function initProofPreview() {
     const hide = () => {
       if (!open) return;
       open = false;
+      zoom.reset({ instant: true });
       proof.classList.remove('is-open');
       trigger.setAttribute('aria-expanded', 'false');
       setLang('en');
@@ -351,6 +352,10 @@ export function initProofPreview() {
     });
     trigger.addEventListener('blur', hideSoon);
 
+    // Щипок и перетаскивание на сенсорных экранах. Возвращает состояние
+    // масштаба, чтобы тап понимал, приближена картинка или нет.
+    const zoom = initPinchZoom(proof, images, fine);
+
     // Без hover — тапами: открыть, сменить язык, закрыть.
     trigger.addEventListener('click', () => {
       if (fine.matches) return;
@@ -359,6 +364,17 @@ export function initProofPreview() {
     });
     proof.addEventListener('click', () => {
       if (fine.matches) return;
+
+      // Жест уже обработан как щипок или перетаскивание — тапом это не считаем.
+      if (zoom.consumeGesture()) return;
+
+      // Приближённая картинка: тап возвращает масштаб, а не закрывает панель,
+      // иначе из увеличения нельзя выйти, не свернув всё.
+      if (zoom.isZoomed()) {
+        zoom.reset();
+        return;
+      }
+
       const showingRu = images.some((i) => i.dataset.rvProofLang === 'ru' && i.classList.contains('is-active'));
       if (showingRu) hide();
       else setLang('ru');
@@ -368,4 +384,165 @@ export function initProofPreview() {
       if (event.key === 'Escape' && open) hide();
     });
   });
+}
+
+/**
+ * Щипок и перетаскивание для панели с данными исследования.
+ *
+ * Горизонтальный слайд на вертикальном экране телефона ужимается до
+ * нечитаемого, поэтому его нужно уметь приблизить. Работает только там, где
+ * нет мыши: на десктопе панель живёт по наведению и увеличение ей ни к чему.
+ *
+ * Трансформация вешается на обе версии слайда сразу — они лежат в одной
+ * ячейке грида, поэтому смена языка не сбрасывает масштаб и не сдвигает кадр.
+ *
+ * @returns {{ isZoomed: () => boolean, reset: (opts?: {instant?: boolean}) => void,
+ *             consumeGesture: () => boolean }}
+ */
+function initPinchZoom(proof, images, fine) {
+  const MIN = 1;
+  const MAX = 4;
+
+  let scale = MIN;
+  let tx = 0;
+  let ty = 0;
+
+  // Жест был именно жестом (двигали или щипали), а не тапом.
+  let gestured = false;
+
+  const pointers = new Map();
+  let start = null;
+
+  const apply = () => {
+    const transform = scale === MIN && tx === 0 && ty === 0 ? '' : `translate(${tx}px, ${ty}px) scale(${scale})`;
+    images.forEach((img) => {
+      img.style.transform = transform;
+    });
+  };
+
+  const clampOffsets = () => {
+    // Активная версия задаёт границы: у двух слайдов разные пропорции.
+    const active = images.find((i) => i.classList.contains('is-active')) || images[0];
+    const rect = active.getBoundingClientRect();
+    const baseW = rect.width / scale;
+    const baseH = rect.height / scale;
+    const maxX = Math.max(0, (baseW * scale - proof.clientWidth) / 2);
+    const maxY = Math.max(0, (baseH * scale - proof.clientHeight) / 2);
+    tx = Math.min(maxX, Math.max(-maxX, tx));
+    ty = Math.min(maxY, Math.max(-maxY, ty));
+  };
+
+  const reset = ({ instant = false } = {}) => {
+    scale = MIN;
+    tx = 0;
+    ty = 0;
+    if (!instant) {
+      proof.classList.add('is-zoom-easing');
+      window.setTimeout(() => proof.classList.remove('is-zoom-easing'), 280);
+    }
+    apply();
+  };
+
+  const midpoint = () => {
+    const pts = Array.from(pointers.values());
+    return {
+      x: (pts[0].x + pts[1].x) / 2,
+      y: (pts[0].y + pts[1].y) / 2,
+    };
+  };
+
+  const spread = () => {
+    const pts = Array.from(pointers.values());
+    return Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+  };
+
+  const beginPinch = () => {
+    const active = images.find((i) => i.classList.contains('is-active')) || images[0];
+    const rect = active.getBoundingClientRect();
+    // Масштаб не двигает центр элемента, поэтому центр в состоянии покоя —
+    // это текущий центр минус накопленный сдвиг.
+    const centre = { x: rect.left + rect.width / 2 - tx, y: rect.top + rect.height / 2 - ty };
+    const mid = midpoint();
+    start = {
+      kind: 'pinch',
+      scale,
+      dist: spread(),
+      centre,
+      // Точка контента под пальцами: она должна остаться на месте при зуме.
+      anchor: { x: (mid.x - centre.x - tx) / scale, y: (mid.y - centre.y - ty) / scale },
+    };
+  };
+
+  const beginPan = (event) => {
+    start = { kind: 'pan', x: event.clientX, y: event.clientY, tx, ty };
+  };
+
+  proof.addEventListener('pointerdown', (event) => {
+    if (fine.matches) return;
+    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    gestured = false;
+
+    if (pointers.size === 2) beginPinch();
+    else if (pointers.size === 1 && scale > MIN) beginPan(event);
+    else start = null;
+  });
+
+  proof.addEventListener(
+    'pointermove',
+    (event) => {
+      if (fine.matches || !pointers.has(event.pointerId) || !start) return;
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+      if (start.kind === 'pinch' && pointers.size >= 2) {
+        const dist = spread();
+        if (!start.dist) return;
+        scale = Math.min(MAX, Math.max(MIN, (start.scale * dist) / start.dist));
+        const mid = midpoint();
+        tx = mid.x - start.centre.x - scale * start.anchor.x;
+        ty = mid.y - start.centre.y - scale * start.anchor.y;
+        clampOffsets();
+        apply();
+        gestured = true;
+        return;
+      }
+
+      if (start.kind === 'pan' && pointers.size === 1) {
+        const dx = event.clientX - start.x;
+        const dy = event.clientY - start.y;
+        if (Math.hypot(dx, dy) > 6) gestured = true;
+        tx = start.tx + dx;
+        ty = start.ty + dy;
+        clampOffsets();
+        apply();
+      }
+    },
+    { passive: true },
+  );
+
+  const release = (event) => {
+    if (!pointers.has(event.pointerId)) return;
+    pointers.delete(event.pointerId);
+
+    if (pointers.size === 1 && scale > MIN) {
+      // Один палец отпустили после щипка — продолжаем как перетаскивание.
+      const [remaining] = Array.from(pointers.values());
+      start = { kind: 'pan', x: remaining.x, y: remaining.y, tx, ty };
+    } else if (pointers.size === 0) {
+      start = null;
+      if (scale <= MIN) reset({ instant: true }); // на всякий случай снимаем остаточный сдвиг
+    }
+  };
+
+  proof.addEventListener('pointerup', release);
+  proof.addEventListener('pointercancel', release);
+
+  return {
+    isZoomed: () => scale > MIN + 0.01,
+    reset,
+    consumeGesture: () => {
+      const was = gestured;
+      gestured = false;
+      return was;
+    },
+  };
 }

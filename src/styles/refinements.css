@@ -481,3 +481,21 @@ html { scroll-padding-top: calc(var(--rv-header-h) + var(--rv-4)); }
 /* Слайд не загрузился: глава остаётся обычной, без намёка на интерактивность. */
 .rv-chapter.is-unavailable .rv-chapter__hint { display: none; }
 .rv-chapter.is-unavailable .rv-chapter__hit { cursor: default; }
+
+/* Щипок и перетаскивание слайда на сенсорных экранах.
+   touch-action: none только там, где нет мыши: жесты обрабатывает скрипт,
+   а на десктопе панель живёт по наведению и трогать поведение не нужно. */
+@media (hover: none) {
+  .rv-proof { touch-action: none; }
+}
+.rv-proof__img {
+  transform-origin: center center;
+  /* Во время жеста трансформация не анимируется — иначе картинка тянется за
+     пальцем с задержкой. Плавность включается только на возврате масштаба. */
+  will-change: transform;
+}
+.rv-proof.is-zoom-easing .rv-proof__img {
+  transition:
+    transform .26s var(--rv-ease),
+    opacity calc(var(--rv-dur) * .8) var(--rv-ease);
+}
