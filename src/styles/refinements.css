@@ -439,6 +439,12 @@ html { scroll-padding-top: calc(var(--rv-header-h) + var(--rv-4)); }
   z-index: 85; /* выше шапки и зерна, ниже модалок (90/95) */
   margin: 0;
   display: grid;
+  /* Строка и колонка обязаны иметь определённый размер: у авто-строки
+     max-height: 100% на картинке разрешается относительно её же контента и
+     молча не срабатывает — слайд держался только по ширине и вылезал за
+     нижний край экрана. minmax(0, 1fr) даёт грид-области реальную высоту
+     окна за вычетом отступов. */
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   place-items: center;
   padding: clamp(8px, 1.5vh, 24px) clamp(12px, 3vw, 48px);
   background: color-mix(in srgb, var(--rv-ink) 72%, transparent);
