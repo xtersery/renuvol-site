@@ -1,10 +1,11 @@
 /**
  * RENUVOL — progressive enhancements.
  *
- * These five behaviours were authored directly on the deployed build as inline
- * scripts and lifted back into source. Each one attaches only to markup it
- * finds and does nothing when that markup is absent, so a section can be moved
- * or removed without touching this file.
+ * Five of these behaviours were authored directly on the deployed build as
+ * inline scripts and lifted back into source; `initProofPreview` was added
+ * afterwards. Each one attaches only to markup it finds and does nothing when
+ * that markup is absent, so a section can be moved or removed without touching
+ * this file.
  *
  * Ordering note: `initFormAlert` listens on the capture phase while the form
  * engine in interactions.js listens on the bubble phase, so the alert always
@@ -197,5 +198,174 @@ export function initFormAlert() {
 
     field.addEventListener('input', onEdit);
     field.addEventListener('change', onEdit);
+  });
+}
+
+/**
+ * Данные исследования во всю высоту экрана.
+ *
+ * Глава рельса открывает панель с англоязычным слайдом; пока указатель
+ * находится на самой панели, показывается русская версия. На устройствах без
+ * hover панель открывается тапом, второй тап по картинке меняет язык, третий
+ * закрывает.
+ *
+ * Если слайд не удалось загрузить, панель не открывается вовсе и подсказка у
+ * главы прячется: отсутствующий файл не должен превращаться в пустой чёрный
+ * экран поверх страницы.
+ */
+export function initProofPreview() {
+  const triggers = Array.from(document.querySelectorAll('[data-rv-proof-open]'));
+  if (!triggers.length) return;
+
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  triggers.forEach((trigger) => {
+    const proof = document.getElementById(trigger.getAttribute('aria-controls') || '');
+    if (!proof) return;
+
+    const images = Array.from(proof.querySelectorAll('[data-rv-proof-lang]'));
+    const primary = images.find((i) => i.dataset.rvProofLang === 'en') || images[0];
+    if (!primary) return;
+
+    let closeTimer = 0;
+    let hideTimer = 0;
+    let warmed = null;
+    let open = false;
+
+    const setLang = (lang) => {
+      images.forEach((img) => img.classList.toggle('is-active', img.dataset.rvProofLang === lang));
+    };
+
+    const disable = () => {
+      trigger.disabled = true;
+      trigger.closest('.rv-chapter')?.classList.add('is-unavailable');
+    };
+
+    /** Грузит слайды по первому обращению и сообщает, есть ли что показывать. */
+    const warm = () => {
+      if (warmed) return warmed;
+      warmed = Promise.all(
+        images.map(
+          (img) =>
+            new Promise((resolve) => {
+              img.loading = 'eager';
+              if (img.complete) {
+                resolve(img.naturalWidth > 0);
+                return;
+              }
+              img.addEventListener('load', () => resolve(true), { once: true });
+              img.addEventListener('error', () => resolve(false), { once: true });
+            }),
+        ),
+      ).then((results) => results[images.indexOf(primary)]);
+      return warmed;
+    };
+
+    const show = async () => {
+      window.clearTimeout(closeTimer);
+      window.clearTimeout(hideTimer);
+      if (open) return;
+
+      if (!(await warm())) {
+        disable();
+        return;
+      }
+
+      open = true;
+      setLang('en');
+      proof.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      // Два кадра: за один браузер не успевает засчитать снятие hidden,
+      // и переход не запускается.
+      requestAnimationFrame(() => requestAnimationFrame(() => proof.classList.add('is-open')));
+    };
+
+    const hide = () => {
+      if (!open) return;
+      open = false;
+      proof.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+      setLang('en');
+      hideTimer = window.setTimeout(() => {
+        proof.hidden = true;
+      }, 400);
+    };
+
+    const hideSoon = () => {
+      window.clearTimeout(closeTimer);
+      // Небольшая пауза: панель перекрывает главу, и без неё уход курсора с
+      // главы на саму панель читался бы как «ушёл совсем».
+      closeTimer = window.setTimeout(hide, 90);
+    };
+
+    trigger.addEventListener('pointerenter', () => {
+      if (fine.matches) show();
+    });
+
+    /**
+     * Открытая панель занимает весь экран и накрывает саму главу, поэтому
+     * hover-события кнопки до неё больше не доходят: пока панель открыта,
+     * положение курсора считаем сами.
+     *
+     * Курсор над главой — английский слайд, над картинкой — русский, мимо
+     * обоих — закрываем.
+     */
+    const inside = (rect, x, y) => x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+
+    /** Объединённый прямоугольник обеих версий: пропорции у них разные. */
+    const imageBox = () => {
+      const rects = images.map((img) => img.getBoundingClientRect());
+      return {
+        left: Math.min(...rects.map((r) => r.left)),
+        right: Math.max(...rects.map((r) => r.right)),
+        top: Math.min(...rects.map((r) => r.top)),
+        bottom: Math.max(...rects.map((r) => r.bottom)),
+      };
+    };
+
+    proof.addEventListener('pointermove', (event) => {
+      if (!fine.matches || !open) return;
+      const { clientX: x, clientY: y } = event;
+
+      if (inside(trigger.getBoundingClientRect(), x, y)) {
+        window.clearTimeout(closeTimer);
+        setLang('en');
+        return;
+      }
+      if (inside(imageBox(), x, y)) {
+        window.clearTimeout(closeTimer);
+        setLang('ru');
+        return;
+      }
+      hideSoon();
+    });
+
+    // Курсор ушёл за пределы окна.
+    proof.addEventListener('pointerleave', () => {
+      if (fine.matches) hideSoon();
+    });
+
+    // Клавиатура: панель следует за фокусом кнопки.
+    trigger.addEventListener('focus', () => {
+      if (fine.matches) show();
+    });
+    trigger.addEventListener('blur', hideSoon);
+
+    // Без hover — тапами: открыть, сменить язык, закрыть.
+    trigger.addEventListener('click', () => {
+      if (fine.matches) return;
+      if (open) hide();
+      else show();
+    });
+    proof.addEventListener('click', () => {
+      if (fine.matches) return;
+      const showingRu = images.some((i) => i.dataset.rvProofLang === 'ru' && i.classList.contains('is-active'));
+      if (showingRu) hide();
+      else setLang('ru');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && open) hide();
+    });
   });
 }

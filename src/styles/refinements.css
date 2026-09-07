@@ -377,3 +377,101 @@ html { scroll-padding-top: calc(var(--rv-header-h) + var(--rv-4)); }
   height: 1px;
   overflow: hidden;
 }
+
+/* ===== Данные по увлажнённости: превью во всю высоту экрана ===== */
+
+/* Универсальный «только для скринридера»: в проекте такого хелпера не было. */
+.rv-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.rv-chapter--proof { position: relative; }
+
+/* Зона наведения намеренно шире самой главы: курсор не срывается на
+   промежутке между индексом, заголовком и линией. */
+.rv-chapter__hit {
+  position: absolute;
+  inset: calc(var(--rv-3) * -1) calc(var(--rv-4) * -1);
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  border-radius: var(--rv-r-2, 12px);
+  cursor: pointer;
+}
+.rv-chapter__hit:focus-visible {
+  outline: 2px solid var(--rv-chapter-accent);
+  outline-offset: 2px;
+}
+
+/* Единственная подсказка, что глава раскрывается: без неё наведение
+   не найти. */
+.rv-chapter__hint {
+  font-size: var(--rv-t-label, .75rem);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--rv-chapter-accent);
+  opacity: .75;
+  transition: opacity var(--rv-dur) var(--rv-ease);
+}
+.rv-chapter__hint::after {
+  content: '';
+  display: inline-block;
+  width: 1.6em;
+  margin-left: .5em;
+  border-top: 1px solid currentColor;
+  vertical-align: middle;
+  transition: width var(--rv-dur) var(--rv-ease);
+}
+.rv-chapter--proof:hover .rv-chapter__hint,
+.rv-chapter__hit:focus-visible ~ .rv-chapter__hint { opacity: 1; }
+.rv-chapter--proof:hover .rv-chapter__hint::after { width: 2.6em; }
+
+.rv-proof {
+  position: fixed;
+  inset: 0;
+  z-index: 85; /* выше шапки и зерна, ниже модалок (90/95) */
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(8px, 1.5vh, 24px) clamp(12px, 3vw, 48px);
+  background: color-mix(in srgb, var(--rv-ink) 72%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--rv-dur) var(--rv-ease);
+}
+.rv-proof[hidden] { display: none; }
+.rv-proof.is-open { opacity: 1; pointer-events: auto; }
+
+/* Обе версии лежат в одной ячейке грида и переключаются прозрачностью:
+   так подмена языка не дёргает раскладку. max-* вместо height: 100% —
+   иначе широкий слайд на низком экране раздавило бы по пропорциям. */
+.rv-proof__img {
+  grid-area: 1 / 1;
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  border-radius: clamp(8px, 1vw, 18px);
+  box-shadow: 0 40px 120px -40px rgb(0 0 0 / .7);
+  opacity: 0;
+  transition: opacity calc(var(--rv-dur) * .8) var(--rv-ease);
+}
+.rv-proof__img.is-active { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rv-proof,
+  .rv-proof__img { transition: none; }
+}
+
+/* Слайд не загрузился: глава остаётся обычной, без намёка на интерактивность. */
+.rv-chapter.is-unavailable .rv-chapter__hint { display: none; }
+.rv-chapter.is-unavailable .rv-chapter__hit { cursor: default; }

@@ -9,6 +9,12 @@
   The five chapter names are approved topic labels. Descriptions are not
   written yet, and the panels are composed to read as finished without them.
   [CONTENT REQUIRED: verified description × 5]
+
+  Chapter 01 opens a full-height proof panel with the manufacturer's hydration
+  imaging slide. The panel shows the English slide first and swaps to the
+  Russian one while the pointer is over it. It refuses to open if the slide is
+  not on disk, so a missing asset degrades to an inert chapter rather than an
+  empty black screen.
 -->
 <section
   class="rv-changes"
@@ -38,10 +44,23 @@
     </div>
 
     <div class="rv-rail rv-above" data-rv-rail>
-      <article class="rv-chapter" data-rv-accent="ha">
+      <article class="rv-chapter rv-chapter--proof" data-rv-accent="ha">
         <p class="rv-chapter__index">01</p>
         <h3 class="rv-chapter__title">Увлажнение</h3>
         <span class="rv-chapter__rule" aria-hidden="true"></span>
+        <p class="rv-chapter__hint" aria-hidden="true">Данные исследования</p>
+
+        <!-- Кнопка накрывает всю главу: она и зона наведения, и точка входа
+             с клавиатуры, при этом заголовок остаётся заголовком. -->
+        <button
+          class="rv-chapter__hit"
+          type="button"
+          aria-expanded="false"
+          aria-controls="rv-proof-hydration"
+          data-rv-proof-open
+        >
+          <span class="rv-sr">Показать данные по увлажнённости кожи</span>
+        </button>
       </article>
 
       <article class="rv-chapter" data-rv-accent="pdo">
