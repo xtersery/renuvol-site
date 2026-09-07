@@ -1,0 +1,44 @@
+<!--
+  Optional film experience.
+
+  The video is a secondary asset: nothing on the page depends on it, it is
+  never autoplayed, and its source is not attached until the visitor opens
+  the modal — so it costs nothing at first paint. Opened by any
+  [data-rv-video-open] control.
+
+  data-rv-end stops playback before the source clip's third-party
+  manufacturer end-card, which is not ours to publish without a rights
+  decision (docs/claims-verification.md). Drop the attribute once a trimmed
+  master exists.
+-->
+<div class="rv-film" data-rv-film hidden>
+  <div class="rv-film__backdrop" data-rv-film-close></div>
+
+  <div
+    class="rv-film__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Фильм о RENUVOL"
+  >
+    <div class="rv-film__frame">
+      <video
+        class="rv-film__video"
+        data-rv-film-video
+        data-rv-src-webm="/video/renuvol-hero-scrub.webm"
+        data-rv-src-webm-mobile="/video/renuvol-hero-scrub-mobile.webm"
+        data-rv-src="/video/renuvol-hero-scrub.mp4"
+        data-rv-src-mobile="/video/renuvol-hero-scrub-mobile.mp4"
+        data-rv-end="39.4"
+        poster="/video/renuvol-hero-poster.jpg"
+        playsinline
+        controls
+        preload="none"
+      ></video>
+    </div>
+
+    <button class="rv-film__close" type="button" data-rv-film-close aria-label="Закрыть видео">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+  </div>
+</div>

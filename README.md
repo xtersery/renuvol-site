@@ -42,12 +42,37 @@ npm run build    # production build to dist/
 npm run preview  # preview the production build locally
 ```
 
+## Deployment
+
+The site is built, not hand-edited. `npm run build` produces `dist/`, and it is
+`dist/` that goes to the hosting root — never a file edited in place on the
+server. A change made directly in the deployed `index.html` is invisible to the
+build and is silently reverted the next time anyone runs it.
+
+One file lives only on the server and never in this repository:
+`renuvol-config.php`, which carries the Telegram bot token and the notification
+address. Copy `renuvol-config.sample.php` next to the site root (or one level
+above it) and fill it in. `api/lead.php` also accepts the same values from the
+environment as `RENUVOL_TG_TOKEN`, `RENUVOL_TG_CHAT` and `RENUVOL_MAIL_TO`.
+
+Every accepted lead is appended to a file on disk before delivery is attempted,
+so a Telegram or mail outage cannot lose a contact. Paths default to the
+server's temp directory and are configurable via `leads_file` / `log_file`.
+
+## Where refinements live
+
+`src/styles/refinements.css` and `src/js/enhancements.js` hold work that was
+originally authored on the deployed build and lifted back into source. The
+stylesheet is loaded last on purpose — several of its rules deliberately
+override the thematic sheets — so move a rule out of it only together with the
+rule it overrides.
+
 ## Project structure
 
 ```
-public/       static assets served as-is (video, images, documents, references)
+public/       static assets served as-is (video, images, documents, api/)
 content/      source copy and factual content (markdown)
 src/          application source (HTML entry, styles, JS, page sections)
-references/   external design/reference material
 docs/         planning and specification documents
+dist/         build output — what gets uploaded; not committed
 ```
