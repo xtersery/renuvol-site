@@ -1920,7 +1920,7 @@
   display: grid;
   /* Текстовой колонке нужен запас: в более узкой заголовок ломался на четыре
      строки. Объекту ширину добираем не колонкой, а выносом в отступ. */
-  grid-template-columns: 1.15fr 1fr;
+  grid-template-columns: 1fr 1.24fr;
   align-items: center;
   gap: clamp(var(--rv-6), 4vw, var(--rv-9));
 }
@@ -1941,11 +1941,94 @@
   color: var(--rv-fg);
 }
 
-.rv-incube__text {
-  max-width: 46ch;
+/* --- Два парящих блока --------------------------------------------------- */
+
+.rv-incube__blocks {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--rv-4), 2.5vw, var(--rv-6));
+  margin-block: var(--rv-3);
+}
+
+.rv-incube__block { max-width: min(38ch, 100%); }
+/* Один блок к левому краю, другой к правому — они читаются как пара, а не
+   как продолжение колонки текста. */
+.rv-incube__block--left  { margin-right: auto; }
+.rv-incube__block--right { margin-left: auto; }
+
+/* Дрейф живёт здесь, а не на .rv-incube__block: тем владеет reveal. У блоков
+   разная длительность и фаза, иначе они качаются синхронно и эффект пропадает. */
+.rv-incube__blockInner {
+  position: relative;
+  padding: clamp(var(--rv-4), 2vw, var(--rv-5)) clamp(var(--rv-4), 2.4vw, var(--rv-6));
+  border-radius: 18px;
+  border: 1px solid rgb(255 255 255 / .16);
+  background: linear-gradient(
+    152deg,
+    rgb(255 255 255 / .12),
+    rgb(255 255 255 / .04) 58%,
+    color-mix(in srgb, var(--rv-accent) 10%, transparent)
+  );
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .22),
+    0 30px 60px -40px rgb(0 0 0 / .8);
+  animation: rv-incube-block 6s ease-in-out infinite alternate;
+  /* `scale` отдельным свойством: `transform` занят дрейфом. */
+  scale: 1;
+  transition:
+    scale var(--rv-dur) var(--rv-ease),
+    border-color var(--rv-dur) var(--rv-ease),
+    box-shadow var(--rv-dur) var(--rv-ease);
+  will-change: transform, scale;
+}
+.rv-incube__block--right .rv-incube__blockInner {
+  animation-duration: 7.4s;
+  animation-delay: -2.6s;
+}
+
+.rv-incube__blockInner p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
   font-size: var(--rv-t-base);
-  line-height: 1.6;
-  color: var(--rv-fg-soft);
+  line-height: 1.55;
+  color: var(--rv-fg);
+}
+
+/* Сияние: гасится по умолчанию, разгорается под курсором. */
+.rv-incube__blockGlow {
+  position: absolute;
+  inset: -30%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, #e7c37a 34%, transparent),
+    transparent 62%
+  );
+  opacity: 0;
+  filter: blur(26px);
+  transition: opacity var(--rv-dur-slow) var(--rv-ease);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rv-incube__block:hover .rv-incube__blockInner {
+    scale: 1.055;
+    border-color: color-mix(in srgb, #e7c37a 55%, transparent);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / .35),
+      0 0 0 1px color-mix(in srgb, #e7c37a 22%, transparent),
+      0 34px 70px -34px color-mix(in srgb, #e7c37a 40%, transparent);
+  }
+  .rv-incube__block:hover .rv-incube__blockGlow { opacity: 1; }
+}
+
+@keyframes rv-incube-block {
+  from { transform: translate3d(0, 9px, 0) rotate(-0.5deg); }
+  to   { transform: translate3d(0, -11px, 0) rotate(0.6deg); }
 }
 
 /* Ступенчатая триада: отступ растёт от строки к строке, штрих слева ведёт
@@ -1995,7 +2078,7 @@
   /* Объект выходит за колонку — вправо в отступ страницы, влево внахлёст на
      промежуток. Секция клипует по горизонтали, поэтому вынос безопасен, а
      ореол и тень остаются привязаны к фигуре, а не к картинке. */
-  margin: 0 calc(var(--rv-gutter) * -1) 0 clamp(-72px, -4vw, 0px);
+  margin: 0 calc(var(--rv-gutter) * -1.35) 0 clamp(-120px, -7vw, 0px);
   padding: clamp(var(--rv-3), 2vw, var(--rv-5));
 }
 
@@ -2010,7 +2093,7 @@
     transparent 68%
   );
   filter: blur(28px);
-  animation: rv-incube-breathe 9s ease-in-out infinite alternate;
+  animation: rv-incube-breathe 5.4s ease-in-out infinite alternate;
 }
 
 /* Тень лежит ниже объекта и живёт в противофазе: объект вверх — тень уже и
@@ -2025,12 +2108,12 @@
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgb(0 0 0 / .55), transparent 70%);
   filter: blur(12px);
-  animation: rv-incube-shadow 7.5s ease-in-out infinite alternate;
+  animation: rv-incube-shadow 4.6s ease-in-out infinite alternate;
 }
 
 .rv-incube__drift {
   display: block;
-  animation: rv-incube-float 7.5s ease-in-out infinite alternate;
+  animation: rv-incube-float 4.6s ease-in-out infinite alternate;
   will-change: transform;
 }
 
@@ -2042,12 +2125,12 @@
 }
 
 @keyframes rv-incube-float {
-  from { transform: translate3d(-10px, 14px, 0) rotate(-1.1deg); }
-  to   { transform: translate3d(10px, -16px, 0) rotate(1.4deg); }
+  from { transform: translate3d(-26px, 34px, 0) rotate(-2.6deg); }
+  to   { transform: translate3d(26px, -38px, 0) rotate(3deg); }
 }
 @keyframes rv-incube-shadow {
-  from { opacity: .55; width: 48%; }
-  to   { opacity: .3;  width: 40%; }
+  from { opacity: .62; width: 52%; }
+  to   { opacity: .24; width: 36%; }
 }
 @keyframes rv-incube-breathe {
   from { opacity: .75; transform: scale(0.97); }
@@ -2072,10 +2155,15 @@
   }
   .rv-incube__triad li:nth-child(2),
   .rv-incube__triad li:nth-child(3) { margin-left: 0; }
+
+  /* Колонка узкая, и блоки во всю ширину теряли бы смещение влево-вправо —
+     ради него оставляем запас. */
+  .rv-incube__block { max-width: 88%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rv-incube__drift,
   .rv-incube__halo,
-  .rv-incube__shadow { animation: none; }
+  .rv-incube__shadow,
+  .rv-incube__blockInner { animation: none; }
 }

@@ -47,15 +47,27 @@
         5 компонентов. 1 флакон.<br />Максимум результата.
       </p>
 
-      <p class="rv-incube__text" data-rv-reveal>
-        RENUVOL — all-in-one PDO booster для комплексного омоложения
-        без компромиссов.
-      </p>
+      <!--
+        Два парящих блока. Слои разведены намеренно: [data-rv-reveal] анимирует
+        `transform` при появлении, дрейф — тоже `transform`, поэтому дрейф живёт
+        на вложенном элементе. Увеличение при наведении идёт через отдельное
+        свойство `scale`, которое с `transform` не спорит.
+      -->
+      <div class="rv-incube__blocks">
+        <div class="rv-incube__block rv-incube__block--left" data-rv-reveal>
+          <div class="rv-incube__blockInner">
+            <span class="rv-incube__blockGlow" aria-hidden="true"></span>
+            <p>RENUVOL — all-in-one PDO booster для комплексного омоложения без компромиссов.</p>
+          </div>
+        </div>
 
-      <p class="rv-incube__text" data-rv-reveal>
-        INCUBE™ помогает защищать активные компоненты формулы, обеспечивая
-        их стабильность и точность работы.
-      </p>
+        <div class="rv-incube__block rv-incube__block--right" data-rv-reveal>
+          <div class="rv-incube__blockInner">
+            <span class="rv-incube__blockGlow" aria-hidden="true"></span>
+            <p>INCUBE™ помогает защищать активные компоненты формулы, обеспечивая их стабильность и точность работы.</p>
+          </div>
+        </div>
+      </div>
 
       <!-- Триада набрана ступенями: три коротких утверждения в строку
            читаются как перечисление, лесенкой — как вывод. -->
