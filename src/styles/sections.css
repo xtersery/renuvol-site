@@ -1933,6 +1933,15 @@
 }
 
 .rv-incube__title { margin-block: var(--rv-2) var(--rv-3); }
+/* Вторая строка мельче: «Нобелевская технология» — заявление, «для вашей
+   практики» — уточнение, и в одном кегле они спорили за вес. */
+.rv-incube__titleSub {
+  display: block;
+  font-size: .52em;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--rv-fg-soft);
+}
 
 .rv-incube__lead {
   font-family: var(--rv-font-display);
@@ -2080,6 +2089,13 @@
      ореол и тень остаются привязаны к фигуре, а не к картинке. */
   margin: 0 calc(var(--rv-gutter) * -1.35) 0 clamp(-120px, -7vw, 0px);
   padding: clamp(var(--rv-3), 2vw, var(--rv-5));
+  /* Объект уходит по орбите за пределы кадра. Клипуем здесь, а не на секции:
+     вертикальный overflow у секции срезал бы её собственный грунт и оставил
+     шов на стыке (см. CLAUDE.md). Маска гасит края мягко, чтобы уход не
+     читался как обрезка. */
+  overflow: clip;
+  -webkit-mask-image: radial-gradient(120% 108% at 62% 50%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(120% 108% at 62% 50%, #000 58%, transparent 100%);
 }
 
 .rv-incube__halo {
@@ -2098,7 +2114,10 @@
 
 /* Тень лежит ниже объекта и живёт в противофазе: объект вверх — тень уже и
    бледнее. Без неё «парение» читается как просто плавающая картинка. */
-.rv-incube__shadow {
+/* Объект больше не висит на месте, а облетает круг — тень под ним читалась бы
+   как отдельный предмет, поэтому она убрана. */
+.rv-incube__shadow { display: none; }
+.rv-incube__shadow--unused {
   position: absolute;
   left: 50%;
   bottom: 4%;
@@ -2111,10 +2130,20 @@
   animation: rv-incube-shadow 4.6s ease-in-out infinite alternate;
 }
 
+/*
+  Полный круг по орбите. offset-path задаёт траекторию и не трогает
+  `transform`, поэтому параллакс указателя на самой картинке продолжает
+  работать, а `translate` на фигуре по-прежнему занят параллаксом скролла.
+  offset-rotate: 0deg — объект не разворачивается вслед за траекторией, он
+  просто облетает круг.
+  linear, а не ease: у бесконечного круга не должно быть слышно, где начало.
+*/
 .rv-incube__drift {
   display: block;
-  animation: rv-incube-float 4.6s ease-in-out infinite alternate;
-  will-change: transform;
+  offset-path: circle(42% at 60% 50%);
+  offset-rotate: 0deg;
+  animation: rv-incube-orbit 24s linear infinite;
+  will-change: offset-distance;
 }
 
 .rv-incube__img {
@@ -2124,9 +2153,9 @@
   will-change: transform;
 }
 
-@keyframes rv-incube-float {
-  from { transform: translate3d(-26px, 34px, 0) rotate(-2.6deg); }
-  to   { transform: translate3d(26px, -38px, 0) rotate(3deg); }
+@keyframes rv-incube-orbit {
+  from { offset-distance: 0%; }
+  to   { offset-distance: 100%; }
 }
 @keyframes rv-incube-shadow {
   from { opacity: .62; width: 52%; }
@@ -2166,4 +2195,206 @@
   .rv-incube__halo,
   .rv-incube__shadow,
   .rv-incube__blockInner { animation: none; }
+  /* Без анимации offset-distance объект замер бы в начале траектории, у края
+     кадра. Возвращаем его в центр. */
+  .rv-incube__drift { offset-path: none; }
+}
+
+/* --- Развёрнутый рассказ об INCUBE (диалог) ------------------------------- */
+
+/* Кнопка накрывает блок целиком: кликабелен весь прямоугольник, а текст
+   внутри остаётся текстом. */
+.rv-incube__blockHit {
+  position: absolute;
+  inset: 0;
+  /* Выше текста: у абзаца внутри блока свой z-index (он поднят над свечением),
+     и без этого он перехватывал клики вместо кнопки. */
+  z-index: 2;
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: inherit;
+  cursor: pointer;
+}
+.rv-incube__blockHit:focus-visible {
+  outline: 2px solid color-mix(in srgb, #e7c37a 70%, transparent);
+  outline-offset: 3px;
+}
+
+.rv-story {
+  position: fixed;
+  inset: 0;
+  z-index: 92; /* выше панелей исследований (85), ниже модалки документа (95) */
+  display: grid;
+  /* Определённая строка и колонка. У авто-строки max-height: 100% на панели
+     разрешался бы относительно её же содержимого и молча не срабатывал —
+     ровно так уже ломались панели исследований. Здесь это страховка: панель
+     и без того занимает всю высоту, но ограничение должно быть к чему
+     привязать, если содержимое или отступы изменятся. */
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  padding: clamp(12px, 3vh, 40px) clamp(12px, 3vw, 40px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--rv-dur) var(--rv-ease);
+}
+.rv-story[hidden] { display: none; }
+.rv-story.is-open { opacity: 1; pointer-events: auto; }
+
+.rv-story__backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, #06090f 78%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.rv-story__panel {
+  position: relative;
+  width: min(760px, 100%);
+  max-height: 100%;
+  display: flex;
+  border-radius: clamp(16px, 2vw, 28px);
+  border: 1px solid rgb(255 255 255 / .14);
+  background: linear-gradient(158deg, #0d1526 0%, #0a1020 60%, #120f22 100%);
+  box-shadow: 0 60px 120px -60px rgb(0 0 0 / .9);
+  overflow: hidden;
+}
+
+/*
+  Прокручивается сама колонка, а не страница. overscroll-behavior: contain
+  не даёт прокрутке перескочить на документ, когда текст дочитан до конца —
+  это заменяет блокировку через overflow на html, которая ломает пиннинг
+  всех sticky-сцен (см. CLAUDE.md).
+*/
+.rv-story__scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(var(--rv-6), 5vw, var(--rv-9)) clamp(var(--rv-5), 4vw, var(--rv-8));
+  color: #eef2f6;
+}
+
+.rv-story__eyebrow { color: #c39a4e; }
+
+.rv-story__title {
+  margin: var(--rv-3) 0 var(--rv-6);
+  font-size: clamp(1.6rem, 1.1rem + 1.9vw, 2.9rem);
+  line-height: 1.1;
+}
+
+.rv-story__text {
+  max-width: 56ch;
+  margin: 0 0 var(--rv-4);
+  font-size: var(--rv-t-base);
+  line-height: 1.65;
+  color: #b9c4d2;
+}
+
+/* Единственная цифра в тексте — ей и вес. */
+.rv-story__stat {
+  margin: var(--rv-6) 0;
+  padding: var(--rv-5) var(--rv-5) var(--rv-5) var(--rv-6);
+  border-left: 2px solid #c39a4e;
+  border-radius: 0 12px 12px 0;
+  background: linear-gradient(90deg, color-mix(in srgb, #c39a4e 14%, transparent), transparent 70%);
+  font-family: var(--rv-font-display);
+  font-size: clamp(1.15rem, .9rem + 1vw, 1.7rem);
+  line-height: 1.25;
+  color: #f4e6cd;
+}
+
+.rv-story__sub {
+  margin: var(--rv-6) 0 var(--rv-4);
+  font-family: var(--rv-font-display);
+  font-size: var(--rv-t-h3);
+  font-weight: 400;
+}
+
+.rv-story__list {
+  margin: 0 0 var(--rv-5);
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rv-3);
+  max-width: 56ch;
+}
+.rv-story__list li {
+  display: flex;
+  gap: var(--rv-4);
+  font-size: var(--rv-t-base);
+  line-height: 1.55;
+  color: #cdd7e3;
+}
+.rv-story__list li::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 18px;
+  height: 1px;
+  margin-top: .78em;
+  background: #c39a4e;
+}
+
+.rv-story__coda {
+  margin: var(--rv-7) 0 var(--rv-6);
+  font-family: var(--rv-font-display);
+  font-size: var(--rv-t-h3);
+  line-height: 1.35;
+  color: #eef2f6;
+}
+
+.rv-story__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rv-4);
+  padding-top: var(--rv-5);
+  border-top: 1px solid rgb(255 255 255 / .12);
+}
+.rv-story__ctaText {
+  margin: 0;
+  font-family: var(--rv-font-display);
+  font-size: var(--rv-t-lead);
+  color: #eef2f6;
+}
+
+.rv-story__close {
+  position: absolute;
+  top: clamp(10px, 1.6vh, 20px);
+  right: clamp(10px, 1.6vw, 20px);
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  appearance: none;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / .24);
+  border-radius: 50%;
+  background: rgb(0 0 0 / .4);
+  cursor: pointer;
+  transition:
+    background var(--rv-dur) var(--rv-ease),
+    border-color var(--rv-dur) var(--rv-ease),
+    rotate var(--rv-dur) var(--rv-ease);
+}
+.rv-story__close span {
+  grid-area: 1 / 1;
+  width: 15px;
+  height: 1.5px;
+  background: #fff;
+}
+.rv-story__close span:first-child { rotate: 45deg; }
+.rv-story__close span:last-child  { rotate: -45deg; }
+.rv-story__close:hover {
+  background: rgb(0 0 0 / .7);
+  border-color: rgb(255 255 255 / .55);
+  rotate: 90deg;
+}
+.rv-story__close:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rv-story,
+  .rv-story__close { transition: none; }
 }

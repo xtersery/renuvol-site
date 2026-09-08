@@ -27,6 +27,7 @@ import {
   initFormAlert,
   initProofPreview,
   initLevitate,
+  initStory,
 } from './enhancements.js';
 
 function boot() {
@@ -60,6 +61,7 @@ function boot() {
   initFormAlert();
   initProofPreview();
   initLevitate();
+  initStory();
 
   // The film is optional and loads nothing until it is opened.
   const film = initFilm();

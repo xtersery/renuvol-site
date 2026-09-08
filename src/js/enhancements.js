@@ -596,3 +596,85 @@ export function initLevitate() {
     }
   });
 }
+
+/**
+ * Развёрнутый рассказ об INCUBE™ — прокручиваемый диалог.
+ *
+ * Открывается любым [data-rv-story-open]; оба парящих блока секции 08 ведут
+ * в один и тот же диалог. Закрывают крестик, клик по фону, Escape и ссылка
+ * «Попробуйте RENUVOL» — она ведёт к форме, и оставлять диалог открытым
+ * поверх неё бессмысленно.
+ *
+ * Прокрутку страницы не блокируем через overflow: он передаётся вьюпорту и
+ * срывает пиннинг у всех sticky-сцен. Вместо этого текст прокручивается
+ * внутри себя (overscroll-behavior: contain в CSS), а колесо над фоном
+ * гасится здесь.
+ */
+export function initStory() {
+  const triggers = Array.from(document.querySelectorAll('[data-rv-story-open]'));
+  if (!triggers.length) return;
+
+  const dialogs = new Map();
+
+  triggers.forEach((trigger) => {
+    const story = document.getElementById(trigger.getAttribute('aria-controls') || '');
+    if (!story) return;
+
+    if (!dialogs.has(story)) {
+      dialogs.set(story, { openers: [], open: false, hideTimer: 0, last: null });
+
+      const state = dialogs.get(story);
+
+      const close = ({ returnFocus = true } = {}) => {
+        if (!state.open) return;
+        state.open = false;
+        story.classList.remove('is-open');
+        state.openers.forEach((b) => b.setAttribute('aria-expanded', 'false'));
+        state.hideTimer = window.setTimeout(() => {
+          story.hidden = true;
+        }, 300);
+        if (returnFocus) state.last?.focus?.({ preventScroll: true });
+      };
+      state.close = close;
+
+      story.querySelectorAll('[data-rv-story-close]').forEach((el) => {
+        el.addEventListener('click', () => {
+          // Ссылка на форму закрывает диалог, но переход не отменяем.
+          close({ returnFocus: el.tagName !== 'A' });
+        });
+      });
+
+      story.querySelector('.rv-story__backdrop')?.addEventListener(
+        'wheel',
+        (event) => {
+          if (state.open) event.preventDefault();
+        },
+        { passive: false },
+      );
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && state.open) close();
+      });
+    }
+
+    const state = dialogs.get(story);
+    state.openers.push(trigger);
+    trigger.setAttribute('aria-expanded', 'false');
+
+    trigger.addEventListener('click', () => {
+      if (state.open) return;
+      state.open = true;
+      state.last = trigger;
+      window.clearTimeout(state.hideTimer);
+      story.hidden = false;
+      state.openers.forEach((b) => b.setAttribute('aria-expanded', 'true'));
+      // Прокрутку сбрасываем: диалог всегда открывается с начала текста.
+      const scroller = story.querySelector('.rv-story__scroll');
+      if (scroller) scroller.scrollTop = 0;
+      requestAnimationFrame(() => requestAnimationFrame(() => story.classList.add('is-open')));
+      // Именно кнопку: первым [data-rv-story-close] в разметке идёт фон,
+      // а он не фокусируемый, и фокус оставался бы на блоке.
+      story.querySelector('button[data-rv-story-close]')?.focus({ preventScroll: true });
+    });
+  });
+}

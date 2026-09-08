@@ -40,7 +40,8 @@
       <p class="rv-eyebrow" data-rv-reveal>INCUBE™</p>
 
       <h2 class="rv-display rv-incube__title" data-rv-reveal>
-        Нобелевская технология<br />для вашей практики
+        Нобелевская технология<br />
+        <span class="rv-incube__titleSub">для вашей практики</span>
       </h2>
 
       <p class="rv-incube__lead" data-rv-reveal>
@@ -48,7 +49,10 @@
       </p>
 
       <!--
-        Два парящих блока. Слои разведены намеренно: [data-rv-reveal] анимирует
+        Два парящих блока. Клик по любому открывает развёрнутый рассказ
+        (21-incube-story.html) — оба ведут в один и тот же диалог.
+
+        Слои разведены намеренно: [data-rv-reveal] анимирует
         `transform` при появлении, дрейф — тоже `transform`, поэтому дрейф живёт
         на вложенном элементе. Увеличение при наведении идёт через отдельное
         свойство `scale`, которое с `transform` не спорит.
@@ -58,6 +62,9 @@
           <div class="rv-incube__blockInner">
             <span class="rv-incube__blockGlow" aria-hidden="true"></span>
             <p>RENUVOL — all-in-one PDO booster для комплексного омоложения без компромиссов.</p>
+            <button class="rv-incube__blockHit" type="button" data-rv-story-open aria-controls="rv-story-incube">
+              <span class="rv-sr">Читать о нобелевской технологии MOF и INCUBE</span>
+            </button>
           </div>
         </div>
 
@@ -65,6 +72,9 @@
           <div class="rv-incube__blockInner">
             <span class="rv-incube__blockGlow" aria-hidden="true"></span>
             <p>INCUBE™ помогает защищать активные компоненты формулы, обеспечивая их стабильность и точность работы.</p>
+            <button class="rv-incube__blockHit" type="button" data-rv-story-open aria-controls="rv-story-incube">
+              <span class="rv-sr">Читать о нобелевской технологии MOF и INCUBE</span>
+            </button>
           </div>
         </div>
       </div>
