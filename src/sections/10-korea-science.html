@@ -22,13 +22,20 @@
     <img class="rv-mini" src="/images/ingredients/pn.webp" alt="" aria-hidden="true" loading="lazy" draggable="false" style="left:8%; top:18%; --rv-mini-s:50px; --rv-mini-o:.42; --rv-mini-t:10s; --rv-mini-dl:-2s" />
     <img class="rv-mini" src="/images/ingredients/vitc.webp" alt="" aria-hidden="true" loading="lazy" draggable="false" style="right:7%; top:9%; left:auto; --rv-mini-s:44px; --rv-mini-o:.4; --rv-mini-t:9s; --rv-mini-dl:-6s" />
     <img class="rv-para" data-rv-para="95" src="/images/decor/molecular-structures-2.webp" alt="" aria-hidden="true" loading="lazy" draggable="false" style="right:3%; left:auto; top:48%; --rv-para-s:230px; --rv-para-o:.3; --rv-para-t:12s; --rv-para-dl:-6s" />
-    <!-- Флаг за заголовком: полупрозрачный, с тем же параллаксом и
-         покачиванием, что у остального декора сцены. -->
-    <img class="rv-para rv-korea__flag" data-rv-para="40" src="/images/decor/flag-korea.webp" alt="" aria-hidden="true" loading="eager" decoding="async" draggable="false" style="--rv-para-s: clamp(460px, 54vw, 1000px); --rv-para-o: .2; --rv-para-t: 16s; --rv-para-dl: -4s" />
   </div>
 
   <div class="rv-shell rv-korea__grid rv-above">
     <div class="rv-korea__lead">
+      <!-- Флаг за заголовком: полупрозрачный, с тем же параллаксом и
+           покачиванием, что у остального декора сцены.
+
+           Лежит внутри колонки заголовка, а не в слое сцены. В слое сцены
+           он позиционировался процентом от высоты секции, и на узком экране
+           секция вытягивалась — флаг уезжал выше надписи и переставал с ней
+           пересекаться вовсе. Здесь его рамка — сама надпись, поэтому он
+           держится её на любой ширине. -->
+      <img class="rv-para rv-korea__flag" data-rv-para="40" src="/images/decor/flag-korea.webp" alt="" aria-hidden="true" loading="eager" decoding="async" draggable="false" style="--rv-para-s: clamp(460px, 54vw, 1000px); --rv-para-o: .2; --rv-para-t: 16s; --rv-para-dl: -4s" />
+
       <h2 class="rv-display rv-display--en rv-korea__title" data-rv-reveal>
         Made in<br />South<br />Korea
       </h2>
