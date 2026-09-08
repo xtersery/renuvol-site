@@ -231,8 +231,18 @@ export function initProofPreview() {
     let hideTimer = 0;
     let warmed = null;
     let open = false;
+    // Момент открытия: синтетический click после тапа приходит с задержкой,
+    // и без отсечки панель тут же обрабатывала бы его как второй тап.
+    let openSince = 0;
+    // Текущий язык панели: по классам читать нельзя, hide() уже вернул EN.
+    let proofLang = 'en';
+    // Последнее действие по панели и по кнопке: pointerup и click одного
+    // тапа не должны срабатывать дважды.
+    let lastPanelAction = 0;
+    let triggerPointerUp = 0;
 
     const setLang = (lang) => {
+      proofLang = lang;
       images.forEach((img) => img.classList.toggle('is-active', img.dataset.rvProofLang === lang));
     };
 
@@ -272,6 +282,10 @@ export function initProofPreview() {
       }
 
       open = true;
+      openSince = performance.now();
+      // Блокируем скролл страницы: иначе жесты по панели прокручивают
+      // pinned-сцены под ней, и после закрытия страница перерисовывается.
+      document.documentElement.style.overflow = 'hidden';
       setLang('en');
       proof.hidden = false;
       trigger.setAttribute('aria-expanded', 'true');
@@ -283,6 +297,7 @@ export function initProofPreview() {
     const hide = () => {
       if (!open) return;
       open = false;
+      document.documentElement.style.overflow = '';
       zoom.reset({ instant: true });
       proof.classList.remove('is-open');
       trigger.setAttribute('aria-expanded', 'false');
@@ -350,20 +365,37 @@ export function initProofPreview() {
     trigger.addEventListener('focus', () => {
       if (fine.matches) show();
     });
-    trigger.addEventListener('blur', hideSoon);
+    trigger.addEventListener('blur', () => {
+      if (fine.matches) hideSoon();
+    });
 
     // Щипок и перетаскивание на сенсорных экранах. Возвращает состояние
     // масштаба, чтобы тап понимал, приближена картинка или нет.
     const zoom = initPinchZoom(proof, images, fine);
 
-    // Без hover — тапами: открыть, сменить язык, закрыть.
-    trigger.addEventListener('click', () => {
-      if (fine.matches) return;
+    // Без hover — тапами: открыть, сменить язык, закрыть. Основное событие —
+    // pointerup: click на тач-устройствах синтетический и приходит позже.
+    trigger.addEventListener('pointerup', (event) => {
+      if (fine.matches || event.pointerType === 'mouse') return;
+      triggerPointerUp = performance.now();
       if (open) hide();
       else show();
     });
-    proof.addEventListener('click', () => {
+    // Клавиатура и скринридеры по-прежнему приходят click'ом; синтетический
+    // click после pointerup отсекаем по времени.
+    trigger.addEventListener('click', () => {
       if (fine.matches) return;
+      if (performance.now() - triggerPointerUp < 800) return;
+      if (open) hide();
+      else show();
+    });
+
+    const onPanelTap = () => {
+      // Click открывающего тапа долетает до панели, которая к этому моменту
+      // уже накрыла экран, — отсекаем по времени открытия.
+      if (openSince && performance.now() - openSince < 800) return;
+      // pointerup и click одного тапа — одно действие.
+      if (performance.now() - lastPanelAction < 500) return;
 
       // Жест уже обработан как щипок или перетаскивание — тапом это не считаем.
       if (zoom.consumeGesture()) return;
@@ -372,12 +404,22 @@ export function initProofPreview() {
       // иначе из увеличения нельзя выйти, не свернув всё.
       if (zoom.isZoomed()) {
         zoom.reset();
+        lastPanelAction = performance.now();
         return;
       }
 
-      const showingRu = images.some((i) => i.dataset.rvProofLang === 'ru' && i.classList.contains('is-active'));
-      if (showingRu) hide();
+      // Состояние языка храним сами: hide() уже успел вернуть класс EN.
+      if (proofLang === 'ru') hide();
       else setLang('ru');
+      lastPanelAction = performance.now();
+    };
+    proof.addEventListener('pointerup', (event) => {
+      if (fine.matches || event.pointerType === 'mouse') return;
+      onPanelTap();
+    });
+    proof.addEventListener('click', () => {
+      if (fine.matches) return;
+      onPanelTap();
     });
 
     document.addEventListener('keydown', (event) => {

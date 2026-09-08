@@ -1,0 +1,35 @@
+<!--
+  19 — Данные по рельефу поверхности кожи: превью во всю высоту экрана.
+
+  Открывается главой 04 рельса в секции «Что меняется в коже»
+  (src/sections/06-skin-changes.html). Устройство то же, что у 16-й:
+  подключается в конец body, потому что у пиннящейся сцены overflow-x: clip
+  обрезает position: fixed, а <main> задаёт свой контекст наложения.
+-->
+<figure
+  class="rv-proof"
+  id="rv-proof-roughness"
+  data-rv-proof
+  role="img"
+  aria-label="Улучшение рельефа поверхности кожи: через 2 недели применения клиническая оценка показала улучшение рельефа поверхности кожи до 16,87% (Ra), что подтверждает визуально более гладкую текстуру кожи"
+  hidden
+>
+  <img
+    class="rv-proof__img is-active"
+    data-rv-proof-lang="en"
+    src="/images/proof/roughness-en.webp"
+    alt=""
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+  <img
+    class="rv-proof__img"
+    data-rv-proof-lang="ru"
+    src="/images/proof/roughness-ru.webp"
+    alt=""
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+</figure>

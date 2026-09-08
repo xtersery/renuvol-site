@@ -297,14 +297,16 @@
 .rv-manifesto__phrase {
   grid-area: 1 / 1;
   font-family: var(--rv-font-display);
-  line-height: 0.92;
+  /* запас сверху: при line-height < 1 засечки Prata срезаются на части устройств */
+  line-height: 1;
   letter-spacing: -0.045em;
   text-transform: uppercase;
 }
 
 .rv-manifesto__phrase--a {
   font-size: clamp(2.1rem, 0.5rem + 6.2vw, 6.2rem);
-  color: color-mix(in srgb, var(--rv-fg) 54%, transparent);
+  /* Полная непрозрачность с самого начала */
+  color: var(--rv-fg);
   transform: scale(calc(1 - var(--rv-p, 0) * 0.12));
 }
 

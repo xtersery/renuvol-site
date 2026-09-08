@@ -1,0 +1,35 @@
+<!--
+  20 — Данные по сиянию кожи: превью во всю высоту экрана.
+
+  Открывается главой 05 рельса в секции «Что меняется в коже»
+  (src/sections/06-skin-changes.html). Устройство то же, что у 16-й:
+  подключается в конец body, потому что у пиннящейся сцены overflow-x: clip
+  обрезает position: fixed, а <main> задаёт свой контекст наложения.
+-->
+<figure
+  class="rv-proof"
+  id="rv-proof-glow"
+  data-rv-proof
+  role="img"
+  aria-label="Улучшение сияния кожи: клинические испытания подтвердили улучшение тона кожи, а через 2 недели применения было показано, что продукт помогает улучшить общий цвет лица"
+  hidden
+>
+  <img
+    class="rv-proof__img is-active"
+    data-rv-proof-lang="en"
+    src="/images/proof/glow-en.webp"
+    alt=""
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+  <img
+    class="rv-proof__img"
+    data-rv-proof-lang="ru"
+    src="/images/proof/glow-ru.webp"
+    alt=""
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+</figure>
