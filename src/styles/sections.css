@@ -1310,6 +1310,23 @@
   opacity: 0.85;
 }
 
+/* Флаг — тихий фон за заголовком: на светлом грунте белое полотно читается
+   через складки и блики, поэтому полупрозрачности достаточно. Своя позиция
+   и свой темп покачивания, чтобы не сливаться с молекулами справа. */
+.rv-korea__flag {
+  left: -6%;
+  top: 16%;
+  filter: none;
+}
+
+@media (max-width: 900px) {
+  .rv-korea__flag {
+    left: -15%;
+    top: 8%;
+    opacity: 0.2;
+  }
+}
+
 .rv-korea__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
@@ -2375,6 +2392,29 @@
   font-size: var(--rv-t-h3);
   line-height: 1.35;
   color: #eef2f6;
+}
+
+/* Фото учёных — после CTA, завершает рассказ: прозрачный фон снимается
+   тёмным грунтом панели, поэтому достаточно скругления и лёгкой тени. */
+.rv-story__figure {
+  margin: var(--rv-6) 0 0;
+  padding: 0;
+}
+.rv-story__figure img {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: clamp(12px, 1.4vw, 20px);
+  filter: drop-shadow(0 24px 48px rgb(0 0 0 / .45));
+}
+.rv-story__caption {
+  margin-top: var(--rv-3);
+  text-align: center;
+  font-size: var(--rv-t-xs);
+  letter-spacing: 0.04em;
+  color: #8b96a6;
 }
 
 .rv-story__cta {

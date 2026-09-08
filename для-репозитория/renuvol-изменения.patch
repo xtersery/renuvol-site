@@ -1,0 +1,119 @@
+diff -ruN a/src/sections/10-korea-science.html b/src/sections/10-korea-science.html
+--- a/src/sections/10-korea-science.html	2026-09-08 13:47:36.000000000 +0800
++++ b/src/sections/10-korea-science.html	2026-09-08 14:38:13.875360226 +0800
+@@ -22,6 +22,9 @@
+     <img class="rv-mini" src="/images/ingredients/pn.webp" alt="" aria-hidden="true" loading="lazy" draggable="false" style="left:8%; top:18%; --rv-mini-s:50px; --rv-mini-o:.42; --rv-mini-t:10s; --rv-mini-dl:-2s" />
+     <img class="rv-mini" src="/images/ingredients/vitc.webp" alt="" aria-hidden="true" loading="lazy" draggable="false" style="right:7%; top:9%; left:auto; --rv-mini-s:44px; --rv-mini-o:.4; --rv-mini-t:9s; --rv-mini-dl:-6s" />
+     <img class="rv-para" data-rv-para="95" src="/images/decor/molecular-structures-2.webp" alt="" aria-hidden="true" loading="lazy" draggable="false" style="right:3%; left:auto; top:48%; --rv-para-s:230px; --rv-para-o:.3; --rv-para-t:12s; --rv-para-dl:-6s" />
++    <!-- Флаг за заголовком: полупрозрачный, с тем же параллаксом и
++         покачиванием, что у остального декора сцены. -->
++    <img class="rv-para rv-korea__flag" data-rv-para="40" src="/images/decor/flag-korea.webp" alt="" aria-hidden="true" loading="eager" decoding="async" draggable="false" style="--rv-para-s: clamp(460px, 54vw, 1000px); --rv-para-o: .2; --rv-para-t: 16s; --rv-para-dl: -4s" />
+   </div>
+ 
+   <div class="rv-shell rv-korea__grid rv-above">
+diff -ruN a/src/sections/21-incube-story.html b/src/sections/21-incube-story.html
+--- a/src/sections/21-incube-story.html	2026-09-08 13:47:36.000000000 +0800
++++ b/src/sections/21-incube-story.html	2026-09-08 14:38:13.876360270 +0800
+@@ -41,8 +41,9 @@
+       </p>
+ 
+       <p class="rv-story__text">
+-        Эта технология решает одну из ключевых задач современной косметологии:
+-        как сохранить активные молекулы стабильными до момента их работы в коже.
++        Эта технология помогает решить одну из ключевых задач современной
++        косметологии: как сохранить активные молекулы стабильными до момента
++        их работы в коже.
+       </p>
+ 
+       <p class="rv-story__text">
+@@ -51,6 +52,13 @@
+       </p>
+ 
+       <p class="rv-story__text">
++        За технологией стоят ученые мирового уровня. Профессор Чхве вывел MOF
++        за пределы лаборатории, а дальнейшее развитие технологии проходило при
++        техническом консультировании Омара Яги — одного из пионеров
++        MOF-направления.
++      </p>
++
++      <p class="rv-story__text">
+         В RENUVOL эта технология реализована через INCUBE™.
+       </p>
+ 
+@@ -104,6 +112,19 @@
+           Попробуйте RENUVOL
+         </a>
+       </div>
++
++      <figure class="rv-story__figure">
++        <img
++          src="/images/sections/incube-scientists.webp"
++          alt="Профессор Чхве и профессор Омар Яги с препаратом RENUVOL и моделью металл-органической каркасной структуры"
++          loading="lazy"
++          decoding="async"
++          draggable="false"
++        />
++        <figcaption class="rv-story__caption">
++          Профессор Чхве и профессор Омар Яги — люди, стоящие за MOF-технологией
++        </figcaption>
++      </figure>
+     </div>
+   </article>
+ </div>
+diff -ruN a/src/styles/sections.css b/src/styles/sections.css
+--- a/src/styles/sections.css	2026-09-08 13:47:36.000000000 +0800
++++ b/src/styles/sections.css	2026-09-08 14:38:13.876360270 +0800
+@@ -1310,6 +1310,23 @@
+   opacity: 0.85;
+ }
+ 
++/* Флаг — тихий фон за заголовком: на светлом грунте белое полотно читается
++   через складки и блики, поэтому полупрозрачности достаточно. Своя позиция
++   и свой темп покачивания, чтобы не сливаться с молекулами справа. */
++.rv-korea__flag {
++  left: -6%;
++  top: 16%;
++  filter: none;
++}
++
++@media (max-width: 900px) {
++  .rv-korea__flag {
++    left: -15%;
++    top: 8%;
++    opacity: 0.2;
++  }
++}
++
+ .rv-korea__grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+@@ -2377,6 +2394,29 @@
+   color: #eef2f6;
+ }
+ 
++/* Фото учёных — после CTA, завершает рассказ: прозрачный фон снимается
++   тёмным грунтом панели, поэтому достаточно скругления и лёгкой тени. */
++.rv-story__figure {
++  margin: var(--rv-6) 0 0;
++  padding: 0;
++}
++.rv-story__figure img {
++  display: block;
++  width: 100%;
++  max-width: 460px;
++  height: auto;
++  margin: 0 auto;
++  border-radius: clamp(12px, 1.4vw, 20px);
++  filter: drop-shadow(0 24px 48px rgb(0 0 0 / .45));
++}
++.rv-story__caption {
++  margin-top: var(--rv-3);
++  text-align: center;
++  font-size: var(--rv-t-xs);
++  letter-spacing: 0.04em;
++  color: #8b96a6;
++}
++
+ .rv-story__cta {
+   display: flex;
+   flex-wrap: wrap;
