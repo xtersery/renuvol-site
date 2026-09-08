@@ -410,28 +410,51 @@ html { scroll-padding-top: calc(var(--rv-header-h) + var(--rv-4)); }
   outline-offset: 2px;
 }
 
-/* Единственная подсказка, что глава раскрывается: без неё наведение
-   не найти. */
+/* Подсказка на карточке живёт в двух состояниях. В покое — спокойная надпись,
+   которая объясняет, что здесь вообще что-то есть. Под курсором она сменяется
+   прямым призывом: панель открывается кликом, и об этом нужно сказать словами,
+   а не намёком. Обе надписи лежат в одной ячейке грида и перекрёстно гаснут —
+   так строка не прыгает по ширине. */
 .rv-chapter__hint {
+  display: grid;
+  justify-items: start;
   font-size: var(--rv-t-label, .75rem);
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--rv-chapter-accent);
-  opacity: .75;
-  transition: opacity var(--rv-dur) var(--rv-ease);
 }
-.rv-chapter__hint::after {
-  content: '';
-  display: inline-block;
-  width: 1.6em;
-  margin-left: .5em;
-  border-top: 1px solid currentColor;
-  vertical-align: middle;
-  transition: width var(--rv-dur) var(--rv-ease);
+.rv-chapter__hintIdle,
+.rv-chapter__hintCta {
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--rv-dur) var(--rv-ease),
+    translate var(--rv-dur) var(--rv-ease);
 }
-.rv-chapter--proof:hover .rv-chapter__hint,
-.rv-chapter__hit:focus-visible ~ .rv-chapter__hint { opacity: 1; }
-.rv-chapter--proof:hover .rv-chapter__hint::after { width: 2.6em; }
+.rv-chapter__hintIdle { opacity: .75; }
+.rv-chapter__hintCta {
+  display: inline-flex;
+  align-items: center;
+  gap: .55em;
+  font-weight: 500;
+  opacity: 0;
+  translate: -8px 0;
+}
+.rv-chapter__hintArrow { transition: translate var(--rv-dur) var(--rv-ease); }
+
+/* :has(), а не соседний комбинатор: подсказка в разметке стоит перед кнопкой,
+   поэтому `~` до неё не дотягивался и с клавиатуры призыв не появлялся. */
+.rv-chapter--proof:hover .rv-chapter__hintIdle,
+.rv-chapter--proof:has(.rv-chapter__hit:focus-visible) .rv-chapter__hintIdle {
+  opacity: 0;
+  translate: 8px 0;
+}
+.rv-chapter--proof:hover .rv-chapter__hintCta,
+.rv-chapter--proof:has(.rv-chapter__hit:focus-visible) .rv-chapter__hintCta {
+  opacity: 1;
+  translate: 0 0;
+}
+.rv-chapter--proof:hover .rv-chapter__hintArrow,
+.rv-chapter--proof:has(.rv-chapter__hit:focus-visible) .rv-chapter__hintArrow { translate: 4px 0; }
 
 .rv-proof {
   position: fixed;
@@ -549,4 +572,57 @@ html { scroll-padding-top: calc(var(--rv-header-h) + var(--rv-4)); }
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
+}
+
+
+/* Панель открывается кликом и сама не закроется — нужен явный выход.
+   Крестик собран из двух линий, как у модалки с фильмом. */
+.rv-proof__close {
+  position: absolute;
+  top: clamp(10px, 2vh, 28px);
+  right: clamp(10px, 2vw, 28px);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  appearance: none;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / .28);
+  border-radius: 50%;
+  background: rgb(0 0 0 / .35);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition:
+    background var(--rv-dur) var(--rv-ease),
+    border-color var(--rv-dur) var(--rv-ease),
+    rotate var(--rv-dur) var(--rv-ease);
+}
+.rv-proof__close span {
+  grid-area: 1 / 1;
+  width: 16px;
+  height: 1.5px;
+  background: #fff;
+}
+.rv-proof__close span:first-child { rotate: 45deg; }
+.rv-proof__close span:last-child  { rotate: -45deg; }
+.rv-proof__close:hover {
+  background: rgb(0 0 0 / .6);
+  border-color: rgb(255 255 255 / .6);
+  rotate: 90deg;
+}
+.rv-proof__close:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Фон панели закрывает по клику — курсор должен об этом сообщать. */
+.rv-proof { cursor: zoom-out; }
+.rv-proof__img { cursor: default; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rv-proof__close,
+  .rv-chapter__hintIdle,
+  .rv-chapter__hintCta,
+  .rv-chapter__hintArrow { transition: none; }
 }

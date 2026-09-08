@@ -204,10 +204,16 @@ export function initFormAlert() {
 /**
  * Данные исследования во всю высоту экрана.
  *
- * Глава рельса открывает панель с англоязычным слайдом; пока указатель
- * находится на самой панели, показывается русская версия. На устройствах без
- * hover панель открывается тапом, второй тап по картинке меняет язык, третий
- * закрывает.
+ * Панель открывается кликом по главе рельса — наведение только подсвечивает
+ * призыв на карточке. Раньше открывало само наведение, и это давало
+ * неустранимую двусмысленность: панель разворачивается почти во весь экран и
+ * накрывает карточку, поэтому «курсор на главе» и «курсор на картинке»
+ * оказывались одной точкой, а язык зависел от того, двигалась ли мышь. Клик
+ * снимает вопрос целиком.
+ *
+ * Открывается всегда на английской версии. На мыши русская показывается, пока
+ * курсор над картинкой; на тач-устройствах — по тапу в неё. Закрывают крестик,
+ * клик мимо картинки и Escape.
  *
  * Если слайд не удалось загрузить, панель не открывается вовсе и подсказка у
  * главы прячется: отсутствующий файл не должен превращаться в пустой чёрный
@@ -219,12 +225,8 @@ export function initProofPreview() {
 
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-  /*
-    Панель раскрывается асинхронно — сначала дожидается загрузки слайда.
-    Если за это время курсор успел уйти и остановиться, панель разворачивается
-    уже позади него, и второе наведение открывает вторую поверх первой. Держим
-    общий список, чтобы открытой всегда оставалась ровно одна.
-  */
+  // Открытой может быть только одна панель: две полноэкранные друг на друге —
+  // гарантированная путаница с языком и закрытием.
   const panels = [];
 
   triggers.forEach((trigger) => {
@@ -235,23 +237,28 @@ export function initProofPreview() {
     const primary = images.find((i) => i.dataset.rvProofLang === 'en') || images[0];
     if (!primary) return;
 
-    let closeTimer = 0;
+    let open = false;
+    let openedAt = 0;
     let hideTimer = 0;
     let warmed = null;
-    let open = false;
-    // Момент открытия: синтетический click после тапа приходит с задержкой,
-    // и без отсечки панель тут же обрабатывала бы его как второй тап.
-    let openSince = 0;
-    // Текущий язык панели: по классам читать нельзя, hide() уже вернул EN.
-    let proofLang = 'en';
-    // Последнее действие по панели и по кнопке: pointerup и click одного
-    // тапа не должны срабатывать дважды.
-    let lastPanelAction = 0;
-    let triggerPointerUp = 0;
 
     const setLang = (lang) => {
-      proofLang = lang;
       images.forEach((img) => img.classList.toggle('is-active', img.dataset.rvProofLang === lang));
+    };
+    const currentLang = () =>
+      (images.find((i) => i.classList.contains('is-active')) || primary).dataset.rvProofLang;
+
+    const inside = (rect, x, y) => x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+
+    /** Объединённый прямоугольник обеих версий: пропорции у них разные. */
+    const imageBox = () => {
+      const rects = images.map((img) => img.getBoundingClientRect());
+      return {
+        left: Math.min(...rects.map((r) => r.left)),
+        right: Math.max(...rects.map((r) => r.right)),
+        top: Math.min(...rects.map((r) => r.top)),
+        bottom: Math.max(...rects.map((r) => r.bottom)),
+      };
     };
 
     const disable = () => {
@@ -280,52 +287,31 @@ export function initProofPreview() {
     };
 
     const show = async () => {
-      window.clearTimeout(closeTimer);
-      window.clearTimeout(hideTimer);
       if (open) return;
-
       if (!(await warm())) {
         disable();
         return;
       }
 
-      // Закрываем всё остальное: две полноэкранные панели друг на друге —
-      // это гарантированная путаница с языком и закрытием.
       panels.forEach((other) => {
         if (other.proof !== proof) other.hide();
       });
 
       open = true;
-      openSince = performance.now();
-      graceOver = false;
-      window.clearTimeout(graceTimer);
-      /*
-        Русская версия появляется только после осознанного движения мышью.
-
-        Картинка разворачивается почти во весь экран, и у средних глав курсор
-        в момент раскрытия уже находится над ней. Если по истечении паузы
-        пересчитывать позицию автоматически, язык переключался бы сам собой —
-        и по-разному в зависимости от того, двигалась мышь в этот момент или
-        нет. Поэтому таймер только снимает запрет, а решает следующий
-        pointermove.
-      */
-      graceTimer = window.setTimeout(() => {
-        graceOver = true;
-      }, GRACE_MS);
+      openedAt = performance.now();
+      window.clearTimeout(hideTimer);
       setLang('en');
       proof.hidden = false;
       trigger.setAttribute('aria-expanded', 'true');
       // Два кадра: за один браузер не успевает засчитать снятие hidden,
       // и переход не запускается.
       requestAnimationFrame(() => requestAnimationFrame(() => proof.classList.add('is-open')));
+      proof.querySelector('[data-rv-proof-close]')?.focus({ preventScroll: true });
     };
 
-    const hide = () => {
+    const hide = ({ returnFocus = false } = {}) => {
       if (!open) return;
       open = false;
-      openOrigin = null;
-      lastPointer = null;
-      window.clearTimeout(graceTimer);
       zoom.reset({ instant: true });
       proof.classList.remove('is-open');
       trigger.setAttribute('aria-expanded', 'false');
@@ -333,188 +319,53 @@ export function initProofPreview() {
       hideTimer = window.setTimeout(() => {
         proof.hidden = true;
       }, 400);
+      if (returnFocus) trigger.focus({ preventScroll: true });
     };
 
     panels.push({ proof, hide });
 
-    const hideSoon = () => {
-      window.clearTimeout(closeTimer);
-      // Небольшая пауза: панель перекрывает главу, и без неё уход курсора с
-      // главы на саму панель читался бы как «ушёл совсем».
-      closeTimer = window.setTimeout(hide, 90);
-    };
+    trigger.addEventListener('click', show);
 
-    /*
-      Точка, в которой курсор стоял в момент раскрытия. У средних глав
-      картинка накрывает карточку целиком, и первый же pointermove по панели
-      попадал бы в картинку — английская версия не успевала показаться.
-      Пока курсор не сдвинулся дальше порога, считаем, что он никуда не
-      переезжал.
-    */
-    let openOrigin = null;
-    let lastPointer = null;
-    let graceOver = false;
-    let graceTimer = 0;
-    const MOVE_THRESHOLD = 14;
-    const GRACE_MS = 400;
-
-    trigger.addEventListener('pointerenter', (event) => {
-      if (!fine.matches) return;
-      openOrigin = { x: event.clientX, y: event.clientY };
-      show();
-    });
-
-    /**
-     * Открытая панель занимает весь экран и накрывает саму главу, поэтому
-     * hover-события кнопки до неё больше не доходят: пока панель открыта,
-     * положение курсора считаем сами.
-     *
-     * Курсор над главой — английский слайд, над картинкой — русский, мимо
-     * обоих — закрываем.
-     */
-    const inside = (rect, x, y) => x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-
-    /** Объединённый прямоугольник обеих версий: пропорции у них разные. */
-    const imageBox = () => {
-      const rects = images.map((img) => img.getBoundingClientRect());
-      return {
-        left: Math.min(...rects.map((r) => r.left)),
-        right: Math.max(...rects.map((r) => r.right)),
-        top: Math.min(...rects.map((r) => r.top)),
-        bottom: Math.max(...rects.map((r) => r.bottom)),
-      };
-    };
-
-    /**
-     * Решает, что показывать при заданном положении курсора.
-     *
-     * Картинку проверяем первой: она лежит поверх карточки и у средних глав
-     * накрывает её целиком — при обратном порядке центр изображения попадал в
-     * прямоугольник карточки, и язык не переключался вовсе.
-     */
-    const evaluate = (x, y) => {
-      if (!open) return;
-
-      if (inside(imageBox(), x, y)) {
-        window.clearTimeout(closeTimer);
-        // Первые мгновения после раскрытия язык держим английским: у средних
-        // глав карточка и картинка занимают одно и то же место, и хвост
-        // движения к карточке иначе сразу перебрасывал бы на русский.
-        setLang(graceOver ? 'ru' : 'en');
-        return;
-      }
-      if (inside(trigger.getBoundingClientRect(), x, y)) {
-        window.clearTimeout(closeTimer);
-        setLang('en');
-        return;
-      }
-      hideSoon();
-    };
-
+    // На мыши язык следует за курсором: над картинкой — русская версия.
     proof.addEventListener('pointermove', (event) => {
       if (!fine.matches || !open) return;
-      const { clientX: x, clientY: y } = event;
-      lastPointer = { x, y };
-
-      if (openOrigin) {
-        if (Math.hypot(x - openOrigin.x, y - openOrigin.y) < MOVE_THRESHOLD) return;
-        openOrigin = null; // курсор поехал — дальше работают обычные правила
-      }
-
-      evaluate(x, y);
+      setLang(inside(imageBox(), event.clientX, event.clientY) ? 'ru' : 'en');
     });
 
-    // Курсор ушёл за пределы окна.
-    proof.addEventListener('pointerleave', () => {
-      if (fine.matches) hideSoon();
-    });
-
-    /*
-      Пока панель открыта, страница под ней стоять должна — но не ценой
-      overflow на html или body: он передаётся вьюпорту и срывает пиннинг у
-      всех sticky-сцен (см. CLAUDE.md). Замер показывал скачок сцены «Что
-      меняется в коже» на 1080px в момент открытия.
-
-      Гасим само прокручивание: колесо над панелью, non-passive, чтобы
-      preventDefault сработал. Тач закрыт через touch-action: none в CSS.
-    */
-    proof.addEventListener(
-      'wheel',
-      (event) => {
-        if (open) event.preventDefault();
-      },
-      { passive: false },
-    );
-
-    // Клавиатура: панель следует за фокусом кнопки.
-    trigger.addEventListener('focus', () => {
-      if (fine.matches) show();
-    });
-    trigger.addEventListener('blur', () => {
-      if (fine.matches) hideSoon();
-    });
-
-    // Щипок и перетаскивание на сенсорных экранах. Возвращает состояние
-    // масштаба, чтобы тап понимал, приближена картинка или нет.
+    // Щипок и перетаскивание на сенсорных экранах.
     const zoom = initPinchZoom(proof, images, fine);
 
-    // Без hover — тапами: открыть, сменить язык, закрыть. Основное событие —
-    // pointerup: click на тач-устройствах синтетический и приходит позже.
-    trigger.addEventListener('pointerup', (event) => {
-      if (fine.matches || event.pointerType === 'mouse') return;
-      triggerPointerUp = performance.now();
-      if (open) hide();
-      else show();
-    });
-    // Клавиатура и скринридеры по-прежнему приходят click'ом; синтетический
-    // click после pointerup отсекаем по времени.
-    trigger.addEventListener('click', () => {
-      if (fine.matches) return;
-      if (performance.now() - triggerPointerUp < 800) return;
-      if (open) hide();
-      else show();
-    });
+    proof.addEventListener('click', (event) => {
+      if (!open) return;
+      // Клик, которым панель открыли, долетает до неё самой — она к этому
+      // моменту уже накрыла экран. Отсекаем по времени открытия.
+      if (performance.now() - openedAt < 350) return;
 
-    const onPanelTap = () => {
-      // Click открывающего тапа долетает до панели, которая к этому моменту
-      // уже накрыла экран, — отсекаем по времени открытия.
-      if (openSince && performance.now() - openSince < 800) return;
-      // pointerup и click одного тапа — одно действие.
-      if (performance.now() - lastPanelAction < 500) return;
-
-      // Жест уже обработан как щипок или перетаскивание — тапом это не считаем.
-      // Отметку времени ставим обязательно: пальцев в щипке два, pointerup
-      // приходит дважды, и без неё второй проходил дальше и сбрасывал
-      // только что набранный масштаб.
-      if (zoom.consumeGesture()) {
-        lastPanelAction = performance.now();
+      if (event.target.closest('[data-rv-proof-close]')) {
+        hide({ returnFocus: true });
         return;
       }
-
-      // Приближённая картинка: тап возвращает масштаб, а не закрывает панель,
+      // Жест уже обработан как щипок или перетаскивание — тапом это не считаем.
+      if (zoom.consumeGesture()) return;
+      // Приближённая картинка: клик возвращает масштаб, а не закрывает панель,
       // иначе из увеличения нельзя выйти, не свернув всё.
       if (zoom.isZoomed()) {
         zoom.reset();
-        lastPanelAction = performance.now();
         return;
       }
 
-      // Состояние языка храним сами: hide() уже успел вернуть класс EN.
-      if (proofLang === 'ru') hide();
-      else setLang('ru');
-      lastPanelAction = performance.now();
-    };
-    proof.addEventListener('pointerup', (event) => {
-      if (fine.matches || event.pointerType === 'mouse') return;
-      onPanelTap();
-    });
-    proof.addEventListener('click', () => {
-      if (fine.matches) return;
-      onPanelTap();
+      if (inside(imageBox(), event.clientX, event.clientY)) {
+        // На мыши языком управляет наведение, второй раз трогать его кликом
+        // незачем; на тач-устройствах это единственный способ переключиться.
+        if (!fine.matches) setLang(currentLang() === 'ru' ? 'en' : 'ru');
+        return;
+      }
+
+      hide({ returnFocus: true }); // клик мимо картинки
     });
 
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && open) hide();
+      if (event.key === 'Escape' && open) hide({ returnFocus: true });
     });
   });
 }

@@ -1,18 +1,19 @@
 <!--
   16 — Данные по увлажнённости: превью во всю высоту экрана.
 
-  Открывается главой 01 рельса в секции «Что меняется в коже»
+  Открывается кликом по главе 01 рельса в секции «Что меняется в коже»
   (src/sections/06-skin-changes.html).
 
   Подключается в конец body, а не внутрь секции, по двум причинам: у
   пиннящейся сцены overflow-x: clip обрезает position: fixed, а <main> задаёт
   свой контекст наложения, из-за которого панель уходила под шапку.
 -->
-<figure
+<div
   class="rv-proof"
   id="rv-proof-hydration"
   data-rv-proof
-  role="img"
+  role="dialog"
+  aria-modal="true"
   aria-label="Улучшение увлажнённости кожи: увлажнённость выросла в среднем на 35,2%, индивидуальные улучшения достигали 102,80% после двух недель применения"
   hidden
 >
@@ -34,4 +35,9 @@
     decoding="async"
     draggable="false"
   />
-</figure>
+
+  <button class="rv-proof__close" type="button" data-rv-proof-close aria-label="Закрыть">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </button>
+</div>
