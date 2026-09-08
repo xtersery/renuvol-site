@@ -26,6 +26,7 @@ import {
   initDocView,
   initFormAlert,
   initProofPreview,
+  initLevitate,
 } from './enhancements.js';
 
 function boot() {
@@ -58,6 +59,7 @@ function boot() {
   initDocView();
   initFormAlert();
   initProofPreview();
+  initLevitate();
 
   // The film is optional and loads nothing until it is opened.
   const film = initFilm();

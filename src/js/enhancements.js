@@ -679,3 +679,69 @@ function initPinchZoom(proof, images, fine) {
     },
   };
 }
+
+/**
+ * Левитация объекта INCUBE: параллакс указателя и защита от отсутствующего файла.
+ *
+ * Трансформации разведены по трём слоям, потому что одно и то же свойство
+ * нельзя писать из двух мест: внешняя обёртка получает `translate` от
+ * `initParallaxDecor`, средний слой держит бесконечный дрейф в CSS, а здесь
+ * трогается только сама картинка. Поэтому объект одновременно плывёт со
+ * скроллом, дышит сам по себе и отзывается на курсор, ничего не перебивая.
+ *
+ * Если картинки нет, секция схлопывается в текстовую: пустая колонка или
+ * значок битого изображения выглядят хуже, чем её отсутствие.
+ */
+export function initLevitate() {
+  const objects = Array.from(document.querySelectorAll('[data-rv-levitate]'));
+  if (!objects.length) return;
+
+  objects.forEach((object) => {
+    const img = object.querySelector('[data-rv-levitate-img]');
+    if (!img) return;
+
+    const markMissing = () => object.closest('section')?.classList.add('is-imageless');
+    if (img.complete && img.naturalWidth === 0) markMissing();
+    img.addEventListener('error', markMissing, { once: true });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!window.matchMedia('(pointer: fine)').matches) return; // мышь и трекпад
+
+    const section = object.closest('section') || object;
+    let tx = 0;
+    let ty = 0;
+    let cx = 0;
+    let cy = 0;
+    let running = false;
+
+    section.addEventListener('pointermove', (event) => {
+      const r = section.getBoundingClientRect();
+      // Отклонение от центра секции, а не от картинки: объект отзывается на
+      // движение по всей секции, включая колонку с текстом.
+      tx = ((event.clientX - r.left) / r.width - 0.5) * 26;
+      ty = ((event.clientY - r.top) / r.height - 0.5) * 18;
+      if (!running) {
+        running = true;
+        requestAnimationFrame(loop);
+      }
+    });
+    section.addEventListener('pointerleave', () => {
+      tx = 0;
+      ty = 0;
+    });
+
+    function loop() {
+      cx += (tx - cx) * 0.045;
+      cy += (ty - cy) * 0.045;
+      img.style.transform = `translate3d(${cx.toFixed(2)}px, ${cy.toFixed(2)}px, 0)`;
+      // Останавливаем цикл, когда объект вернулся в покой: держать rAF ради
+      // нулевого смещения незачем.
+      if (Math.abs(tx - cx) < 0.05 && Math.abs(ty - cy) < 0.05 && tx === 0 && ty === 0) {
+        img.style.transform = '';
+        running = false;
+        return;
+      }
+      requestAnimationFrame(loop);
+    }
+  });
+}

@@ -1875,3 +1875,207 @@
   border-color: var(--rv-accent);
   background: color-mix(in srgb, var(--rv-accent) 12%, transparent);
 }
+
+/* ===========================================================================
+   08 — INCUBE™ / нобелевская технология
+
+   Две колонки: текст слева, левитирующий объект справа. Пропорция 1fr / 1.05fr
+   даёт объекту чуть больше места — он и есть смысловой центр секции, текст
+   его поясняет.
+   =========================================================================== */
+
+.rv-incube {
+  position: relative;
+  padding-block: var(--rv-section-y);
+  /* Клипуем только по горизонтали: вертикальный overflow срезал бы грунт
+     секции на её границе и оставил шов (см. CLAUDE.md). */
+  overflow-x: clip;
+}
+
+.rv-incube__scene { position: absolute; inset: 0; }
+
+.rv-incube__glow {
+  left: -10%;
+  top: 8%;
+  width: 70%;
+  height: 80%;
+  opacity: .5;
+}
+.rv-incube__glow--cool {
+  left: auto;
+  right: -14%;
+  top: 24%;
+  width: 62%;
+  opacity: .42;
+}
+
+.rv-incube__arc {
+  right: -18%;
+  top: 6%;
+  width: 78%;
+  aspect-ratio: 1;
+}
+
+.rv-incube__grid {
+  display: grid;
+  /* Текстовой колонке нужен запас: в более узкой заголовок ломался на четыре
+     строки. Объекту ширину добираем не колонкой, а выносом в отступ. */
+  grid-template-columns: 1.15fr 1fr;
+  align-items: center;
+  gap: clamp(var(--rv-6), 4vw, var(--rv-9));
+}
+
+.rv-incube__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rv-4);
+}
+
+.rv-incube__title { margin-block: var(--rv-2) var(--rv-3); }
+
+.rv-incube__lead {
+  font-family: var(--rv-font-display);
+  font-size: var(--rv-t-h3);
+  line-height: 1.2;
+  color: var(--rv-fg);
+}
+
+.rv-incube__text {
+  max-width: 46ch;
+  font-size: var(--rv-t-base);
+  line-height: 1.6;
+  color: var(--rv-fg-soft);
+}
+
+/* Ступенчатая триада: отступ растёт от строки к строке, штрих слева ведёт
+   взгляд вниз. */
+.rv-incube__triad {
+  margin: var(--rv-4) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rv-3);
+}
+.rv-incube__triad li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--rv-3);
+  font-family: var(--rv-font-display);
+  font-size: var(--rv-t-lead);
+  color: var(--rv-fg);
+}
+.rv-incube__triad li:nth-child(2) { margin-left: clamp(var(--rv-4), 2.5vw, var(--rv-7)); }
+.rv-incube__triad li:nth-child(3) { margin-left: clamp(var(--rv-6), 5vw, var(--rv-10)); }
+.rv-incube__triad li::before {
+  content: '';
+  flex: 0 0 auto;
+  width: clamp(18px, 2.4vw, 36px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rv-accent));
+}
+
+.rv-incube__note {
+  margin-top: var(--rv-5);
+  padding-top: var(--rv-4);
+  border-top: 1px solid var(--rv-line-soft);
+  font-size: var(--rv-t-sm);
+  line-height: 1.7;
+  letter-spacing: .02em;
+  color: var(--rv-fg-soft);
+}
+
+/* --- Левитирующий объект ------------------------------------------------- */
+
+.rv-incube__object {
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* Объект выходит за колонку — вправо в отступ страницы, влево внахлёст на
+     промежуток. Секция клипует по горизонтали, поэтому вынос безопасен, а
+     ореол и тень остаются привязаны к фигуре, а не к картинке. */
+  margin: 0 calc(var(--rv-gutter) * -1) 0 clamp(-72px, -4vw, 0px);
+  padding: clamp(var(--rv-3), 2vw, var(--rv-5));
+}
+
+.rv-incube__halo {
+  position: absolute;
+  inset: 8% 4%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 58% 42%,
+    color-mix(in srgb, #e7c37a 42%, transparent) 0%,
+    color-mix(in srgb, #6f5a34 18%, transparent) 42%,
+    transparent 68%
+  );
+  filter: blur(28px);
+  animation: rv-incube-breathe 9s ease-in-out infinite alternate;
+}
+
+/* Тень лежит ниже объекта и живёт в противофазе: объект вверх — тень уже и
+   бледнее. Без неё «парение» читается как просто плавающая картинка. */
+.rv-incube__shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  width: 46%;
+  height: 5%;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgb(0 0 0 / .55), transparent 70%);
+  filter: blur(12px);
+  animation: rv-incube-shadow 7.5s ease-in-out infinite alternate;
+}
+
+.rv-incube__drift {
+  display: block;
+  animation: rv-incube-float 7.5s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.rv-incube__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  will-change: transform;
+}
+
+@keyframes rv-incube-float {
+  from { transform: translate3d(-10px, 14px, 0) rotate(-1.1deg); }
+  to   { transform: translate3d(10px, -16px, 0) rotate(1.4deg); }
+}
+@keyframes rv-incube-shadow {
+  from { opacity: .55; width: 48%; }
+  to   { opacity: .3;  width: 40%; }
+}
+@keyframes rv-incube-breathe {
+  from { opacity: .75; transform: scale(0.97); }
+  to   { opacity: 1;   transform: scale(1.04); }
+}
+
+/* Слайд не загрузился — секция остаётся текстовой, пустая колонка не нужна. */
+.rv-incube.is-imageless .rv-incube__object { display: none; }
+.rv-incube.is-imageless .rv-incube__grid { grid-template-columns: 1fr; }
+
+@media (max-width: 900px) {
+  .rv-incube__grid {
+    grid-template-columns: 1fr;
+    gap: var(--rv-6);
+  }
+  /* На узком экране объект идёт первым: он крупный и держит внимание, а
+     читать текст удобнее уже под ним. */
+  .rv-incube__object {
+    order: -1;
+    /* На узком экране выносить некуда — возвращаем в поток. */
+    margin-inline: 0;
+  }
+  .rv-incube__triad li:nth-child(2),
+  .rv-incube__triad li:nth-child(3) { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv-incube__drift,
+  .rv-incube__halo,
+  .rv-incube__shadow { animation: none; }
+}
