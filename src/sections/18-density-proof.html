@@ -1,0 +1,35 @@
+<!--
+  18 — Данные по плотности кожи: превью во всю высоту экрана.
+
+  Открывается главой 02 рельса в секции «Что меняется в коже»
+  (src/sections/06-skin-changes.html). Устройство то же, что у 16-й:
+  подключается в конец body, потому что у пиннящейся сцены overflow-x: clip
+  обрезает position: fixed, а <main> задаёт свой контекст наложения.
+-->
+<figure
+  class="rv-proof"
+  id="rv-proof-density"
+  data-rv-proof
+  role="img"
+  aria-label="Улучшение плотности кожи, подтверждённое клинической оценкой: способствует укреплению дермальной структуры, делая кожу более упругой и гладкой"
+  hidden
+>
+  <img
+    class="rv-proof__img is-active"
+    data-rv-proof-lang="en"
+    src="/images/proof/density-en.webp"
+    alt=""
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+  <img
+    class="rv-proof__img"
+    data-rv-proof-lang="ru"
+    src="/images/proof/density-ru.webp"
+    alt=""
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+</figure>

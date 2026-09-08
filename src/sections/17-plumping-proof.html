@@ -1,0 +1,35 @@
+<!--
+  17 — Данные по наполнению кожи: превью во всю высоту экрана.
+
+  Открывается главой 03 рельса в секции «Что меняется в коже»
+  (src/sections/06-skin-changes.html). Устройство то же, что у 16-й:
+  подключается в конец body, потому что у пиннящейся сцены overflow-x: clip
+  обрезает position: fixed, а <main> задаёт свой контекст наложения.
+-->
+<figure
+  class="rv-proof"
+  id="rv-proof-plumping"
+  data-rv-proof
+  role="img"
+  aria-label="Наполнение кожи: клинически доказанный эффект с улучшением объёма кожи до 21,73% после двух недель применения"
+  hidden
+>
+  <img
+    class="rv-proof__img is-active"
+    data-rv-proof-lang="en"
+    src="/images/proof/plumping-en.webp"
+    alt=""
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+  <img
+    class="rv-proof__img"
+    data-rv-proof-lang="ru"
+    src="/images/proof/plumping-ru.webp"
+    alt=""
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+</figure>
