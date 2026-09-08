@@ -90,32 +90,34 @@
     </div>
 
     <figure class="rv-incube__object" data-rv-levitate data-rv-para="45">
-      <span class="rv-incube__halo" aria-hidden="true"></span>
+      <!-- Лид стоит над объектом, а не за ним: пролетая по орбите, каркас
+           перекрывал середину строки, и фраза читалась урывками. Здесь он
+           ничем не перекрыт и работает как заголовок к объекту.
 
-      <!-- Лид ушёл из колонки текста на задний план объекта: он читается как
-           надпись, сквозь которую пролетает каркас, а не как ещё одна строка
-           в столбце. Остаётся обычным текстом — это содержание, а не декор.
-
-           Две строки, а не три: золотое ядро каркаса шире короткой строки,
-           и «1 флакон.» отдельной строкой оно перекрывало целиком. В двух
-           длинных строках объект проходит по части строки, и фраза читается
-           в любой точке орбиты. -->
+           Это обычный текст в потоке, а не декор: подпись — содержание. -->
       <p class="rv-incube__objectLead">
         5 компонентов. 1 флакон.<br />Максимум результата.
       </p>
 
-      <span class="rv-incube__drift">
-        <img
-          class="rv-incube__img"
-          src="/images/sections/incube-mof.webp"
-          alt="Молекулярный каркас INCUBE: золотая решётка, удерживающая внутри активные компоненты формулы"
-          loading="lazy"
-          decoding="async"
-          draggable="false"
-          data-rv-levitate-img
-        />
+      <!-- Сцена орбиты. Отделена от подписи, потому что зазор под орбиту
+           нужен только вокруг картинки: будь подпись внутри, отступ
+           оторвал бы её от объекта на всю величину радиуса. -->
+      <span class="rv-incube__stage">
+        <span class="rv-incube__halo" aria-hidden="true"></span>
+
+        <span class="rv-incube__drift">
+          <img
+            class="rv-incube__img"
+            src="/images/sections/incube-mof.webp"
+            alt="Молекулярный каркас INCUBE: золотая решётка, удерживающая внутри активные компоненты формулы"
+            loading="lazy"
+            decoding="async"
+            draggable="false"
+            data-rv-levitate-img
+          />
+        </span>
+        <span class="rv-incube__shadow" aria-hidden="true"></span>
       </span>
-      <span class="rv-incube__shadow" aria-hidden="true"></span>
     </figure>
   </div>
 </section>
