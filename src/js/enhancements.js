@@ -718,8 +718,8 @@ export function initLevitate() {
       const r = section.getBoundingClientRect();
       // Отклонение от центра секции, а не от картинки: объект отзывается на
       // движение по всей секции, включая колонку с текстом.
-      tx = ((event.clientX - r.left) / r.width - 0.5) * 26;
-      ty = ((event.clientY - r.top) / r.height - 0.5) * 18;
+      tx = ((event.clientX - r.left) / r.width - 0.5) * 40;
+      ty = ((event.clientY - r.top) / r.height - 0.5) * 28;
       if (!running) {
         running = true;
         requestAnimationFrame(loop);
