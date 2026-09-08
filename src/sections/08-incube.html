@@ -1,0 +1,90 @@
+<!--
+  08 — INCUBE™ / нобелевская технология.
+
+  Стоит между биотех-пиком и «Made in South Korea». Биотех — последняя
+  пиннящаяся сцена страницы, поэтому здесь сознательно обычная секция: ещё
+  один закреплённый экран сразу после самого длинного растянул бы прокрутку
+  и обесценил пик. Ритм держится не пиннингом, а композицией.
+
+  Грунт `night` — глубже и холоднее, чем `dark` у биотеха. Объект золотой на
+  прозрачном фоне: на светлом грунте он теряет свечение, а повторять `dark`
+  дважды подряд значит смазать переход между цветовыми главами.
+
+  Объект левитирует тремя независимыми слоями, у каждого своё свойство
+  трансформации — иначе они перезаписывают друг друга:
+    .rv-incube__object — параллакс скролла, пишет `translate` (enhancements.js)
+    .rv-incube__drift  — вечный дрейф, владеет `transform` (CSS-анимация)
+    .rv-incube__img    — параллакс указателя, владеет `transform` (JS)
+
+  [CONTENT REQUIRED: подтверждение статуса официального дистрибьютора]
+  Формулировки о нобелевской технологии и о защите компонентов — строка 39 в
+  docs/claims-verification.md.
+-->
+<section
+  class="rv-incube"
+  id="rv-incube"
+  data-rv-scene="incube"
+  data-rv-ground="night"
+>
+  <div class="rv-scene rv-incube__scene">
+    <span class="rv-wash rv-incube__glow" style="--rv-wash-tint: #c39a4e"></span>
+    <span class="rv-wash rv-incube__glow rv-incube__glow--cool" style="--rv-wash-tint: #23508f"></span>
+    <span class="rv-arc rv-incube__arc"></span>
+    <img class="rv-mini" src="/images/ingredients/vitc.webp" alt="" aria-hidden="true" loading="lazy" draggable="false" style="left:6%; top:22%; --rv-mini-s:46px; --rv-mini-o:.45; --rv-mini-t:10s; --rv-mini-dl:-3s" />
+    <img class="rv-mini" src="/images/ingredients/gsh.webp" alt="" aria-hidden="true" loading="lazy" draggable="false" style="left:12%; top:74%; --rv-mini-s:52px; --rv-mini-o:.4; --rv-mini-t:11.5s; --rv-mini-dl:-6s" />
+    <img class="rv-para" data-rv-para="85" src="/images/decor/molecular-structures-6.webp" alt="" aria-hidden="true" loading="lazy" draggable="false" style="right:4%; left:auto; top:8%; --rv-para-s:150px; --rv-para-o:.28; --rv-para-t:12s" />
+  </div>
+
+  <div class="rv-shell rv-incube__grid rv-above">
+    <div class="rv-incube__copy">
+      <p class="rv-eyebrow" data-rv-reveal>INCUBE™</p>
+
+      <h2 class="rv-display rv-incube__title" data-rv-reveal>
+        Нобелевская технология<br />для вашей практики
+      </h2>
+
+      <p class="rv-incube__lead" data-rv-reveal>
+        5 компонентов. 1 флакон.<br />Максимум результата.
+      </p>
+
+      <p class="rv-incube__text" data-rv-reveal>
+        RENUVOL — all-in-one PDO booster для комплексного омоложения
+        без компромиссов.
+      </p>
+
+      <p class="rv-incube__text" data-rv-reveal>
+        INCUBE™ помогает защищать активные компоненты формулы, обеспечивая
+        их стабильность и точность работы.
+      </p>
+
+      <!-- Триада набрана ступенями: три коротких утверждения в строку
+           читаются как перечисление, лесенкой — как вывод. -->
+      <ol class="rv-incube__triad" role="list">
+        <li data-rv-reveal><span>Одна формула</span></li>
+        <li data-rv-reveal><span>Пять направлений действия</span></li>
+        <li data-rv-reveal><span>Один предсказуемый протокол</span></li>
+      </ol>
+
+      <p class="rv-incube__note" data-rv-reveal>
+        Для косметологов и клиник эстетической медицины.<br />
+        Официальный дистрибьютор RENUVOL в России.
+      </p>
+    </div>
+
+    <figure class="rv-incube__object" data-rv-levitate data-rv-para="45">
+      <span class="rv-incube__halo" aria-hidden="true"></span>
+      <span class="rv-incube__drift">
+        <img
+          class="rv-incube__img"
+          src="/images/sections/incube-mof.webp"
+          alt="Молекулярный каркас INCUBE: золотая решётка, удерживающая внутри активные компоненты формулы"
+          loading="lazy"
+          decoding="async"
+          draggable="false"
+          data-rv-levitate-img
+        />
+      </span>
+      <span class="rv-incube__shadow" aria-hidden="true"></span>
+    </figure>
+  </div>
+</section>
