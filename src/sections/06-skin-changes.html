@@ -10,11 +10,13 @@
   written yet, and the panels are composed to read as finished without them.
   [CONTENT REQUIRED: verified description × 5]
 
-  Each chapter opens a full-height proof panel with one of the
-  manufacturer's imaging slides — hydration and plumping respectively. A panel
-  shows the English slide first and swaps to the Russian one while the pointer
-  is over it. It refuses to open if the slide is not on disk, so a missing
-  asset degrades to an inert chapter rather than an empty black screen.
+  Each chapter opens a full-height proof panel with one of the manufacturer's
+  imaging slides. The panel opens on click; hovering a card only lights up its
+  call to action. It shows the English slide first and swaps to the Russian one
+  while the pointer is over the image, and it closes by its own button, by a
+  click outside the image, or by Escape. A chapter whose slide is not on disk
+  refuses to open and hides its affordance, so a missing asset degrades to an
+  inert card rather than an empty black screen.
 -->
 <section
   class="rv-changes"
@@ -53,9 +55,10 @@
           <span class="rv-chapter__hintCta">Смотреть<span class="rv-chapter__hintArrow">→</span></span>
         </p>
 
-        <!-- Кнопка накрывает всю главу: она и зона наведения, и точка входа
-             с клавиатуры, при этом заголовок остаётся заголовком.
-             Панель открывается кликом; наведение только подсвечивает призыв. -->
+        <!-- Кнопка накрывает всю главу: клик по любой её точке открывает
+             панель, при этом заголовок остаётся заголовком, а с клавиатуры
+             глава доступна как обычный элемент управления. Наведение ничего
+             не открывает — только подсвечивает призыв. -->
         <button
           class="rv-chapter__hit"
           type="button"
